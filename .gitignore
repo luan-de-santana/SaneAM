@@ -1,0 +1,24 @@
+# Caches e arquivos gerados pelo Android Studio / IntelliJ
+.idea/
+.gradle/
+build/
+app/build/
+*.iml
+
+# Configurações locais do seu computador (contém o caminho do seu SDK)
+local.properties
+
+# Arquivos de autenticação e chaves privadas (NUNCA envie ao Git)
+*.jks
+*.keystore
+*.pkcs12
+google-services.json
+
+# Caches específicos de sistemas operacionais
+.DS_Store
+Thumbs.db
+
+# Log de erros e relatórios de execução
+captureSystrace.txt
+.externalNativeBuild
+.cxx/

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cardItemContainer"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="12dp"
+    app:cardBackgroundColor="#FFFFFF"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="0dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <!-- Icon Box -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardIcon"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            app:cardBackgroundColor="#F1F5F9"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/imgIcone"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_build"
+                app:tint="#94A3B8" />
+        </androidx.cardview.widget.CardView>
+
+        <!-- Material Details -->
+        <TextView
+            android:id="@+id/txtNome"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="8dp"
+            android:textColor="#0F172A"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@id/layoutQuantidade"
+            app:layout_constraintStart_toEndOf="@id/cardIcon"
+            app:layout_constraintTop_toTopOf="@id/cardIcon"
+            tools:text="Registro de Gaveta 50mm" />
+
+        <TextView
+            android:id="@+id/txtSubtitulo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="8dp"
+            android:textColor="#64748B"
+            android:textSize="13sp"
+            app:layout_constraintEnd_toStartOf="@id/layoutQuantidade"
+            app:layout_constraintStart_toEndOf="@id/cardIcon"
+            app:layout_constraintTop_toBottomOf="@id/txtNome"
+            tools:text="Galpão A · Val 12/2027" />
+
+        <!-- Quantity Side Container -->
+        <LinearLayout
+            android:id="@+id/layoutQuantidade"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/cardIcon">
+
+            <TextView
+                android:id="@+id/txtQuantidade"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#0F172A"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                tools:text="34" />
+
+            <TextView
+                android:id="@+id/txtUnidade"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#64748B"
+                android:textSize="12sp"
+                tools:text="un" />
+        </LinearLayout>
+
+        <!-- Stock Progress Bar -->
+        <ProgressBar
+            android:id="@+id/progressEstoque"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="0dp"
+            android:layout_height="6dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="12dp"
+            android:progressDrawable="@drawable/custom_progress_green"
+            app:layout_constraintEnd_toStartOf="@id/txtMinimo"
+            app:layout_constraintStart_toStartOf="@id/txtSubtitulo"
+            app:layout_constraintTop_toBottomOf="@id/txtSubtitulo"
+            tools:progress="60" />
+
+        <TextView
+            android:id="@+id/txtMinimo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#94A3B8"
+            android:textSize="11sp"
+            app:layout_constraintBottom_toBottomOf="@id/progressEstoque"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/progressEstoque"
+            tools:text="mín 10" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

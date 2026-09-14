@@ -1,0 +1,35 @@
+# Add project specific R8 rules here.
+# AGP will combine all keep rule files in src/main/keepRules to pass to R8
+#
+# For more details, see
+#   https://d.android.com/r/tools/r8/keep-rules
+
+# If your project uses WebView with JS, uncomment the following
+# and specify the fully qualified class name to the JavaScript interface
+# class:
+#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
+#   public *;
+#}
+
+# Essas linhas dizem ao Proguard para não mexer em anotações e assinaturas de tipos (necessárias para decodificar o JSON que vem do Supabase)
+-keepattributes Signature, *Annotation*, EnclosingMethod, InnerClasses
+-keep class kotlin.Metadata { *; }
+
+# Garante que classes anotadas com @Serializable (KotlinX Serialization) não sejam corrompidas
+-keepattributes *Annotation*,Signature
+-keepclassmembers class * {
+    @kotlinx.serialization.Serializable *;
+}
+-keep class * implements kotlinx.serialization.KSerializer { *; }
+
+# Impede que o mecanismo interno do Ktor e suas engines quebrem
+-keep class io.ktor.** { *; }
+-dontwarn io.ktor.**
+
+# Caso use Coroutines (padrão do ecossistema Kotlin/Supabase)
+-keep class kotlinx.coroutines.** { *; }
+-dontwarn kotlinx.coroutines.**
+
+# Caso use o CredentialManager do Android para fazer login social no Supabase com o Google
+-if class androidx.credentials.CredentialManager
+-keep class androidx.credentials.playservices.** { *; }

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_inicio"
+        android:icon="@drawable/ic_home"
+        android:title="Início" />
+
+    <item
+        android:id="@+id/nav_inventario"
+        android:icon="@drawable/ic_grid"
+        android:title="Inventário" />
+
+    <item
+        android:id="@+id/nav_moviment"
+        android:icon="@drawable/ic_swap_horizontal"
+        android:title="Moviment." />
+
+    <item
+        android:id="@+id/nav_relatorios"
+        android:icon="@drawable/ic_chart"
+        android:title="Relatórios" />
+
+    <item
+        android:id="@+id/nav_config"
+        android:icon="@drawable/ic_settings"
+        android:title="Config." />
+</menu>

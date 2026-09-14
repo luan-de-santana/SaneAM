@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Material 3 Light Theme Tokens -->
+    <color name="md_theme_light_primary">#5B9EE1</color>
+    <color name="md_theme_light_onPrimary">#FFFFFF</color>
+    <color name="md_theme_light_primaryContainer">#5294D7</color>
+    <color name="md_theme_light_onPrimaryContainer">#FFFFFF</color>
+
+    <color name="md_theme_light_background">#F4F7FC</color>
+    <color name="md_theme_light_onBackground">#0F2851</color>
+
+    <color name="md_theme_light_surface">#FFFFFF</color>
+    <color name="md_theme_light_onSurface">#1E293B</color>
+    <color name="md_theme_light_hint">#94A3B8</color>
+    <color name="md_theme_light_surfaceVariant">#F1F5F9</color>
+    <color name="md_theme_light_outline">#64748B</color>
+
+    <!-- Custom Badges / Indicators Colors -->
+    <!-- Blue Badge (Depósitos & Transferências) -->
+    <color name="badge_blue_bg">#EDF5FD</color>
+    <color name="badge_blue_text">#3B82F6</color>
+
+    <!-- Green Badge (Itens & Entrada) -->
+    <color name="badge_green_bg">#EFFBF3</color>
+    <color name="badge_green_text">#16A34A</color>
+    <color name="badge_green_line">#166534</color>
+
+    <!-- Amber Badge (Críticos) -->
+    <color name="badge_amber_bg">#FFFBEB</color>
+    <color name="badge_amber_text">#D97706</color>
+    <color name="badge_amber_line">#C2410C</color>
+
+    <!-- Red Badge (Vencendo & Saída) -->
+    <color name="badge_red_bg">#FEF2F2</color>
+    <color name="badge_red_text">#DC2626</color>
+    <color name="badge_red_line">#B91C1C</color>
+
+    <!-- Purple Badge (Inventário) -->
+    <color name="badge_purple_bg">#F3E8FF</color>
+    <color name="badge_purple_text">#9333EA</color>
+</resources>
