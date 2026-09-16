@@ -1,4 +1,4 @@
-package com.luandev.saneam.repository
+package com.luandev.saneam.service.repository
 
 import com.luandev.saneam.BuildConfig
 import io.github.jan.supabase.createSupabaseClient

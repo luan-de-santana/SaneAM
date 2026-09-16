@@ -10,7 +10,7 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.luandev.saneam.R
-import com.luandev.saneam.model.MaterialItem
+import com.luandev.saneam.service.model.MaterialItem
 import com.luandev.saneam.databinding.ItemMaterialInventarioBinding
 
 class InventarioAdapter(

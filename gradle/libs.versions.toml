@@ -7,10 +7,14 @@ espressoCore = "3.7.0"
 appcompat = "1.8.0"
 material = "1.14.0"
 secretsGradlePlugin = "2.0.1"
+androidx-lifecycle = "2.11.0"
+androidx-activity = "1.13.0"
+# Manter as versões abaixo devido à compatibilidade com a versão do Kotlin
 supabase = "2.5.2"
-ktor = "2.3.12" # Versão recomendada e testada para a linha 2.x do Supabase
+ktor = "2.3.12"
 credentials = "1.5.0-rc01"
 googlePlayServicesAuth = "21.3.0"
+googleid = "1.2.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -18,6 +22,8 @@ junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "androidx-lifecycle" }
+androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "androidx-activity" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 # Módulos Core do Supabase
 supabase-postgrest = { module = "io.github.jan-tennert.supabase:postgrest-kt", version.ref = "supabase" }
@@ -28,6 +34,7 @@ ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "kto
 androidx-credentials = { module = "androidx.credentials:credentials", version.ref = "credentials" }
 androidx-credentials-play-services = { module = "androidx.credentials:credentials-play-services-auth", version.ref = "credentials" }
 google-play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "googlePlayServicesAuth" }
+googleid = { group = "com.google.android.libraries.identity.googleid", name = "googleid", version.ref = "googleid" }
 
 [bundles]
 # Criado um "pacote" para importar todas de uma vez no Gradle

@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.luandev.saneam.R
 import com.luandev.saneam.databinding.FragmentInventarioBinding
-import com.luandev.saneam.model.MaterialItem
+import com.luandev.saneam.service.model.MaterialItem
 
 class InventarioFragment : Fragment() {
 

@@ -1,4 +1,4 @@
-package com.luandev.saneam.model
+package com.luandev.saneam.service.model
 
 data class MaterialItem(
     val id: String,
