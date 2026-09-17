@@ -41,7 +41,7 @@ android {
     }
     buildFeatures {
         viewBinding = true
-        buildConfig = true // Garante que a classe BuildConfig seja gerada
+        buildConfig = true
     }
 }
 
@@ -55,6 +55,8 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.activity.ktx)
+    implementation(libs.androidx.navigation.fragment.ktx)
+    implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.googleid)
     implementation(libs.material)
     implementation(libs.bundles.supabase)

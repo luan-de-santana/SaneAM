@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">SaneAM</string>
+
+    <!-- Títulos das telas -->
+    <string name="title_inicio">Início</string>
+    <string name="title_inventario">Inventário</string>
+    <string name="title_moviment">Movimentação</string>
+    <string name="title_relatorios">Relatórios</string>
+    <string name="title_config">Config</string>
+    <string name="title_activity_menu">Menu SaneAM</string>
 </resources>

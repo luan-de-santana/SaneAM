@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doOnTextChanged
 import com.luandev.saneam.databinding.ActivityTransferenciaBinding
+import androidx.core.graphics.toColorInt
 
 class TransferenciaActivity : AppCompatActivity() {
 
@@ -77,11 +78,11 @@ class TransferenciaActivity : AppCompatActivity() {
         // Atualiza a aparência e o estado do botão
         binding.btnConfirmar.isEnabled = isFormValid
         if (isFormValid) {
-            binding.btnConfirmar.setBackgroundColor(Color.parseColor("#2563EB")) // Azul ativo
+            binding.btnConfirmar.setBackgroundColor("#2563EB".toColorInt()) // Azul ativo
             binding.btnConfirmar.setTextColor(Color.WHITE)
         } else {
-            binding.btnConfirmar.setBackgroundColor(Color.parseColor("#E2E8F0")) // Cinza desativado
-            binding.btnConfirmar.setTextColor(Color.parseColor("#94A3B8"))
+            binding.btnConfirmar.setBackgroundColor("#E2E8F0".toColorInt()) // Cinza desativado
+            binding.btnConfirmar.setTextColor("#94A3B8".toColorInt())
         }
     }
 }

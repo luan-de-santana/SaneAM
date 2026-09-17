@@ -18,14 +18,54 @@ class AuthViewModel : ViewModel() {
     private val _authState = MutableLiveData<AuthState>(AuthState.Idle)
     val authState: LiveData<AuthState> get() = _authState
 
+    init {
+        checarSessaoAtiva()
+    }
+
+    /**
+     * Verifica se existe um token de sessão válido salvo localmente no Supabase
+     */
+    fun checarSessaoAtiva() {
+        _authState.value = AuthState.Loading
+        viewModelScope.launch {
+            try {
+                // O Supabase restaura a sessão salva no armazenamento seguro
+                val currentSession = SupabaseClientProvider.client.auth.currentSessionOrNull()
+
+                if (currentSession != null) {
+                    // Sessão encontrada e válida
+                    _authState.value = AuthState.LoggedIn
+                } else {
+                    // Nenhuma sessão ativa, permanece na tela de login
+                    _authState.value = AuthState.Idle
+                }
+            } catch (e: Exception) {
+                // Em caso de falha ao ler credenciais salvas, volta para Idle
+                _authState.value = AuthState.Idle
+            }
+        }
+    }
+
+    /**
+     * Realiza o logout do Supabase e limpa a sessão armazenada
+     */
+    fun desconectar() {
+        viewModelScope.launch {
+            try {
+                SupabaseClientProvider.client.auth.signOut()
+                _authState.value = AuthState.Idle
+            } catch (e: Exception) {
+                _authState.value = AuthState.Error(e.localizedMessage ?: "Erro ao sair da conta.")
+            }
+        }
+    }
+
     /**
      * Realiza o login do usuário com e-mail e senha no Supabase
      */
     fun realizarLogin(emailTxt: String, passwordTxt: String) {
         if (!validarCampos(emailTxt, passwordTxt)) return
-
         _authState.value = AuthState.Loading
-
         viewModelScope.launch {
             try {
                 SupabaseClientProvider.client.auth.signInWith(Email) {
@@ -45,12 +85,9 @@ class AuthViewModel : ViewModel() {
      */
     fun realizarCadastro(emailTxt: String, passwordTxt: String) {
         if (!validarCampos(emailTxt, passwordTxt)) return
-
         _authState.value = AuthState.Loading
-
         viewModelScope.launch {
             try {
-                // No GoTrue (Supabase 2.x), o cadastro é feito pela função signUpWith
                 SupabaseClientProvider.client.auth.signUpWith(Email) {
                     email = emailTxt
                     password = passwordTxt
@@ -96,7 +133,8 @@ class AuthViewModel : ViewModel() {
             return false
         }
         if (!senhaForte(passwordTxt)) {
-            _authState.value = AuthState.Error("A senha precisa de no mínimo 6 caracteres e conter letras e números.")
+            _authState.value =
+                AuthState.Error("A senha precisa de no mínimo 6 caracteres e conter letras e números.")
             return false
         }
         return true

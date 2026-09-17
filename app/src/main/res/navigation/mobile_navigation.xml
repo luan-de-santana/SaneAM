@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_home">
+
+    <fragment
+        android:id="@+id/navigation_inicio"
+        android:name="com.luandev.saneam.ui.dashboard.FragmentDashboard"
+        android:label="@string/title_inicio"
+        tools:layout="@layout/fragment_dashboard" />
+
+    <fragment
+        android:id="@+id/navigation_inventario"
+        android:name="com.luandev.saneam.ui.inventario.InventarioFragment"
+        android:label="@string/title_inventario"
+        tools:layout="@layout/fragment_inventario" />
+
+    <fragment
+        android:id="@+id/navigation_moviment"
+        android:name="com.luandev.saneam.ui.movimentacoes.MovimentacoesFragment"
+        android:label="@string/title_moviment"
+        tools:layout="@layout/fragment_movimentacoes" />
+
+    <fragment
+        android:id="@+id/navigation_relatorios"
+        android:name="com.luandev.saneam.ui.relatorios.RelatoriosFragment"
+        android:label="@string/title_relatorios"
+        tools:layout="@layout/fragment_relatorios" />
+
+    <fragment
+        android:id="@+id/navigation_config"
+        android:name="com.luandev.saneam.ui.relatorios.ConfigFragment"
+        android:label="@string/title_config"
+        tools:layout="@layout/fragment_config" />
+
+</navigation>

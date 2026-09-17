@@ -1,5 +1,6 @@
-package com.luandev.saneam.ui
+package com.luandev.saneam.ui.autenticacao
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -13,6 +14,7 @@ import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.luandev.saneam.BuildConfig
 import com.luandev.saneam.databinding.ActivityAuthBinding
+import com.luandev.saneam.ui.menu.MenuActivity
 import com.luandev.saneam.viewmodel.AuthState
 import com.luandev.saneam.viewmodel.AuthViewModel
 import kotlinx.coroutines.launch
@@ -94,10 +96,17 @@ class AuthActivity : AppCompatActivity() {
                     mostrarCarregamento()
                 }
 
+                is AuthState.LoggedIn -> {
+                    // Redireciona diretamente (Sem mensagem) pois o usuário já estava logado previamente
+                    esconderCarregamento()
+                    irParaMenu()
+                }
+
                 is AuthState.Success -> {
                     esconderCarregamento()
-                    Toast.makeText(this, state.message, Toast.LENGTH_LONG).show()
-                    // TODO: Prosseguir para a tela logada aqui...
+                    Toast.makeText(this, state.message, Toast.LENGTH_SHORT).show()
+                    // Redireciona após realizar login com sucesso
+                    irParaMenu()
                 }
 
                 is AuthState.Error -> {
@@ -106,6 +115,14 @@ class AuthActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun irParaMenu() {
+        val intent = Intent(this, MenuActivity::class.java)
+        // Limpa a pilha para que o botão 'Voltar' do dispositivo não retorne à AuthActivity
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+        finish()
     }
 
     private fun mostrarCarregamento() {
@@ -122,4 +139,21 @@ class AuthActivity : AppCompatActivity() {
         binding.btnCriarConta.isEnabled = true
         binding.btnGoogle.isEnabled = true
     }
+
+    /*private fun realizarLogout() {
+        lifecycleScope.launch {
+            try {
+                // Encerra a sessão no Supabase e remove os tokens locais
+                SupabaseClientProvider.client.auth.signOut()
+
+                // Redireciona para a tela de Auth/Login
+                val intent = Intent(this@MenuActivity, AuthActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                startActivity(intent)
+                finish()
+            } catch (e: Exception) {
+                Toast.makeText(this@MenuActivity, "Erro ao sair: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }*/
 }
