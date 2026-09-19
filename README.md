@@ -1,21 +1,23 @@
-# [SaneAM]
+# 📱 SaneAM
 
 [![License: GPL v3](https://shields.io)](https://gnu.org)
 [![Kotlin](https://shields.io)](https://kotlinlang.org)
-[![Android](https://shields.io)](https://developer.android.com/develop)
+[![Android](https://shields.io)](https://developer.android.com/)
 
-Um aplicativo Android desenvolvido em Kotlin para apoiar a iniciativa de controle de estoque da COMPESA, no âmbito da CPR Agreste Meridional em Garanhuns, servindo simultaneamente como projeto prático para a faculdade UNINTER (Centro Universitário Internacional).
+
+Um aplicativo Android desenvolvido em Kotlin para apoiar a iniciativa de controle de estoque da **COMPESA**, no âmbito da **CPR Agreste Meridional** em Garanhuns-PE, servindo simultaneamente como projeto prático para a faculdade **UNINTER (Centro Universitário Internacional)**, da graduação de **Análise e Desenvolvimento de Sistemas**.
 
 ## 📌 Sobre o Projeto
 
-O **SaneAM** nasceu para resolver [o problema de saber a quantidade real dos materiais no almoxarifado e em outros depósitos da Coordenação].
+O **SaneAM** nasceu para resolver o problema de saber a quantidade real dos materiais no almoxarifado e em outros depósitos da Coordenação.
 
-Este projeto foi construído unindo o rigor acadêmico da disciplina de [Análise e Desenvolvimento de Sistemas - Atividade de Extensão] com o impacto social real exigido por projetos comunitários.
+Este projeto foi construído unindo o rigor acadêmico da disciplina de **Trabalho Extensionista 02 (Tecnologia Aplicada à Inclusão Digital - Projeto)** com o impacto social real exigido por projetos comunitários.
 
 ### 🚀 Principais Funcionalidades
-* **[Entrada]:** [Realizar a entrada de materiais nos depósitos].
-* **[Saída]:** [Registrar a saída de itens para as equipes de manutenção usarem em atividades em campo].
-* **[Inventário]:** [Relação atualizada da quantidade dos materiais].
+* **☑ Entrada:** Realizar a entrada de materiais nos depósitos.
+* **☑ Saída:** Registrar a saída de itens para as equipes de manutenção usarem em atividades em campo.
+* **☑ Acerto:** Ajustar o estoque atual em decorrência de avarias.
+* **☑ Inventário:** Relação atualizada da quantidade dos materiais.
 
 ---
 
@@ -23,13 +25,13 @@ Este projeto foi construído unindo o rigor acadêmico da disciplina de [Anális
 
 O aplicativo foi desenvolvido seguindo as práticas modernas recomendadas pela Google para o ecossistema Android, integrando uma infraestrutura em nuvem robusta e reativa:
 
-* **Linguagem:** Kotlin
-* **Arquitetura:** MVVM (Model-View-ViewModel)
-* **Asincronismo e Concorrência:** Kotlin Coroutines (para chamadas assíncronas eficientes e sem travamento da UI)
-* **Backend as a Service (BaaS):** [Supabase](https://supabase.com)
+* **☑ Linguagem:** Kotlin
+* **☑ Arquitetura:** MVVM (Model-View-ViewModel)
+* **☑ Asincronismo e Concorrência:** Kotlin Coroutines (para chamadas assíncronas eficientes e sem travamento da UI)
+* **☑ Backend as a Service (BaaS):** [Supabase](https://supabase.com)
     * **Banco de Dados:** PostgreSQL acessado via API RESTful automatizada ([PostgREST](https://postgrest.org))
     * **Autenticação:** Google Sign-In integrado diretamente via Supabase Auth
-* **Interface (UI):** [XML View Binding]
+* **☑ Interface (UI):** [XML View Binding]
 
 
 ---
@@ -49,9 +51,9 @@ Para rodar o projeto localmente em sua máquina, siga os passos abaixo:
 
 ---
 
-## 👥 Autor (Projeto Acadêmico)
+## 👨‍💻 Autor (Projeto Acadêmico)
 
-* **[Luan Pimentel de Santana]** - *Desenvolvedor do projeto* - [GitHub](https://github.com/luan-de-santana)
+**✔ Luan Pimentel de Santana** - *graduando em Análise e Desenvolvimento de Sistemas e Agente de Saneamento* - [GitHub](https://github.com/luan-de-santana)
 
 ---
 

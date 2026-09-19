@@ -14,7 +14,7 @@
         android:layout_height="0dp"
         android:fillViewport="true"
         android:scrollbars="none"
-        app:layout_bottom_toTopOf="@id/progressBar"
+        app:layout_bottom_toTopOf="@id/txtDeveloper"
         app:layout_top_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -28,7 +28,7 @@
                 layout="@layout/layout_app_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="62dp"
+                android:layout_marginTop="82dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -206,7 +206,22 @@
         android:layout_height="wrap_content"
         android:indeterminateTint="#15803D"
         android:visibility="gone"
-        app:layout_bottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/txtDeveloper"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.95" />
+
+    <TextView
+        android:id="@+id/txtDeveloper"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:text="@string/desenvolvido_por"
+        android:textColor="#334155"
+        android:textSize="12sp"
+        android:textStyle="italic"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 

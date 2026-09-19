@@ -12,16 +12,15 @@
         📌 Projeto Android desenvolvido para apoiar a iniciativa de controle de estoque da COMPESA, no âmbito da CPR Agreste Meridional em Garanhuns, servindo simultaneamente como projeto prático para a faculdade UNINTER (Centro Universitário Internacional).
         O SaneAM nasceu para resolver o problema de gerenciar a quantidade real dos materiais no almoxarifado e de outros depósitos da Coordenação.\n\n
 
-        🚀 Principais Funcionalidades:\n\n
-
+        🚀 Principais Funcionalidades:\n
         ☑ Entrada: realizar a entrada de materiais nos depósitos.\n
         ☑ Saída: registrar a saída de itens para as equipes de manutenção usarem em atividades em campo.\n
         ☑ Acerto: ajuste do estoque atual para devido avarias.\n
         ☑ Inventário: relação atualizada da quantidade dos materiais.\n\n
 
-        👨‍💻>_ Desenvolvedor:\n\n
-
-        ✔ Luan Pimentel de Santana - Analista de Software e Agente de Saneamento
+        👨‍💻 Autor:\n
+        ✔ Luan Pimentel de Santana - graduando em Análise e Desenvolvimento de Sistemas (RU:5091214) e Agente de Saneamento (Mat:10703)
 
     </string>
+    <string name="desenvolvido_por">Desenvolvido por Luan de Santana</string>
 </resources>
