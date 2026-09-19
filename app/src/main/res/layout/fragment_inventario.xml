@@ -97,18 +97,20 @@
 
             <!-- Horizontal Scroll Filter Tabs (Depósitos) -->
             <HorizontalScrollView
+                android:id="@+id/scrollHorizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:scrollbars="none">
 
                 <LinearLayout
+                    android:id="@+id/containerDepositos"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:paddingVertical="4dp">
 
-                    <!-- Tab Todos -->
+                    <!-- Tab Todos (Sempre fixa) -->
                     <androidx.cardview.widget.CardView
                         android:id="@+id/tabTodos"
                         android:layout_width="wrap_content"
@@ -126,71 +128,6 @@
                             android:paddingHorizontal="20dp"
                             android:text="Todos"
                             android:textColor="#FFFFFF"
-                            android:textSize="14sp"
-                            android:textStyle="bold" />
-                    </androidx.cardview.widget.CardView>
-
-                    <!-- Tab Galpão A -->
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/tabGalpaoA"
-                        android:layout_width="wrap_content"
-                        android:layout_height="36dp"
-                        android:layout_marginEnd="8dp"
-                        app:cardBackgroundColor="#FFFFFF"
-                        app:cardCornerRadius="18dp"
-                        app:cardElevation="0dp">
-
-                        <TextView
-                            android:id="@+id/txtTabGalpaoA"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:paddingHorizontal="16dp"
-                            android:text="Galpão A"
-                            android:textColor="#64748B"
-                            android:textSize="14sp"
-                            android:textStyle="bold" />
-                    </androidx.cardview.widget.CardView>
-
-                    <!-- Tab Loja Centro -->
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/tabLojaCentro"
-                        android:layout_width="wrap_content"
-                        android:layout_height="36dp"
-                        android:layout_marginEnd="8dp"
-                        app:cardBackgroundColor="#FFFFFF"
-                        app:cardCornerRadius="18dp"
-                        app:cardElevation="0dp">
-
-                        <TextView
-                            android:id="@+id/txtTabLojaCentro"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:paddingHorizontal="16dp"
-                            android:text="Loja Centro"
-                            android:textColor="#64748B"
-                            android:textSize="14sp"
-                            android:textStyle="bold" />
-                    </androidx.cardview.widget.CardView>
-
-                    <!-- Tab Loja Norte -->
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/tabLojaNorte"
-                        android:layout_width="wrap_content"
-                        android:layout_height="36dp"
-                        app:cardBackgroundColor="#FFFFFF"
-                        app:cardCornerRadius="18dp"
-                        app:cardElevation="0dp">
-
-                        <TextView
-                            android:id="@+id/txtTabLojaNorte"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:paddingHorizontal="16dp"
-                            android:text="Loja Norte"
-                            android:textColor="#64748B"
                             android:textSize="14sp"
                             android:textStyle="bold" />
                     </androidx.cardview.widget.CardView>

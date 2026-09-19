@@ -16,11 +16,6 @@
         android:title="Moviment." />
 
     <item
-        android:id="@+id/nav_relatorios"
-        android:icon="@drawable/ic_chart"
-        android:title="Relatórios" />
-
-    <item
         android:id="@+id/nav_config"
         android:icon="@drawable/ic_settings"
         android:title="Config." />

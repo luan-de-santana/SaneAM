@@ -30,7 +30,6 @@ class MenuActivity : AppCompatActivity() {
                 R.id.nav_inicio,
                 R.id.nav_inventario,
                 R.id.nav_moviment,
-                R.id.nav_relatorios,
                 R.id.nav_config
             )
         )

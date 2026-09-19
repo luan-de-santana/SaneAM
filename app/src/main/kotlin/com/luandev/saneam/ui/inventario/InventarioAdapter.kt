@@ -2,24 +2,21 @@ package com.luandev.saneam.ui.inventario
 
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
-import android.text.Spannable
-import android.text.SpannableString
-import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.luandev.saneam.R
-import com.luandev.saneam.service.model.MaterialItem
+import com.luandev.saneam.service.model.ResumoMaterialDeposito
 import com.luandev.saneam.databinding.ItemMaterialInventarioBinding
+import androidx.core.graphics.toColorInt
+import com.luandev.saneam.service.util.IconeHelper
 
-class InventarioAdapter(
-    private var listaCompleta: List<MaterialItem>
-) : RecyclerView.Adapter<InventarioAdapter.MaterialViewHolder>() {
+class InventarioAdapter : ListAdapter<ResumoMaterialDeposito, InventarioAdapter.MaterialViewHolder>(DiffCallback) {
 
-    private var listaFiltrada: List<MaterialItem> = listaCompleta
-
-    inner class MaterialViewHolder(val binding: ItemMaterialInventarioBinding) :
+    class MaterialViewHolder(val binding: ItemMaterialInventarioBinding) :
         RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MaterialViewHolder {
@@ -30,33 +27,19 @@ class InventarioAdapter(
     }
 
     override fun onBindViewHolder(holder: MaterialViewHolder, position: Int) {
-        val item = listaFiltrada[position]
+        val item = getItem(position)
         val context = holder.itemView.context
 
         with(holder.binding) {
-            txtNome.text = item.nome
-            imgIcone.setImageResource(item.iconeRes)
+            val textQuantMinima = "mín ${item.quantidadeMinima}"
+            val resId = IconeHelper.obterIconeGrupo(item.iconeGrupo)
+
+            txtNome.text = item.nomeMaterial
+            imgIcone.setImageResource(resId)
             txtQuantidade.text = item.quantidade.toString()
-            txtUnidade.text = item.unidade
-            txtMinimo.text = "mín ${item.quantidadeMinima}"
-
-            // Formatação do Subtítulo (Depósito + Validade se existir)
-            if (!item.validade.isNullOrEmpty()) {
-                val textoCompleto = "${item.deposito} · Val ${item.validade}"
-                val spannable = SpannableString(textoCompleto)
-                val inicioValidade = textoCompleto.indexOf("Val")
-                val corLaranja = Color.parseColor("#C2410C")
-
-                spannable.setSpan(
-                    ForegroundColorSpan(corLaranja),
-                    inicioValidade,
-                    textoCompleto.length,
-                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-                )
-                txtSubtitulo.text = spannable
-            } else {
-                txtSubtitulo.text = item.deposito
-            }
+            txtUnidade.text = item.unidadeMedida
+            txtMinimo.text = textQuantMinima
+            txtSubtitulo.text = item.nomeDeposito
 
             val backgroundDrawable = GradientDrawable().apply {
                 setColor(Color.WHITE) // Cor interna do card
@@ -67,13 +50,13 @@ class InventarioAdapter(
             val isEstoqueBaixo = item.quantidade <= item.quantidadeMinima
 
             if (isEstoqueBaixo) {
-                txtQuantidade.setTextColor(Color.parseColor("#B91C1C")) // Vermelho
+                txtQuantidade.setTextColor("#B91C1C".toColorInt()) // Vermelho
                 progressEstoque.progressDrawable =
                     ContextCompat.getDrawable(context, R.drawable.custom_progress_red)
                 // Aplica a borda vermelha manualmente
-                backgroundDrawable.setStroke(2.toPx(context).toInt(), Color.parseColor("#FECACA"))
+                backgroundDrawable.setStroke(2.toPx(context).toInt(), "#FECACA".toColorInt())
             } else {
-                txtQuantidade.setTextColor(Color.parseColor("#0F172A")) // Escuro padrão
+                txtQuantidade.setTextColor("#0F172A".toColorInt()) // Escuro padrão
                 progressEstoque.progressDrawable =
                     ContextCompat.getDrawable(context, R.drawable.custom_progress_green)
                 // Sem borda
@@ -82,26 +65,24 @@ class InventarioAdapter(
             cardItemContainer.background = backgroundDrawable
 
             // Cálculo da barra de progresso
-            val maxProgress = (item.quantidadeMinima * 2).coerceAtLeast(1)
-            progressEstoque.max = maxProgress
-            progressEstoque.progress = item.quantidade.coerceAtMost(maxProgress)
+            val maxProgress = (item.quantidadeMinima * 2).coerceAtLeast(1.0)
+            progressEstoque.max = maxProgress.toInt()
+            progressEstoque.progress = item.quantidade.coerceAtMost(maxProgress).toInt()
         }
     }
 
-    override fun getItemCount(): Int = listaFiltrada.size
+    fun atualizarDados(novaLista: List<ResumoMaterialDeposito>) {
+        submitList(novaLista)
+    }
 
-    fun aplicarFiltros(depositoSelecionado: String?, busca: String?) {
-        listaFiltrada = listaCompleta.filter { item ->
-            val atendeDeposito = depositoSelecionado.isNullOrEmpty() ||
-                    depositoSelecionado.equals("Todos", ignoreCase = true) ||
-                    item.deposito.equals(depositoSelecionado, ignoreCase = true)
-
-            val atendeBusca = busca.isNullOrEmpty() ||
-                    item.nome.contains(busca, ignoreCase = true)
-
-            atendeDeposito && atendeBusca
+    companion object DiffCallback : DiffUtil.ItemCallback<ResumoMaterialDeposito>() {
+        override fun areItemsTheSame(oldItem: ResumoMaterialDeposito, newItem: ResumoMaterialDeposito): Boolean {
+            return oldItem.idEstoque == newItem.idEstoque
         }
-        notifyDataSetChanged()
+
+        override fun areContentsTheSame(oldItem: ResumoMaterialDeposito, newItem: ResumoMaterialDeposito): Boolean {
+            return oldItem == newItem
+        }
     }
 }
 

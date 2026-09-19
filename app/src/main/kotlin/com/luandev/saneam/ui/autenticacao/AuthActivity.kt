@@ -3,8 +3,10 @@ package com.luandev.saneam.ui.autenticacao
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.credentials.CredentialManager
 import androidx.credentials.GetCredentialRequest
@@ -48,7 +50,7 @@ class AuthActivity : AppCompatActivity() {
         binding.btnCriarConta.setOnClickListener {
             val email = binding.edtEmail.text.toString().trim()
             val password = binding.edtPassword.text.toString().trim()
-            viewModel.realizarCadastro(email, password)
+            exibirDialogNome(email, password)
         }
 
         // Login com o Google
@@ -88,28 +90,28 @@ class AuthActivity : AppCompatActivity() {
         // "Observe" que escuta qualquer alteração de estado vinda da ViewModel
         viewModel.authState.observe(this) { state ->
             when (state) {
-                is AuthState.Idle -> {
+                is AuthState.Parado -> {
                     esconderCarregamento()
                 }
 
-                is AuthState.Loading -> {
+                is AuthState.Carregando -> {
                     mostrarCarregamento()
                 }
 
-                is AuthState.LoggedIn -> {
+                is AuthState.Conectado -> {
                     // Redireciona diretamente (Sem mensagem) pois o usuário já estava logado previamente
                     esconderCarregamento()
                     irParaMenu()
                 }
 
-                is AuthState.Success -> {
+                is AuthState.Sucesso -> {
                     esconderCarregamento()
                     Toast.makeText(this, state.message, Toast.LENGTH_SHORT).show()
                     // Redireciona após realizar login com sucesso
                     irParaMenu()
                 }
 
-                is AuthState.Error -> {
+                is AuthState.Erro -> {
                     esconderCarregamento()
                     Toast.makeText(this, state.errorMessage, Toast.LENGTH_LONG).show()
                 }
@@ -140,20 +142,26 @@ class AuthActivity : AppCompatActivity() {
         binding.btnGoogle.isEnabled = true
     }
 
-    /*private fun realizarLogout() {
-        lifecycleScope.launch {
-            try {
-                // Encerra a sessão no Supabase e remove os tokens locais
-                SupabaseClientProvider.client.auth.signOut()
-
-                // Redireciona para a tela de Auth/Login
-                val intent = Intent(this@MenuActivity, AuthActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                startActivity(intent)
-                finish()
-            } catch (e: Exception) {
-                Toast.makeText(this@MenuActivity, "Erro ao sair: ${e.message}", Toast.LENGTH_SHORT).show()
-            }
+    private fun exibirDialogNome(email: String, senha: String) {
+        val input = EditText(this).apply {
+            hint = "Nome completo"
         }
-    }*/
+
+        AlertDialog.Builder(this)
+            .setTitle("Finalizar Cadastro")
+            .setMessage("Como gostaria de ser chamado?")
+            .setView(input)
+            .setPositiveButton("Confirmar") { _, _ ->
+                val nome = input.text.toString().trim()
+                if (nome.isNotEmpty() && nome.length > 2) {
+                    viewModel.realizarCadastro(email, senha, nome)
+                } else {
+                    Toast.makeText(this, "O nome é necessário para o cadastro.", Toast.LENGTH_SHORT)
+                        .show()
+                }
+            }
+            .setNegativeButton("Cancelar", null)
+            .show()
+    }
+
 }

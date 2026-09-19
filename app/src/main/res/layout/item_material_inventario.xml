@@ -63,7 +63,7 @@
             app:layout_constraintEnd_toStartOf="@id/layoutQuantidade"
             app:layout_constraintStart_toEndOf="@id/cardIcon"
             app:layout_constraintTop_toBottomOf="@id/txtNome"
-            tools:text="Galpão A · Val 12/2027" />
+            tools:text="Galpão A" />
 
         <!-- Quantity Side Container -->
         <LinearLayout

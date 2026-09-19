@@ -5,20 +5,37 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import android.widget.Toast
+import androidx.cardview.widget.CardView
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.luandev.saneam.R
 import com.luandev.saneam.databinding.FragmentInventarioBinding
-import com.luandev.saneam.service.model.MaterialItem
+import androidx.core.graphics.toColorInt
+import com.luandev.saneam.service.model.Deposito
+import com.luandev.saneam.viewmodel.InventarioViewModel
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlin.time.Duration.Companion.milliseconds
 
 class InventarioFragment : Fragment() {
 
     private var _binding: FragmentInventarioBinding? = null
     private val binding get() = _binding!!
 
+    private val viewModel: InventarioViewModel by viewModels()
     private lateinit var adapter: InventarioAdapter
-    private var depositoSelecionado: String = "Todos"
+    
+    private var idDepositoSelecionado: Long? = null // null significa "Todos"
     private var termoBusca: String = ""
 
     override fun onCreateView(
@@ -35,71 +52,99 @@ class InventarioFragment : Fragment() {
 
         setupRecyclerView()
         setupSearch()
-        setupTabs()
+        setupListenersFixos()
+        configurarObservadores()
     }
 
     private fun setupRecyclerView() {
-        adapter = InventarioAdapter(getDadosMock())
+        adapter = InventarioAdapter()
         binding.rvMateriais.layoutManager = LinearLayoutManager(requireContext())
         binding.rvMateriais.adapter = adapter
     }
 
+    @OptIn(FlowPreview::class)
     private fun setupSearch() {
-        binding.edtSearch.doOnTextChanged { text, _, _, _ ->
-            termoBusca = text.toString().trim()
-            adapter.aplicarFiltros(depositoSelecionado, termoBusca)
+        callbackFlow {
+            val watcher = binding.edtSearch.doOnTextChanged { text, _, _, _ ->
+                trySend(text?.toString()?.trim() ?: "")
+            }
+            awaitClose { binding.edtSearch.removeTextChangedListener(watcher) }
+        }
+            .debounce(500.milliseconds) // Aguarda 500ms após a última digitação
+            .distinctUntilChanged() // Só dispara se o texto for diferente do anterior
+            .onEach { termo ->
+                termoBusca = termo
+                viewModel.buscarMateriais(termoBusca, idDepositoSelecionado)
+            }
+            .launchIn(lifecycleScope)
+    }
+
+    private fun setupListenersFixos() {
+        binding.tabTodos.setOnClickListener {
+            idDepositoSelecionado = null
+            atualizarFiltroVisual()
+            viewModel.buscarMateriais(termoBusca, idDepositoSelecionado)
         }
     }
 
-    private fun setupTabs() {
-        binding.tabTodos.setOnClickListener { selectTab("Todos") }
-        binding.tabGalpaoA.setOnClickListener { selectTab("Galpão A") }
-        binding.tabLojaCentro.setOnClickListener { selectTab("Loja Centro") }
-        binding.tabLojaNorte.setOnClickListener { selectTab("Loja Norte") }
+    private fun configurarObservadores() {
+        viewModel.depositos.observe(viewLifecycleOwner) { lista ->
+            renderizarAbasDepositos(lista)
+        }
+
+        viewModel.materiais.observe(viewLifecycleOwner) { lista ->
+            adapter.atualizarDados(lista)
+        }
+
+        viewModel.erro.observe(viewLifecycleOwner) { msg ->
+            Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
+        }
     }
 
-    private fun selectTab(deposito: String) {
-        depositoSelecionado = deposito
+    private fun renderizarAbasDepositos(lista: List<Deposito>) {
+        // "Todos" é o índice 0
+        if (binding.containerDepositos.childCount > 1) {
+            binding.containerDepositos.removeViews(1, binding.containerDepositos.childCount - 1)
+        }
 
-        // Reset Visual de todas as abas
+        lista.forEach { deposito ->
+            val cardAba = layoutInflater.inflate(R.layout.item_aba_deposito, binding.containerDepositos, false) as CardView
+            val textAba = cardAba.findViewById<TextView>(R.id.txtTabNome)
+            
+            textAba.text = deposito.nome
+            cardAba.tag = deposito.id // Salva o ID para identificar no clique
+
+            cardAba.setOnClickListener {
+                idDepositoSelecionado = deposito.id
+                atualizarFiltroVisual()
+                viewModel.buscarMateriais(termoBusca, idDepositoSelecionado)
+            }
+
+            binding.containerDepositos.addView(cardAba)
+        }
+        
+        atualizarFiltroVisual() // Garante que a seleção atual seja refletida
+    }
+
+    private fun atualizarFiltroVisual() {
         val bgWhite = Color.WHITE
-        val bgBlue = Color.parseColor("#60A5FA")
-        val txtGray = Color.parseColor("#64748B")
+        val bgBlue = "#60A5FA".toColorInt()
+        val txtGray = "#64748B".toColorInt()
         val txtWhite = Color.WHITE
 
-        binding.tabTodos.setCardBackgroundColor(if (deposito == "Todos") bgBlue else bgWhite)
-        binding.txtTabTodos.setTextColor(if (deposito == "Todos") txtWhite else txtGray)
+        // Reset e Atualização da aba "Todos"
+        binding.tabTodos.setCardBackgroundColor(if (idDepositoSelecionado == null) bgBlue else bgWhite)
+        binding.txtTabTodos.setTextColor(if (idDepositoSelecionado == null) txtWhite else txtGray)
 
-        binding.tabGalpaoA.setCardBackgroundColor(if (deposito == "Galpão A") bgBlue else bgWhite)
-        binding.txtTabGalpaoA.setTextColor(if (deposito == "Galpão A") txtWhite else txtGray)
+        // Iterar sobre as abas dinâmicas no container
+        for (i in 1 until binding.containerDepositos.childCount) {
+            val card = binding.containerDepositos.getChildAt(i) as CardView
+            val textView = card.getChildAt(0) as TextView
+            val isSelected = card.tag == idDepositoSelecionado
 
-        binding.tabLojaCentro.setCardBackgroundColor(if (deposito == "Loja Centro") bgBlue else bgWhite)
-        binding.txtTabLojaCentro.setTextColor(if (deposito == "Loja Centro") txtWhite else txtGray)
-
-        binding.tabLojaNorte.setCardBackgroundColor(if (deposito == "Loja Norte") bgBlue else bgWhite)
-        binding.txtTabLojaNorte.setTextColor(if (deposito == "Loja Norte") txtWhite else txtGray)
-
-        // Aplica o filtro atualizado na lista
-        adapter.aplicarFiltros(depositoSelecionado, termoBusca)
-    }
-
-    private fun getDadosMock(): List<MaterialItem> {
-        return listOf(
-            MaterialItem(
-                "1",
-                "Registro de Gaveta 50mm",
-                "Galpão A",
-                "12/2027",
-                34,
-                "un",
-                10,
-                R.drawable.ic_build
-            ),
-            MaterialItem("2", "Tubo PVC Soldável 25mm", "Galpão A", null, 120, "m", 50, R.drawable.ic_build),
-            MaterialItem("3", "Registro de Esfera 3/4\"", "Loja Norte", null, 2, "un", 10, R.drawable.ic_build),
-            MaterialItem("4", "Capacete de Segurança", "Galpão A", "06/2028", 15, "un", 5, R.drawable.ic_build),
-            MaterialItem("5", "Luva de PVC 25mm", "Galpão A", null, 5, "un", 20, R.drawable.ic_construction)
-        )
+            card.setCardBackgroundColor(if (isSelected) bgBlue else bgWhite)
+            textView.setTextColor(if (isSelected) txtWhite else txtGray)
+        }
     }
 
     override fun onDestroyView() {

@@ -3,36 +3,35 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home">
+    app:startDestination="@+id/nav_inicio">
 
     <fragment
-        android:id="@+id/navigation_inicio"
+        android:id="@+id/nav_inicio"
         android:name="com.luandev.saneam.ui.dashboard.FragmentDashboard"
         android:label="@string/title_inicio"
         tools:layout="@layout/fragment_dashboard" />
 
     <fragment
-        android:id="@+id/navigation_inventario"
+        android:id="@+id/nav_inventario"
         android:name="com.luandev.saneam.ui.inventario.InventarioFragment"
         android:label="@string/title_inventario"
         tools:layout="@layout/fragment_inventario" />
 
     <fragment
-        android:id="@+id/navigation_moviment"
+        android:id="@+id/nav_moviment"
         android:name="com.luandev.saneam.ui.movimentacoes.MovimentacoesFragment"
         android:label="@string/title_moviment"
-        tools:layout="@layout/fragment_movimentacoes" />
+        tools:layout="@layout/fragment_movimentacoes">
+        <argument
+            android:name="tab_inicial"
+            app:argType="integer"
+            android:defaultValue="0" />
+    </fragment>
 
     <fragment
-        android:id="@+id/navigation_relatorios"
-        android:name="com.luandev.saneam.ui.relatorios.RelatoriosFragment"
-        android:label="@string/title_relatorios"
-        tools:layout="@layout/fragment_relatorios" />
-
-    <fragment
-        android:id="@+id/navigation_config"
-        android:name="com.luandev.saneam.ui.relatorios.ConfigFragment"
+        android:id="@+id/nav_config"
+        android:name="com.luandev.saneam.ui.config.ConfigFragment"
         android:label="@string/title_config"
-        tools:layout="@layout/fragment_config" />
+        tools:layout="@layout/fragment_configuracoes" />
 
 </navigation>

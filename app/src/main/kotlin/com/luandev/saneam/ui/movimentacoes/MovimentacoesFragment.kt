@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.luandev.saneam.R
 import com.luandev.saneam.databinding.FragmentMovimentacoesBinding
+import com.luandev.saneam.service.util.ConstantsSaneAM.Key
 
 class MovimentacoesFragment : Fragment() {
 
@@ -29,8 +30,9 @@ class MovimentacoesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Fragment Inicial (Entrada)
-        selectTab(0)
+        // Recupera a aba inicial via argumentos (Navigation) ou padrão 0 (Entrada)
+        val abaInicial = arguments?.getInt(Key.TAB_INICIAL) ?: 0
+        selectTab(abaInicial)
 
         // Configuração dos cliques usando a variável binding
         binding.tabEntrada.setOnClickListener { selectTab(0) }
