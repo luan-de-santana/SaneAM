@@ -4,6 +4,7 @@ import com.luandev.saneam.service.model.Grupo
 import com.luandev.saneam.service.model.Material
 import com.luandev.saneam.service.model.ResumoMaterial
 import com.luandev.saneam.service.model.ResumoMaterialDeposito
+import com.luandev.saneam.service.model.ResumoMaterialGrupo
 import com.luandev.saneam.service.util.ConstantsSaneAM.Supabase
 import io.github.jan.supabase.postgrest.query.Order
 import io.github.jan.supabase.SupabaseClient
@@ -95,6 +96,36 @@ class RepositorioMaterial(private val cliente: SupabaseClient = SupabaseClientPr
             cliente.postgrest[Supabase.MATERIAIS].delete {
                 filter { eq(Supabase.COL_ID, id) }
             }
+        }
+    }
+
+    suspend fun buscarMateriais(
+        textoPesquisa: String,
+        pagina: Int = 0,
+        tamanhoPagina: Int = 10
+    ): Result<List<ResumoMaterialGrupo>> = runCatching {
+        withContext(Dispatchers.IO) {
+            val de = pagina * tamanhoPagina
+            val ate = de + tamanhoPagina - 1
+
+            cliente.postgrest[Supabase.VISAO_RESUMO_MATERIAIS_GRUPOS]
+                .select {
+
+                    // Aplica a busca parcial no nome se houver texto de pesquisa
+                    if (!textoPesquisa.isNotNullOrBlank()) {
+                        filter {
+                            // ilike ignora maiúsculas/minúsculas e % busca o texto em qualquer posição
+                            ilike(Supabase.COL_NOME, "%${textoPesquisa.trim()}%")
+                        }
+                    }
+
+                    // Ordena alfabeticamente para manter a lista estável
+                    order(Supabase.COL_NOME, Order.ASCENDING)
+
+                    // Limita a quantidade de linhas retornadas por requisição
+                    range(from = de.toLong(), to = ate.toLong())
+                }
+                .decodeList<ResumoMaterialGrupo>()
         }
     }
 

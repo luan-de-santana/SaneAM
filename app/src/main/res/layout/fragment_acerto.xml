@@ -55,21 +55,35 @@
             android:textSize="12sp"
             android:textStyle="bold" />
 
-        <androidx.cardview.widget.CardView
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilSeletorMaterial"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="6dp"
-            app:cardBackgroundColor="@color/md_theme_light_surface"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="0dp">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:boxBackgroundColor="#FFFFFF"
+            app:boxCornerRadiusBottomEnd="12dp"
+            app:boxCornerRadiusBottomStart="12dp"
+            app:boxCornerRadiusTopEnd="12dp"
+            app:boxCornerRadiusTopStart="12dp"
+            app:boxStrokeColor="#E2E8F0"
+            app:endIconDrawable="@drawable/ic_search"
+            app:endIconMode="custom"
+            app:endIconTint="#94A3B8"
+            app:hintEnabled="false">
 
-            <Spinner
-                android:id="@+id/spinnerMaterialAcerto"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edtMaterial"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@null"
-                android:paddingHorizontal="16dp" />
-        </androidx.cardview.widget.CardView>
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="false"
+                android:hint="Selecionar material..."
+                android:inputType="text"
+                android:textColor="#0F172A"
+                android:textColorHint="#94A3B8"
+                android:textSize="14sp" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <!-- DEPÓSITO -->
         <TextView
@@ -90,7 +104,7 @@
             app:cardElevation="0dp">
 
             <Spinner
-                android:id="@+id/spinnerDepositoAcerto"
+                android:id="@+id/spinnerDeposito"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@null"

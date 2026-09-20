@@ -1,17 +1,22 @@
 package com.luandev.saneam.ui.movimentacoes
 
-import android.graphics.Color
 import android.os.Bundle
+import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.widget.doOnTextChanged
 import com.luandev.saneam.databinding.ActivityTransferenciaBinding
-import androidx.core.graphics.toColorInt
+import com.luandev.saneam.service.model.Deposito
+import com.luandev.saneam.service.model.ResumoMaterialGrupo
+import com.luandev.saneam.viewmodel.DepositoSelectorViewModel
 
 class TransferenciaActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityTransferenciaBinding
+    private val depositoViewModel: DepositoSelectorViewModel by viewModels()
     private var quantidade: Int = 0
+    private var materialSelecionado: ResumoMaterialGrupo? = null
+    private var listaDepositos: List<Deposito> = emptyList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -19,13 +24,31 @@ class TransferenciaActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         setupListeners()
+        configurarObservadores()
         updateQuantidadeView()
+    }
+
+    private fun configurarObservadores() {
+        depositoViewModel.depositos.observe(this) { lista ->
+            listaDepositos = lista
+            val nomes = lista.map { it.nome }
+            val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, nomes)
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            
+            binding.spinnerOrigem.adapter = adapter
+            binding.spinnerDestino.adapter = adapter
+        }
     }
 
     private fun setupListeners() {
         // Ação de Voltar
         binding.btnBackCard.setOnClickListener {
             finish()
+        }
+
+        // Abre o Seletor de Material
+        binding.edtMaterial.setOnClickListener {
+            abrirSeletorMaterial()
         }
 
         // Incrementar e decrementar quantidade
@@ -41,20 +64,37 @@ class TransferenciaActivity : AppCompatActivity() {
             }
         }
 
-        // Monitorar preenchimento dos campos para validar o botão
-        binding.edtMaterial.doOnTextChanged { _, _, _, _ -> checkFormValidation() }
-        binding.edtOrigem.doOnTextChanged { _, _, _, _ -> checkFormValidation() }
-        binding.edtDestino.doOnTextChanged { _, _, _, _ -> checkFormValidation() }
-
         // Ação de Confirmar Transferência
         binding.btnConfirmar.setOnClickListener {
-            val material = binding.edtMaterial.text.toString()
-            val origem = binding.edtOrigem.text.toString()
-            val destino = binding.edtDestino.text.toString()
+            val idxOrigem = binding.spinnerOrigem.selectedItemPosition
+            val idxDestino = binding.spinnerDestino.selectedItemPosition
+            
+            val origem = if (idxOrigem != -1) listaDepositos[idxOrigem] else null
+            val destino = if (idxDestino != -1) listaDepositos[idxDestino] else null
+
+            if (materialSelecionado == null) {
+                Toast.makeText(this, "Selecione um material", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            if (origem == null || destino == null) {
+                Toast.makeText(this, "Selecione os depósitos", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            if (origem.id == destino.id) {
+                Toast.makeText(this, "Origem e destino devem ser diferentes", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            if (quantidade <= 0) {
+                Toast.makeText(this, "Informe a quantidade", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
 
             Toast.makeText(
                 this,
-                "Transferência de $quantidade un de $material confirmada!",
+                "Transferência de $quantidade un de ${materialSelecionado?.nome} de ${origem.nome} (ID: ${origem.id}) para ${destino.nome} (ID: ${destino.id}) confirmada!",
                 Toast.LENGTH_LONG
             ).show()
 
@@ -62,27 +102,15 @@ class TransferenciaActivity : AppCompatActivity() {
         }
     }
 
-    private fun updateQuantidadeView() {
-        binding.txtQuantidade.text = quantidade.toString()
-        checkFormValidation()
+    private fun abrirSeletorMaterial() {
+        val bottomSheet = MaterialSelectorBottomSheet { material ->
+            materialSelecionado = material
+            binding.edtMaterial.setText(material.nome)
+        }
+        bottomSheet.show(supportFragmentManager, MaterialSelectorBottomSheet.TAG)
     }
 
-    private fun checkFormValidation() {
-        val hasMaterial = !binding.edtMaterial.text.isNullOrBlank()
-        val hasOrigem = !binding.edtOrigem.text.isNullOrBlank()
-        val hasDestino = !binding.edtDestino.text.isNullOrBlank()
-        val hasValidQuantity = quantidade > 0
-
-        val isFormValid = hasMaterial && hasOrigem && hasDestino && hasValidQuantity
-
-        // Atualiza a aparência e o estado do botão
-        binding.btnConfirmar.isEnabled = isFormValid
-        if (isFormValid) {
-            binding.btnConfirmar.setBackgroundColor("#2563EB".toColorInt()) // Azul ativo
-            binding.btnConfirmar.setTextColor(Color.WHITE)
-        } else {
-            binding.btnConfirmar.setBackgroundColor("#E2E8F0".toColorInt()) // Cinza desativado
-            binding.btnConfirmar.setTextColor("#94A3B8".toColorInt())
-        }
+    private fun updateQuantidadeView() {
+        binding.txtQuantidade.text = quantidade.toString()
     }
 }

@@ -124,7 +124,7 @@
             app:layout_constraintTop_toBottomOf="@id/cardHeader" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/inputLayoutMaterial"
+            android:id="@+id/tilSeletorMaterial"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -145,6 +145,8 @@
                 android:id="@+id/edtMaterial"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="false"
                 android:hint="Selecionar material..."
                 android:inputType="text"
                 android:textColor="#0F172A"
@@ -164,7 +166,7 @@
             android:textStyle="bold"
             app:layout_constraintEnd_toStartOf="@id/iconArrow"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/inputLayoutMaterial" />
+            app:layout_constraintTop_toBottomOf="@id/tilSeletorMaterial" />
 
         <TextView
             android:id="@+id/lblDestino"
@@ -175,36 +177,29 @@
             android:textSize="12sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@id/inputLayoutDestino"
+            app:layout_constraintStart_toStartOf="@id/cardDestino"
             app:layout_constraintTop_toTopOf="@id/lblOrigem" />
 
         <!-- Campo: Origem -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/inputLayoutOrigem"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardOrigem"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            app:boxBackgroundColor="#FFFFFF"
-            app:boxCornerRadiusBottomEnd="12dp"
-            app:boxCornerRadiusBottomStart="12dp"
-            app:boxCornerRadiusTopEnd="12dp"
-            app:boxCornerRadiusTopStart="12dp"
-            app:boxStrokeColor="#E2E8F0"
-            app:hintEnabled="false"
+            android:layout_height="50dp"
+            android:layout_marginTop="6dp"
+            app:cardBackgroundColor="@color/md_theme_light_surface"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp"
             app:layout_constraintEnd_toStartOf="@id/iconArrow"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/lblOrigem">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/edtOrigem"
+            <Spinner
+                android:id="@+id/spinnerOrigem"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Depósito..."
-                android:textColor="#0F172A"
-                android:textColorHint="#94A3B8"
-                android:textSize="14sp" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:paddingHorizontal="16dp" />
+        </androidx.cardview.widget.CardView>
 
         <!-- Ícone Seta entre Origem e Destino -->
         <androidx.cardview.widget.CardView
@@ -215,10 +210,10 @@
             app:cardBackgroundColor="#EFF6FF"
             app:cardCornerRadius="8dp"
             app:cardElevation="0dp"
-            app:layout_constraintBottom_toBottomOf="@id/inputLayoutOrigem"
-            app:layout_constraintEnd_toStartOf="@id/inputLayoutDestino"
-            app:layout_constraintStart_toEndOf="@id/inputLayoutOrigem"
-            app:layout_constraintTop_toTopOf="@id/inputLayoutOrigem"
+            app:layout_constraintBottom_toBottomOf="@id/cardOrigem"
+            app:layout_constraintEnd_toStartOf="@id/cardDestino"
+            app:layout_constraintStart_toEndOf="@id/cardOrigem"
+            app:layout_constraintTop_toTopOf="@id/cardOrigem"
             app:strokeWidth="0dp">
 
             <androidx.appcompat.widget.AppCompatImageView
@@ -230,31 +225,25 @@
         </androidx.cardview.widget.CardView>
 
         <!-- Campo: Destino -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/inputLayoutDestino"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardDestino"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:boxBackgroundColor="#FFFFFF"
-            app:boxCornerRadiusBottomEnd="12dp"
-            app:boxCornerRadiusBottomStart="12dp"
-            app:boxCornerRadiusTopEnd="12dp"
-            app:boxCornerRadiusTopStart="12dp"
-            app:boxStrokeColor="#E2E8F0"
-            app:hintEnabled="false"
+            android:layout_height="50dp"
+            android:layout_marginTop="6dp"
+            app:cardBackgroundColor="@color/md_theme_light_surface"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/iconArrow"
-            app:layout_constraintTop_toTopOf="@id/inputLayoutOrigem">
+            app:layout_constraintTop_toBottomOf="@id/lblDestino">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/edtDestino"
+            <Spinner
+                android:id="@+id/spinnerDestino"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Depósito..."
-                android:textColor="#0F172A"
-                android:textColorHint="#94A3B8"
-                android:textSize="14sp" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:paddingHorizontal="16dp" />
+        </androidx.cardview.widget.CardView>
 
         <!-- Seção: Quantidade -->
         <TextView
@@ -267,7 +256,7 @@
             android:textSize="12sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/inputLayoutOrigem" />
+            app:layout_constraintTop_toBottomOf="@id/cardOrigem" />
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cardQuantidade"
@@ -329,22 +318,58 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
+        <!-- MOTIVO -->
+        <TextView
+            android:id="@+id/labMotivo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="MOTIVO"
+            android:textColor="@color/md_theme_light_outline"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cardQuantidade" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardMotivo"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="6dp"
+            app:cardBackgroundColor="@color/md_theme_light_surface"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/labMotivo">
+
+            <EditText
+                android:id="@+id/edtMotivo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:hint="Motivo da transferência..."
+                android:inputType="text"
+                android:paddingHorizontal="16dp"
+                android:textColor="@color/md_theme_light_onSurface"
+                android:textColorHint="@color/md_theme_light_hint"
+                android:textSize="14sp" />
+        </androidx.cardview.widget.CardView>
+
         <!-- Botão Confirmar Transferência -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnConfirmar"
             android:layout_width="match_parent"
             android:layout_height="54dp"
-            android:layout_marginTop="32dp"
-            android:enabled="false"
+            android:layout_marginTop="28dp"
             android:text="Confirmar Transferência"
             android:textAllCaps="false"
-            android:textColor="#94A3B8"
+            android:textColor="@android:color/white"
             android:textSize="15sp"
             android:textStyle="bold"
-            app:backgroundTint="#E2E8F0"
-            app:cornerRadius="12dp"
+            app:backgroundTint="@color/md_theme_light_primary"
+            app:cornerRadius="14dp"
             app:elevation="0dp"
-            app:layout_constraintTop_toBottomOf="@id/cardQuantidade" />
+            app:layout_constraintTop_toBottomOf="@id/cardMotivo" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
