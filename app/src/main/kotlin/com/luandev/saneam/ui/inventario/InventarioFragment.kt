@@ -68,7 +68,7 @@ class InventarioFragment : Fragment() {
             val watcher = binding.edtSearch.doOnTextChanged { text, _, _, _ ->
                 trySend(text?.toString()?.trim() ?: "")
             }
-            awaitClose { binding.edtSearch.removeTextChangedListener(watcher) }
+            awaitClose { _binding?.edtSearch?.removeTextChangedListener(watcher) }
         }
             .debounce(500.milliseconds) // Aguarda 500ms após a última digitação
             .distinctUntilChanged() // Só dispara se o texto for diferente do anterior
@@ -76,7 +76,7 @@ class InventarioFragment : Fragment() {
                 termoBusca = termo
                 viewModel.buscarMateriais(termoBusca, idDepositoSelecionado)
             }
-            .launchIn(lifecycleScope)
+            .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     private fun setupListenersFixos() {

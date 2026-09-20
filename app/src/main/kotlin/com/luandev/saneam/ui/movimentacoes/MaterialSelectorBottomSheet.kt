@@ -72,14 +72,14 @@ class MaterialSelectorBottomSheet(
             val watcher = binding.edtSearch.doOnTextChanged { text, _, _, _ ->
                 trySend(text?.toString()?.trim() ?: "")
             }
-            awaitClose { binding.edtSearch.removeTextChangedListener(watcher) }
+            awaitClose { _binding?.edtSearch?.removeTextChangedListener(watcher) }
         }
             .debounce(400.milliseconds)
             .distinctUntilChanged()
             .onEach { termo ->
                 viewModel.buscarMateriais(termo)
             }
-            .launchIn(lifecycleScope)
+            .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     private fun configurarObservadores() {
