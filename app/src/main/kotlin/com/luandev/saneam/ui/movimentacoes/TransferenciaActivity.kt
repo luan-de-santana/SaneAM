@@ -9,11 +9,14 @@ import com.luandev.saneam.databinding.ActivityTransferenciaBinding
 import com.luandev.saneam.service.model.Deposito
 import com.luandev.saneam.service.model.ResumoMaterialGrupo
 import com.luandev.saneam.viewmodel.DepositoSelectorViewModel
+import com.luandev.saneam.viewmodel.MovimentacaoStatus
+import com.luandev.saneam.viewmodel.MovimentacaoViewModel
 
 class TransferenciaActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityTransferenciaBinding
     private val depositoViewModel: DepositoSelectorViewModel by viewModels()
+    private val movimentacaoViewModel: MovimentacaoViewModel by viewModels()
     private var quantidade: Int = 0
     private var materialSelecionado: ResumoMaterialGrupo? = null
     private var listaDepositos: List<Deposito> = emptyList()
@@ -37,6 +40,25 @@ class TransferenciaActivity : AppCompatActivity() {
             
             binding.spinnerOrigem.adapter = adapter
             binding.spinnerDestino.adapter = adapter
+        }
+
+        movimentacaoViewModel.status.observe(this) { status ->
+            when (status) {
+                is MovimentacaoStatus.Carregando -> {
+                    binding.btnConfirmar.isEnabled = false
+                }
+                is MovimentacaoStatus.Sucesso -> {
+                    binding.btnConfirmar.isEnabled = true
+                    Toast.makeText(this, "Transferência realizada com sucesso!", Toast.LENGTH_SHORT).show()
+                    finish()
+                }
+                is MovimentacaoStatus.Erro -> {
+                    binding.btnConfirmar.isEnabled = true
+                    Toast.makeText(this, status.mensagem, Toast.LENGTH_LONG).show()
+                    movimentacaoViewModel.resetStatus()
+                }
+                else -> {}
+            }
         }
     }
 
@@ -69,15 +91,15 @@ class TransferenciaActivity : AppCompatActivity() {
             val idxOrigem = binding.spinnerOrigem.selectedItemPosition
             val idxDestino = binding.spinnerDestino.selectedItemPosition
             
-            val origem = if (idxOrigem != -1) listaDepositos[idxOrigem] else null
-            val destino = if (idxDestino != -1) listaDepositos[idxDestino] else null
+            val origem = if (idxOrigem != -1 && listaDepositos.isNotEmpty()) listaDepositos[idxOrigem] else null
+            val destino = if (idxDestino != -1 && listaDepositos.isNotEmpty()) listaDepositos[idxDestino] else null
 
             if (materialSelecionado == null) {
                 Toast.makeText(this, "Selecione um material", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            if (origem == null || destino == null) {
+            if (origem?.id == null || destino?.id == null) {
                 Toast.makeText(this, "Selecione os depósitos", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
@@ -92,13 +114,13 @@ class TransferenciaActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            Toast.makeText(
-                this,
-                "Transferência de $quantidade un de ${materialSelecionado?.nome} de ${origem.nome} (ID: ${origem.id}) para ${destino.nome} (ID: ${destino.id}) confirmada!",
-                Toast.LENGTH_LONG
-            ).show()
-
-            finish() // Fecha a tela após a confirmação
+            movimentacaoViewModel.executarTransferencia(
+                idMaterial = materialSelecionado!!.id!!,
+                idOrigem = origem.id,
+                idDestino = destino.id,
+                quantidade = quantidade.toDouble(),
+                nomeMaterial = materialSelecionado!!.nome
+            )
         }
     }
 

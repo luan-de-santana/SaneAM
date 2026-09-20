@@ -11,7 +11,10 @@ import androidx.fragment.app.viewModels
 import com.luandev.saneam.databinding.FragmentEntradaBinding
 import com.luandev.saneam.service.model.Deposito
 import com.luandev.saneam.service.model.ResumoMaterialGrupo
+import com.luandev.saneam.service.model.TipoMovimentacao
 import com.luandev.saneam.viewmodel.DepositoSelectorViewModel
+import com.luandev.saneam.viewmodel.MovimentacaoStatus
+import com.luandev.saneam.viewmodel.MovimentacaoViewModel
 
 class EntradaFragment : Fragment() {
 
@@ -19,6 +22,7 @@ class EntradaFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val depositoViewModel: DepositoSelectorViewModel by viewModels()
+    private val movimentacaoViewModel: MovimentacaoViewModel by viewModels()
     private var materialSelecionado: ResumoMaterialGrupo? = null
     private var listaDepositos: List<Deposito> = emptyList()
 
@@ -45,6 +49,34 @@ class EntradaFragment : Fragment() {
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             binding.spinnerDeposito.adapter = adapter
         }
+
+        movimentacaoViewModel.status.observe(viewLifecycleOwner) { status ->
+            when (status) {
+                is MovimentacaoStatus.Carregando -> {
+                    binding.btnConfirmarEntrada.isEnabled = false
+                    // Opcional: mostrar um ProgressBar específico aqui
+                }
+                is MovimentacaoStatus.Sucesso -> {
+                    binding.btnConfirmarEntrada.isEnabled = true
+                    Toast.makeText(requireContext(), "Entrada realizada com sucesso!", Toast.LENGTH_SHORT).show()
+                    limparCampos()
+                    movimentacaoViewModel.resetStatus()
+                }
+                is MovimentacaoStatus.Erro -> {
+                    binding.btnConfirmarEntrada.isEnabled = true
+                    Toast.makeText(requireContext(), status.mensagem, Toast.LENGTH_LONG).show()
+                    movimentacaoViewModel.resetStatus()
+                }
+                else -> {}
+            }
+        }
+    }
+
+    private fun limparCampos() {
+        materialSelecionado = null
+        binding.edtMaterial.setText("")
+        binding.edtQuantidade.setText("")
+        binding.edtMotivo.setText("")
     }
 
     private fun configurarCliques() {
@@ -54,28 +86,33 @@ class EntradaFragment : Fragment() {
         }
 
         binding.btnConfirmarEntrada.setOnClickListener {
-            val qtd = binding.edtQuantidade.text.toString()
+            val qtdStr = binding.edtQuantidade.text.toString()
             val materialId = materialSelecionado?.id
             
             val posicaoSelecionada = binding.spinnerDeposito.selectedItemPosition
-            val deposito = if (posicaoSelecionada != -1) listaDepositos[posicaoSelecionada] else null
+            val deposito = if (posicaoSelecionada != -1 && listaDepositos.isNotEmpty()) listaDepositos[posicaoSelecionada] else null
 
             if (materialId == null) {
                 Toast.makeText(requireContext(), "Selecione um material", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            if (deposito == null) {
+            if (deposito?.id == null) {
                 Toast.makeText(requireContext(), "Selecione um depósito", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            if (qtd.isNotEmpty()) {
-                Toast.makeText(
-                    requireContext(),
-                    "Entrada de $qtd ${materialSelecionado?.nome} em ${deposito.nome} (ID: ${deposito.id}) registrada!",
-                    Toast.LENGTH_SHORT
-                ).show()
+            if (qtdStr.isNotEmpty()) {
+                val quantidade = qtdStr.toDoubleOrNull() ?: 0.0
+                val motivo = binding.edtMotivo.text.toString().trim().ifEmpty { null }
+
+                movimentacaoViewModel.executarMovimentacao(
+                    tipo = TipoMovimentacao.ENTRADA,
+                    idMaterial = materialId,
+                    idDeposito = deposito.id,
+                    quantidade = quantidade,
+                    motivo = motivo
+                )
             } else {
                 binding.edtQuantidade.error = "Informe a quantidade"
             }

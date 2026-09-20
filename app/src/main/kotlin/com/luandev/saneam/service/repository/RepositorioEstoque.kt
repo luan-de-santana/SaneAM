@@ -52,10 +52,9 @@ class RepositorioEstoque(private val cliente: SupabaseClient = SupabaseClientPro
         }
     }
 
-    // Consulta SQL na View itens_estoque_baixo
     suspend fun obterItensComEstoqueBaixo(idDeposito: Long? = null): Result<List<ItemEstoqueBaixo>> = runCatching {
         withContext(Dispatchers.IO) {
-            cliente.postgrest[Supabase.ITENS_ESTOQUE_BAIXO]
+            cliente.postgrest[Supabase.VISAO_ITENS_ESTOQUE_BAIXO]
                 .select {
                     // Aplica o filtro apenas se idLocal for informado
                     idDeposito?.let { id ->
