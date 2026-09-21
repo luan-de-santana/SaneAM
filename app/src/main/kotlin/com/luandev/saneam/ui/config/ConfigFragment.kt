@@ -10,6 +10,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.luandev.saneam.databinding.FragmentConfiguracoesBinding
+import com.luandev.saneam.service.util.aplicarInsetsBarrasSistema
 import com.luandev.saneam.service.repository.SupabaseClientProvider
 import com.luandev.saneam.service.util.configurarCabecalhoPadrao
 import com.luandev.saneam.ui.autenticacao.AuthActivity
@@ -32,6 +33,7 @@ class ConfigFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.root.aplicarInsetsBarrasSistema()
 
         configurarCabecalho()
         configurarCliques()

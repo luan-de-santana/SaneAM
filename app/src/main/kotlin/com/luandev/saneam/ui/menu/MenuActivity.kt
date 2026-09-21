@@ -6,6 +6,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.luandev.saneam.R
 import com.luandev.saneam.databinding.ActivityMenuBinding
+import com.luandev.saneam.service.util.aplicarInsetsBarrasSistema
 
 class MenuActivity : AppCompatActivity() {
 
@@ -15,6 +16,9 @@ class MenuActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMenuBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        binding.navHostFragmentActivityMain.aplicarInsetsBarrasSistema(topo = true, inferior = false)
+        binding.bottomNavigation.aplicarInsetsBarrasSistema(topo = false)
 
         // Configura bottom navigation
         configurarNavegacao()

@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.luandev.saneam.databinding.ActivityTransferenciaBinding
 import com.luandev.saneam.service.model.Deposito
 import com.luandev.saneam.service.model.ResumoMaterialGrupo
+import com.luandev.saneam.service.util.aplicarInsetsBarrasSistema
 import com.luandev.saneam.viewmodel.DepositoSelectorViewModel
 import com.luandev.saneam.viewmodel.MovimentacaoStatus
 import com.luandev.saneam.viewmodel.MovimentacaoViewModel
@@ -25,6 +26,15 @@ class TransferenciaActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityTransferenciaBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        binding.root.aplicarInsetsBarrasSistema(topo = true, laterais = true)
+
+        supportFragmentManager.setFragmentResultListener(
+            MaterialSelectorBottomSheet.REQUEST_KEY,
+            this
+        ) { _, result ->
+            materialSelecionado = MaterialSelectorBottomSheet.materialFromResult(result)
+            binding.edtMaterial.setText(materialSelecionado?.nome)
+        }
 
         setupListeners()
         configurarObservadores()
@@ -40,6 +50,16 @@ class TransferenciaActivity : AppCompatActivity() {
             
             binding.spinnerOrigem.adapter = adapter
             binding.spinnerDestino.adapter = adapter
+        }
+
+        depositoViewModel.erro.observe(this) { mensagem ->
+            Toast.makeText(this, "Não foi possível carregar os depósitos: $mensagem", Toast.LENGTH_LONG).show()
+        }
+
+        depositoViewModel.carregando.observe(this) { carregando ->
+            binding.spinnerOrigem.isEnabled = !carregando
+            binding.spinnerDestino.isEnabled = !carregando
+            if (carregando) binding.btnConfirmar.isEnabled = false
         }
 
         movimentacaoViewModel.status.observe(this) { status ->
@@ -114,21 +134,28 @@ class TransferenciaActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
+            val material = materialSelecionado ?: run {
+                Toast.makeText(this, "Selecione um material", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            val idMaterial = material.id ?: run {
+                Toast.makeText(this, "Material inválido. Selecione outro item.", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
             movimentacaoViewModel.executarTransferencia(
-                idMaterial = materialSelecionado!!.id!!,
+                idMaterial = idMaterial,
                 idOrigem = origem.id,
                 idDestino = destino.id,
                 quantidade = quantidade.toDouble(),
-                nomeMaterial = materialSelecionado!!.nome
+                nomeMaterial = material.nome
             )
         }
     }
 
     private fun abrirSeletorMaterial() {
-        val bottomSheet = MaterialSelectorBottomSheet { material ->
-            materialSelecionado = material
-            binding.edtMaterial.setText(material.nome)
-        }
+        val bottomSheet = MaterialSelectorBottomSheet.newInstance()
         bottomSheet.show(supportFragmentManager, MaterialSelectorBottomSheet.TAG)
     }
 

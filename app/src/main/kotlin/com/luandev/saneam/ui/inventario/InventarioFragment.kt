@@ -15,6 +15,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.luandev.saneam.R
 import com.luandev.saneam.databinding.FragmentInventarioBinding
+import com.luandev.saneam.service.util.aplicarInsetsBarrasSistema
 import androidx.core.graphics.toColorInt
 import com.luandev.saneam.service.model.Deposito
 import com.luandev.saneam.viewmodel.InventarioViewModel
@@ -49,6 +50,7 @@ class InventarioFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.root.aplicarInsetsBarrasSistema()
 
         setupRecyclerView()
         setupSearch()

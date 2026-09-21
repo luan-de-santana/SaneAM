@@ -22,6 +22,7 @@ class ConstantsSaneAM {
 
         // Funções RPC
         const val RPC_OBTER_RESUMO_DASHBOARD = "obter_resumo_dashboard"
+        const val RPC_TRANSFERIR_ESTOQUE = "transferir_estoque"
 
         // Colunas e Filtros
         const val COL_ID = "id"

@@ -12,6 +12,7 @@ import com.luandev.saneam.databinding.FragmentEntradaBinding
 import com.luandev.saneam.service.model.Deposito
 import com.luandev.saneam.service.model.ResumoMaterialGrupo
 import com.luandev.saneam.service.model.TipoMovimentacao
+import com.luandev.saneam.service.util.parseQuantidadeMovimentacao
 import com.luandev.saneam.viewmodel.DepositoSelectorViewModel
 import com.luandev.saneam.viewmodel.MovimentacaoStatus
 import com.luandev.saneam.viewmodel.MovimentacaoViewModel
@@ -38,6 +39,14 @@ class EntradaFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        childFragmentManager.setFragmentResultListener(
+            MaterialSelectorBottomSheet.REQUEST_KEY,
+            viewLifecycleOwner
+        ) { _, result ->
+            materialSelecionado = MaterialSelectorBottomSheet.materialFromResult(result)
+            binding.edtMaterial.setText(materialSelecionado?.nome)
+        }
+
         configurarCliques()
         configurarObservadores()
     }
@@ -48,6 +57,15 @@ class EntradaFragment : Fragment() {
             val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, lista.map { it.nome })
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             binding.spinnerDeposito.adapter = adapter
+        }
+
+        depositoViewModel.erro.observe(viewLifecycleOwner) { mensagem ->
+            Toast.makeText(requireContext(), "Não foi possível carregar os depósitos: $mensagem", Toast.LENGTH_LONG).show()
+        }
+
+        depositoViewModel.carregando.observe(viewLifecycleOwner) { carregando ->
+            binding.spinnerDeposito.isEnabled = !carregando
+            if (carregando) binding.btnConfirmarEntrada.isEnabled = false
         }
 
         movimentacaoViewModel.status.observe(viewLifecycleOwner) { status ->
@@ -102,29 +120,26 @@ class EntradaFragment : Fragment() {
                 return@setOnClickListener
             }
 
-            if (qtdStr.isNotEmpty()) {
-                val quantidade = qtdStr.toDoubleOrNull() ?: 0.0
-                val motivo = binding.edtMotivo.text.toString().trim().ifEmpty { null }
-
-                movimentacaoViewModel.executarMovimentacao(
-                    tipo = TipoMovimentacao.ENTRADA,
-                    idMaterial = materialId,
-                    idDeposito = deposito.id,
-                    quantidade = quantidade,
-                    motivo = motivo
-                )
-            } else {
-                binding.edtQuantidade.error = "Informe a quantidade"
+            val quantidade = parseQuantidadeMovimentacao(qtdStr)
+            if (quantidade == null) {
+                binding.edtQuantidade.error = "Informe uma quantidade válida maior que zero"
+                return@setOnClickListener
             }
+
+            val motivo = binding.edtMotivo.text.toString().trim().ifEmpty { null }
+
+            movimentacaoViewModel.executarMovimentacao(
+                tipo = TipoMovimentacao.ENTRADA,
+                idMaterial = materialId,
+                idDeposito = deposito.id,
+                quantidade = quantidade,
+                motivo = motivo
+            )
         }
     }
 
     private fun abrirSeletorMaterial() {
-        val bottomSheet = MaterialSelectorBottomSheet { material ->
-            // Recupera o item selecionado
-            materialSelecionado = material
-            binding.edtMaterial.setText(material.nome)
-        }
+        val bottomSheet = MaterialSelectorBottomSheet.newInstance()
         bottomSheet.show(childFragmentManager, MaterialSelectorBottomSheet.TAG)
     }
 

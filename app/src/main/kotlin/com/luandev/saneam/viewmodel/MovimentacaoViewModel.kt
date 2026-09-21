@@ -8,6 +8,7 @@ import com.luandev.saneam.service.model.MovimentacaoEstoque
 import com.luandev.saneam.service.model.TipoMovimentacao
 import com.luandev.saneam.service.repository.RepositorioEstoque
 import com.luandev.saneam.service.repository.SupabaseClientProvider
+import com.luandev.saneam.service.util.ehQuantidadeMovimentoValida
 import io.github.jan.supabase.gotrue.auth
 import kotlinx.coroutines.launch
 
@@ -35,6 +36,11 @@ class MovimentacaoViewModel(
         quantidade: Double,
         motivo: String? = null
     ) {
+        if (!quantidade.ehQuantidadeMovimentoValida()) {
+            _status.value = MovimentacaoStatus.Erro("Informe uma quantidade válida maior que zero.")
+            return
+        }
+
         val idUsuario = SupabaseClientProvider.client.auth.currentUserOrNull()?.id ?: run {
             _status.value = MovimentacaoStatus.Erro("Usuário não autenticado")
             return
@@ -72,46 +78,37 @@ class MovimentacaoViewModel(
         quantidade: Double,
         nomeMaterial: String
     ) {
+        if (!quantidade.ehQuantidadeMovimentoValida()) {
+            _status.value = MovimentacaoStatus.Erro("Informe uma quantidade válida maior que zero.")
+            return
+        }
+
         val idUsuario = SupabaseClientProvider.client.auth.currentUserOrNull()?.id ?: run {
             _status.value = MovimentacaoStatus.Erro("Usuário não autenticado")
+            return
+        }
+
+        if (idOrigem == idDestino) {
+            _status.value = MovimentacaoStatus.Erro("Origem e destino devem ser diferentes")
             return
         }
 
         _status.value = MovimentacaoStatus.Carregando
 
         viewModelScope.launch {
-            // 1. Registrar Saída da Origem
-            val movSaida = MovimentacaoEstoque(
-                tipo = TipoMovimentacao.SAIDA,
+            repositorio.transferirEstoque(
                 idMaterial = idMaterial,
-                idDeposito = idOrigem,
-                idUsuario = idUsuario,
+                idOrigem = idOrigem,
+                idDestino = idDestino,
                 quantidade = quantidade,
-                motivo = "Transferência de $nomeMaterial para destino"
+                idUsuario = idUsuario,
+                motivo = "Transferência de $nomeMaterial"
             )
-
-            repositorio.executarMovimentacaoEstoque(movSaida)
                 .onSuccess {
-                    // 2. Registrar Entrada no Destino
-                    val movEntrada = MovimentacaoEstoque(
-                        tipo = TipoMovimentacao.ENTRADA,
-                        idMaterial = idMaterial,
-                        idDeposito = idDestino,
-                        idUsuario = idUsuario,
-                        quantidade = quantidade,
-                        motivo = "Transferência de $nomeMaterial da origem"
-                    )
-
-                    repositorio.executarMovimentacaoEstoque(movEntrada)
-                        .onSuccess {
-                            _status.value = MovimentacaoStatus.Sucesso
-                        }
-                        .onFailure {
-                            _status.value = MovimentacaoStatus.Erro("Saída registrada, mas erro na entrada: ${it.message}")
-                        }
+                    _status.value = MovimentacaoStatus.Sucesso
                 }
                 .onFailure {
-                    _status.value = MovimentacaoStatus.Erro("Erro na saída da origem: ${it.message}")
+                    _status.value = MovimentacaoStatus.Erro(it.message ?: "Erro ao transferir estoque")
                 }
         }
     }

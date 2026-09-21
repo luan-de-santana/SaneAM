@@ -110,9 +110,8 @@ class RepositorioMaterial(private val cliente: SupabaseClient = SupabaseClientPr
 
             cliente.postgrest[Supabase.VISAO_RESUMO_MATERIAIS_GRUPOS]
                 .select {
-
-                    // Aplica a busca parcial no nome se houver texto de pesquisa
-                    if (!textoPesquisa.isNotNullOrBlank()) {
+                    // Aplica a busca parcial no nome apenas quando há texto de pesquisa
+                    if (textoPesquisa.isNotBlank()) {
                         filter {
                             // ilike ignora maiúsculas/minúsculas e % busca o texto em qualquer posição
                             ilike(Supabase.COL_NOME, "%${textoPesquisa.trim()}%")
@@ -146,8 +145,8 @@ class RepositorioMaterial(private val cliente: SupabaseClient = SupabaseClientPr
                         filter { eq(Supabase.COL_ID_DEPOSITO, id) }
                     }
 
-                    // Aplica a busca parcial no nome se houver texto de pesquisa
-                    if (!textoPesquisa.isNotNullOrBlank()) {
+                    // Aplica a busca parcial no nome apenas quando há texto de pesquisa
+                    if (!textoPesquisa.isNullOrBlank()) {
                         filter {
                             // ilike ignora maiúsculas/minúsculas e % busca o texto em qualquer posição
                             ilike(Supabase.COL_NOME_MATERIAL, "%${textoPesquisa.trim()}%")
@@ -163,8 +162,4 @@ class RepositorioMaterial(private val cliente: SupabaseClient = SupabaseClientPr
                 .decodeList<ResumoMaterialDeposito>()
         }
     }
-
-    // Extensão auxiliar privada
-    private fun String?.isNotNullOrBlank(): Boolean = !this.isNullOrBlank()
-
 }

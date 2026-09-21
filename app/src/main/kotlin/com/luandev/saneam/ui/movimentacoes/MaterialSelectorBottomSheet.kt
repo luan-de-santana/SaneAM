@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -22,16 +23,25 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlin.time.Duration.Companion.milliseconds
 
-class MaterialSelectorBottomSheet(
-    private val onMaterialSelected: (ResumoMaterialGrupo) -> Unit
-) : BottomSheetDialogFragment() {
+class MaterialSelectorBottomSheet : BottomSheetDialogFragment() {
 
     private var _binding: LayoutMaterialSelectorBottomSheetBinding? = null
     private val binding get() = _binding!!
 
     private val viewModel: MaterialSelectorViewModel by viewModels()
     private val adapter = MaterialAdapter { material ->
-        onMaterialSelected(material)
+        parentFragmentManager.setFragmentResult(
+            REQUEST_KEY,
+            bundleOf(
+                RESULT_ID to material.id,
+                RESULT_CODIGO_ALPHA to material.codigoAlpha,
+                RESULT_NOME to material.nome,
+                RESULT_UNIDADE_MEDIDA to material.unidadeMedida,
+                RESULT_ID_GRUPO to material.idGrupo,
+                RESULT_NOME_GRUPO to material.nomeGrupo,
+                RESULT_ICONE_GRUPO to material.iconeGrupo
+            )
+        )
         dismiss()
     }
 
@@ -99,5 +109,27 @@ class MaterialSelectorBottomSheet(
 
     companion object {
         const val TAG = "MaterialSelectorBottomSheet"
+        const val REQUEST_KEY = "material_selector_result"
+
+        private const val RESULT_ID = "id"
+        private const val RESULT_CODIGO_ALPHA = "codigo_alpha"
+        private const val RESULT_NOME = "nome"
+        private const val RESULT_UNIDADE_MEDIDA = "unidade_medida"
+        private const val RESULT_ID_GRUPO = "id_grupo"
+        private const val RESULT_NOME_GRUPO = "nome_grupo"
+        private const val RESULT_ICONE_GRUPO = "icone_grupo"
+
+        fun newInstance() = MaterialSelectorBottomSheet()
+
+        fun materialFromResult(result: Bundle): ResumoMaterialGrupo =
+            ResumoMaterialGrupo(
+                id = result.getLong(RESULT_ID).takeUnless { it == 0L },
+                codigoAlpha = result.getInt(RESULT_CODIGO_ALPHA),
+                nome = result.getString(RESULT_NOME).orEmpty(),
+                unidadeMedida = result.getString(RESULT_UNIDADE_MEDIDA).orEmpty(),
+                idGrupo = result.getLong(RESULT_ID_GRUPO),
+                nomeGrupo = result.getString(RESULT_NOME_GRUPO).orEmpty(),
+                iconeGrupo = result.getString(RESULT_ICONE_GRUPO).orEmpty()
+            )
     }
 }

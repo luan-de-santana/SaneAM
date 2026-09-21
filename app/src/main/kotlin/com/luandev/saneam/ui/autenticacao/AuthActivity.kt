@@ -10,12 +10,19 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.credentials.CredentialManager
 import androidx.credentials.GetCredentialRequest
+import androidx.credentials.exceptions.GetCredentialCancellationException
 import androidx.credentials.exceptions.GetCredentialException
+import androidx.credentials.exceptions.GetCredentialInterruptedException
+import androidx.credentials.exceptions.GetCredentialProviderConfigurationException
+import androidx.credentials.exceptions.GetCredentialUnknownException
+import androidx.credentials.exceptions.NoCredentialException
 import androidx.lifecycle.lifecycleScope
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
+import com.google.android.libraries.identity.googleid.GetSignInWithGoogleOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.luandev.saneam.BuildConfig
 import com.luandev.saneam.databinding.ActivityAuthBinding
+import com.luandev.saneam.service.util.aplicarInsetsBarrasSistema
 import com.luandev.saneam.ui.menu.MenuActivity
 import com.luandev.saneam.viewmodel.AuthState
 import com.luandev.saneam.viewmodel.AuthViewModel
@@ -32,6 +39,7 @@ class AuthActivity : AppCompatActivity() {
         binding = ActivityAuthBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        binding.root.aplicarInsetsBarrasSistema()
         credentialManager = CredentialManager.create(this)
 
         configurarCliques()
@@ -72,18 +80,96 @@ class AuthActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             try {
-                val result = credentialManager.getCredential(this@AuthActivity, request)
-                val credential = result.credential
+                autenticarComCredencial(
+                    credentialManager.getCredential(this@AuthActivity, request).credential
+                )
+            } catch (e: NoCredentialException) {
+                try {
+                    // Fallback para o fluxo explícito, que também permite escolher uma conta
+                    // ainda não autorizada para este aplicativo.
+                    val signInOption = GetSignInWithGoogleOption
+                        .Builder(BuildConfig.GOOGLE_WEB_CLIENT_ID)
+                        .build()
+                    val signInRequest = GetCredentialRequest.Builder()
+                        .addCredentialOption(signInOption)
+                        .build()
 
-                if (credential is GoogleIdTokenCredential) {
-                    // Entrega o token obtido de forma segura para a ViewModel processar no Supabase
-                    viewModel.realizarLoginComGoogle(credential.idToken)
+                    autenticarComCredencial(
+                        credentialManager.getCredential(this@AuthActivity, signInRequest).credential
+                    )
+                } catch (fallbackError: NoCredentialException) {
+                    Toast.makeText(
+                        this@AuthActivity,
+                        "Nenhuma conta Google está disponível. Adicione uma conta ao dispositivo e verifique se o Google Play Services está atualizado.",
+                        Toast.LENGTH_LONG
+                    ).show()
+                } catch (fallbackError: GetCredentialException) {
+                    mostrarErroCredencial(fallbackError)
                 }
+            } catch (e: GetCredentialCancellationException) {
+                Toast.makeText(
+                    this@AuthActivity,
+                    "Login com Google cancelado.",
+                    Toast.LENGTH_SHORT
+                ).show()
+            } catch (e: NoCredentialException) {
+                Toast.makeText(
+                    this@AuthActivity,
+                    "Nenhuma credencial do Google foi encontrada neste dispositivo.",
+                    Toast.LENGTH_LONG
+                ).show()
+            } catch (e: GetCredentialInterruptedException) {
+                Toast.makeText(
+                    this@AuthActivity,
+                    "Não foi possível concluir o login. Verifique sua conexão e tente novamente.",
+                    Toast.LENGTH_LONG
+                ).show()
+            } catch (e: GetCredentialProviderConfigurationException) {
+                Toast.makeText(
+                    this@AuthActivity,
+                    "O login com Google não está disponível neste dispositivo.",
+                    Toast.LENGTH_LONG
+                ).show()
+            } catch (e: GetCredentialUnknownException) {
+                Toast.makeText(
+                    this@AuthActivity,
+                    "Falha inesperada ao obter a credencial do Google.",
+                    Toast.LENGTH_LONG
+                ).show()
             } catch (e: GetCredentialException) {
-                Toast.makeText(this@AuthActivity, "Login com Google cancelado.", Toast.LENGTH_SHORT)
-                    .show()
+                Toast.makeText(
+                    this@AuthActivity,
+                    "Não foi possível obter a credencial do Google.",
+                    Toast.LENGTH_LONG
+                ).show()
             }
         }
+    }
+
+    private fun autenticarComCredencial(credential: androidx.credentials.Credential) {
+        if (credential is GoogleIdTokenCredential) {
+            viewModel.realizarLoginComGoogle(credential.idToken)
+        } else {
+            Toast.makeText(
+                this,
+                "A credencial selecionada não é compatível com o login do Google.",
+                Toast.LENGTH_LONG
+            ).show()
+        }
+    }
+
+    private fun mostrarErroCredencial(exception: GetCredentialException) {
+        val mensagem = when (exception) {
+            is GetCredentialCancellationException -> "Login com Google cancelado."
+            is GetCredentialInterruptedException ->
+                "Não foi possível concluir o login. Verifique sua conexão e tente novamente."
+            is GetCredentialProviderConfigurationException ->
+                "O login com Google não está disponível neste dispositivo."
+            is GetCredentialUnknownException ->
+                "Falha inesperada ao obter a credencial do Google."
+            else -> "Não foi possível obter a credencial do Google."
+        }
+        Toast.makeText(this, mensagem, Toast.LENGTH_LONG).show()
     }
 
     private fun configurarObservadores() {

@@ -86,7 +86,14 @@ class AuthViewModel : ViewModel() {
      * Realiza o cadastro de um novo usuário (E-mail e Senha) no Supabase
      */
     fun realizarCadastro(emailTxt: String, passwordTxt: String, nomeTxt: String) {
+        val nomeValido = nomeTxt.trim()
+
         if (!validarCampos(emailTxt, passwordTxt)) return
+        if (nomeValido.isBlank() || nomeValido.length < 3) {
+            _authState.value = AuthState.Erro("Informe um nome com pelo menos 3 caracteres.")
+            return
+        }
+
         _authState.value = AuthState.Carregando
         viewModelScope.launch {
             try {
@@ -95,7 +102,7 @@ class AuthViewModel : ViewModel() {
                     password = passwordTxt
                     // Envia o nome dentro do objeto de metadados do usuário
                     data = buildJsonObject {
-                        put("nome", nomeTxt)
+                        put("nome", nomeValido)
                     }
                 }
                 _authState.value =

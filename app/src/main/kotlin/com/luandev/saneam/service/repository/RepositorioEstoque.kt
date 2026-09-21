@@ -8,6 +8,7 @@ import com.luandev.saneam.service.util.ConstantsSaneAM.Supabase
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.postgrest.postgrest
 import io.github.jan.supabase.postgrest.query.Order
+import io.github.jan.supabase.postgrest.rpc
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -25,6 +26,10 @@ class RepositorioEstoque(private val cliente: SupabaseClient = SupabaseClientPro
     }
 
     suspend fun executarMovimentacaoEstoque(movimentacao: MovimentacaoEstoque): Result<Unit> = runCatching {
+        require(movimentacao.quantidade.isFinite() && movimentacao.quantidade > 0.0) {
+            "Quantidade inválida. Informe um valor numérico maior que zero."
+        }
+
         withContext(Dispatchers.IO) {
             val estoqueAtual = obterItemEstoque(movimentacao.idMaterial, movimentacao.idDeposito).getOrThrow()
 
@@ -49,6 +54,31 @@ class RepositorioEstoque(private val cliente: SupabaseClient = SupabaseClientPro
 
             cliente.postgrest[Supabase.ESTOQUES].upsert(estoqueAtualizado)
             cliente.postgrest[Supabase.MOVIMENTACOES].insert(movimentacao)
+        }
+    }
+
+    suspend fun transferirEstoque(
+        idMaterial: Long,
+        idOrigem: Long,
+        idDestino: Long,
+        quantidade: Double,
+        idUsuario: String,
+        motivo: String? = null
+    ): Result<Unit> = runCatching {
+        require(quantidade > 0) { "Quantidade deve ser maior que zero." }
+
+        withContext(Dispatchers.IO) {
+            cliente.postgrest.rpc(
+                Supabase.RPC_TRANSFERIR_ESTOQUE,
+                mapOf(
+                    "p_id_material" to idMaterial,
+                    "p_id_origem" to idOrigem,
+                    "p_id_destino" to idDestino,
+                    "p_quantidade" to quantidade,
+                    "p_id_usuario" to idUsuario,
+                    "p_motivo" to motivo
+                )
+            )
         }
     }
 

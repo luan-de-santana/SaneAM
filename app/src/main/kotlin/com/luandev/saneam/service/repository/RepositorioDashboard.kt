@@ -8,7 +8,7 @@ import io.github.jan.supabase.postgrest.rpc
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class RepositorioDasboard(private val cliente: SupabaseClient = SupabaseClientProvider.client) {
+class RepositorioDashboard(private val cliente: SupabaseClient = SupabaseClientProvider.client) {
 
     suspend fun obterResumoDashboard(): Result<ResumoDashboard> = runCatching {
         withContext(Dispatchers.IO) {

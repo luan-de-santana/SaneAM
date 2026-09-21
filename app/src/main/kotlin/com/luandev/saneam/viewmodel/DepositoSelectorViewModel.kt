@@ -18,15 +18,20 @@ class DepositoSelectorViewModel(
     private val _erro = MutableLiveData<String>()
     val erro: LiveData<String> get() = _erro
 
+    private val _carregando = MutableLiveData(false)
+    val carregando: LiveData<Boolean> get() = _carregando
+
     init {
         carregarDepositos()
     }
 
     private fun carregarDepositos() {
+        _carregando.value = true
         viewModelScope.launch {
             repositorio.obterTodosDepositos()
                 .onSuccess { _depositos.value = it }
                 .onFailure { _erro.value = it.message ?: "Erro ao carregar depósitos" }
+                .also { _carregando.value = false }
         }
     }
 }

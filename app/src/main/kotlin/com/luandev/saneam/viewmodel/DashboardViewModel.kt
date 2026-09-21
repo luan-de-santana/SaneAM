@@ -5,11 +5,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.luandev.saneam.service.model.ResumoDashboard
-import com.luandev.saneam.service.repository.RepositorioDasboard
+import com.luandev.saneam.service.repository.RepositorioDashboard
 import kotlinx.coroutines.launch
 
 class DashboardViewModel(
-    private val repositorio: RepositorioDasboard = RepositorioDasboard()
+    private val repositorio: RepositorioDashboard = RepositorioDashboard()
 ) : ViewModel() {
 
     private val _resumo = MutableLiveData<ResumoDashboard>()

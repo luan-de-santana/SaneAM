@@ -11,6 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.luandev.saneam.R
 import com.luandev.saneam.databinding.FragmentDashboardBinding
+import com.luandev.saneam.service.util.aplicarInsetsBarrasSistema
 import com.luandev.saneam.service.util.ConstantsSaneAM.Key
 import com.luandev.saneam.service.util.configurarCabecalhoPadrao
 import com.luandev.saneam.ui.movimentacoes.TransferenciaActivity
@@ -33,6 +34,7 @@ class FragmentDashboard : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.root.aplicarInsetsBarrasSistema()
 
         configurarCabecalho()
         configurarCliques()
