@@ -4,7 +4,7 @@
     android:layout_width="wrap_content"
     android:layout_height="36dp"
     android:layout_marginEnd="8dp"
-    app:cardBackgroundColor="#FFFFFF"
+    app:cardBackgroundColor="@color/white"
     app:cardCornerRadius="18dp"
     app:cardElevation="0dp">
 
@@ -14,8 +14,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:paddingHorizontal="16dp"
-        android:text="Depósito"
-        android:textColor="#64748B"
+        android:text="@string/deposito_label"
+        android:textColor="@color/text_secondary"
         android:textSize="14sp"
         android:textStyle="bold" />
 </androidx.cardview.widget.CardView>

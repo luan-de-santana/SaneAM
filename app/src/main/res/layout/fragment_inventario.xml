@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F8FAFC"
+    android:background="@color/surface_light"
     android:orientation="vertical">
 
     <!-- Header Section -->
@@ -20,7 +20,7 @@
         <androidx.cardview.widget.CardView
             android:layout_width="44dp"
             android:layout_height="44dp"
-            app:cardBackgroundColor="#60A5FA"
+            app:cardBackgroundColor="@color/blue"
             app:cardCornerRadius="12dp"
             app:cardElevation="0dp">
 
@@ -29,15 +29,15 @@
                 android:layout_height="24dp"
                 android:layout_gravity="center"
                 android:src="@drawable/ic_location_pin"
-                app:tint="#FFFFFF" />
+                app:tint="@color/white" />
         </androidx.cardview.widget.CardView>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:text="Inventário"
-            android:textColor="#0F172A"
+            android:text="@string/inventario"
+            android:textColor="@color/text_primary"
             android:textSize="22sp"
             android:textStyle="bold" />
     </LinearLayout>
@@ -45,7 +45,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#E2E8F0" />
+        android:background="@color/border" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -63,7 +63,7 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
-                app:cardBackgroundColor="#FFFFFF"
+                app:cardBackgroundColor="@color/white"
                 app:cardCornerRadius="24dp"
                 app:cardElevation="0dp">
 
@@ -78,7 +78,7 @@
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:src="@drawable/ic_search"
-                        app:tint="#94A3B8" />
+                        app:tint="@color/hint" />
 
                     <EditText
                         android:id="@+id/edtSearch"
@@ -86,11 +86,11 @@
                         android:layout_height="match_parent"
                         android:layout_marginStart="12dp"
                         android:background="@null"
-                        android:hint="Buscar material..."
+                        android:hint="@string/buscar_material"
                         android:imeOptions="actionSearch"
                         android:inputType="text"
-                        android:textColor="#0F172A"
-                        android:textColorHint="#94A3B8"
+                        android:textColor="@color/text_primary"
+                        android:textColorHint="@color/hint"
                         android:textSize="14sp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -116,7 +116,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="36dp"
                         android:layout_marginEnd="8dp"
-                        app:cardBackgroundColor="#60A5FA"
+                        app:cardBackgroundColor="@color/blue"
                         app:cardCornerRadius="18dp"
                         app:cardElevation="0dp">
 
@@ -126,8 +126,8 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:paddingHorizontal="20dp"
-                            android:text="Todos"
-                            android:textColor="#FFFFFF"
+                            android:text="@string/todos"
+                            android:textColor="@color/white"
                             android:textSize="14sp"
                             android:textStyle="bold" />
                     </androidx.cardview.widget.CardView>

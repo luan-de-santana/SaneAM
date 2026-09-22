@@ -38,4 +38,29 @@
     <!-- Purple Badge (Inventário) -->
     <color name="badge_purple_bg">#F3E8FF</color>
     <color name="badge_purple_text">#9333EA</color>
+
+    <color name="white">#FFFFFF</color>
+    <color name="black_transparent">#00000000</color>
+    <color name="text_primary">#0F172A</color>
+    <color name="text_secondary">#64748B</color>
+    <color name="text_button">#334155</color>
+    <color name="text_icon">#475569</color>
+    <color name="hint">#94A3B8</color>
+    <color name="border">#E2E8F0</color>
+    <color name="border_button">#CBD5E1</color>
+    <color name="blue">#60A5FA</color>
+    <color name="blue_light">#EFF6FF</color>
+    <color name="blue_border">#DBEAFE</color>
+    <color name="surface_light">#F8FAFC</color>
+    <color name="surface_muted">#F1F5F9</color>
+    <color name="green_dark">#15803D</color>
+    <color name="red_dark">#B91C1C</color>
+    <color name="red">#C5221F</color>
+    <color name="red_light">#FECACA</color>
+    <color name="orange_light">#FFF7ED</color>
+    <color name="green_light">#E6F4EA</color>
+    <color name="red_surface">#FDF2F2</color>
+    <color name="movement_surface">#E6EEF7</color>
+    <color name="indigo">#4F46E5</color>
+    <color name="green_line">#166534</color>
 </resources>

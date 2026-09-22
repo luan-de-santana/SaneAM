@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/water_sanitation_light_mode"
@@ -38,8 +37,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:text="Faça login para continuar"
-                android:textColor="#64748B"
+                android:text="@string/faca_login"
+                android:textColor="@color/text_secondary"
                 android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -52,25 +51,25 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
-                android:hint="E-mail"
+                android:hint="@string/email"
                 app:boxCornerRadiusBottomEnd="12dp"
                 app:boxCornerRadiusBottomStart="12dp"
                 app:boxCornerRadiusTopEnd="12dp"
                 app:boxCornerRadiusTopStart="12dp"
-                app:boxStrokeColor="#4F46E5"
-                app:hintTextColor="#4F46E5"
+                app:boxStrokeColor="@color/indigo"
+                app:hintTextColor="@color/indigo"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/txtSubTitle"
                 app:startIconDrawable="@android:drawable/sym_action_email"
-                app:startIconTint="#64748B">
+                app:startIconTint="@color/text_secondary">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/edtEmail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textEmailAddress"
-                    android:textColor="#0F172A"
+                    android:textColor="@color/text_primary"
                     android:textSize="15sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -81,27 +80,27 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:hint="Senha (mínimo 6 caracteres)"
+                android:hint="@string/senha_minima"
                 app:boxCornerRadiusBottomEnd="12dp"
                 app:boxCornerRadiusBottomStart="12dp"
                 app:boxCornerRadiusTopEnd="12dp"
                 app:boxCornerRadiusTopStart="12dp"
-                app:boxStrokeColor="#4F46E5"
+                app:boxStrokeColor="@color/indigo"
                 app:endIconMode="password_toggle"
-                app:endIconTint="#64748B"
-                app:hintTextColor="#4F46E5"
+                app:endIconTint="@color/text_secondary"
+                app:hintTextColor="@color/indigo"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/inputLayoutEmail"
                 app:startIconDrawable="@android:drawable/ic_lock_idle_lock"
-                app:startIconTint="#64748B">
+                app:startIconTint="@color/text_secondary">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/edtPassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPassword"
-                    android:textColor="#0F172A"
+                    android:textColor="@color/text_primary"
                     android:textSize="15sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -114,9 +113,9 @@
                 android:layout_height="54dp"
                 android:layout_marginTop="24dp"
                 android:backgroundTint="@color/md_theme_light_primary"
-                android:text="Entrar"
+                android:text="@string/entrar"
                 android:textAllCaps="false"
-                android:textColor="#FFFFFF"
+                android:textColor="@color/white"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 app:cornerRadius="12dp"
@@ -138,14 +137,14 @@
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_weight="1"
-                    android:background="#E2E8F0" />
+                    android:background="@color/border" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingHorizontal="12dp"
-                    android:text="OU"
-                    android:textColor="#94A3B8"
+                    android:text="@string/ou"
+                    android:textColor="@color/hint"
                     android:textSize="12sp"
                     android:textStyle="bold" />
 
@@ -153,7 +152,7 @@
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_weight="1"
-                    android:background="#E2E8F0" />
+                    android:background="@color/border" />
             </LinearLayout>
 
             <!-- Botão Continuar com o Google -->
@@ -163,19 +162,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="54dp"
                 android:layout_marginTop="20dp"
-                android:text="Continuar com o Google"
+                android:text="@string/continuar_google"
                 android:textAllCaps="false"
-                android:textColor="#334155"
+                android:textColor="@color/text_button"
                 android:textSize="15sp"
                 android:textStyle="bold"
                 app:cornerRadius="12dp"
                 app:icon="@android:drawable/ic_menu_compass"
                 app:iconGravity="textStart"
-                app:iconTint="#475569"
+                app:iconTint="@color/text_icon"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/layoutDivider"
-                app:strokeColor="#CBD5E1"
+                app:strokeColor="@color/border_button"
                 app:strokeWidth="1dp" />
 
             <!-- Botão Criar Conta -->
@@ -186,9 +185,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:layout_marginBottom="16dp"
-                android:text="Não tem uma conta? Criar nova conta"
+                android:text="@string/criar_conta"
                 android:textAllCaps="false"
-                android:textColor="#4F46E5"
+                android:textColor="@color/indigo"
                 android:textSize="14sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -205,7 +204,7 @@
         style="?android:attr/progressBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:indeterminateTint="#15803D"
+        android:indeterminateTint="@color/green_dark"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@id/txtDeveloper"
         app:layout_constraintEnd_toEndOf="parent"
@@ -219,7 +218,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
         android:text="@string/desenvolvido_por"
-        android:textColor="#334155"
+        android:textColor="@color/text_button"
         android:textSize="12sp"
         android:textStyle="italic"
         app:layout_constraintBottom_toBottomOf="parent"

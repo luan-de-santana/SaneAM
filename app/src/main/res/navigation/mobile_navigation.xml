@@ -7,19 +7,19 @@
 
     <fragment
         android:id="@+id/nav_inicio"
-        android:name="com.luandev.saneam.ui.dashboard.FragmentDashboard"
+        android:name="com.luanpsantanadev.saneam.ui.dashboard.FragmentDashboard"
         android:label="@string/title_inicio"
         tools:layout="@layout/fragment_dashboard" />
 
     <fragment
         android:id="@+id/nav_inventario"
-        android:name="com.luandev.saneam.ui.inventario.InventarioFragment"
+        android:name="com.luanpsantanadev.saneam.ui.inventario.InventarioFragment"
         android:label="@string/title_inventario"
         tools:layout="@layout/fragment_inventario" />
 
     <fragment
         android:id="@+id/nav_moviment"
-        android:name="com.luandev.saneam.ui.movimentacoes.MovimentacoesFragment"
+        android:name="com.luanpsantanadev.saneam.ui.movimentacoes.MovimentacoesFragment"
         android:label="@string/title_moviment"
         tools:layout="@layout/fragment_movimentacoes">
         <argument
@@ -30,7 +30,7 @@
 
     <fragment
         android:id="@+id/nav_config"
-        android:name="com.luandev.saneam.ui.config.ConfigFragment"
+        android:name="com.luanpsantanadev.saneam.ui.config.ConfigFragment"
         android:label="@string/title_config"
         tools:layout="@layout/fragment_configuracoes" />
 

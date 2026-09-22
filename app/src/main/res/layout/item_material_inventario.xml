@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="12dp"
-    app:cardBackgroundColor="#FFFFFF"
+    app:cardBackgroundColor="@color/white"
     app:cardCornerRadius="16dp"
     app:cardElevation="0dp">
 
@@ -20,7 +20,7 @@
             android:id="@+id/cardIcon"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            app:cardBackgroundColor="#F1F5F9"
+            app:cardBackgroundColor="@color/surface_muted"
             app:cardCornerRadius="12dp"
             app:cardElevation="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -33,7 +33,7 @@
                 android:layout_height="24dp"
                 android:layout_gravity="center"
                 android:src="@drawable/ic_build"
-                app:tint="#94A3B8" />
+                app:tint="@color/hint" />
         </androidx.cardview.widget.CardView>
 
         <!-- Material Details -->
@@ -43,7 +43,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             android:layout_marginEnd="8dp"
-            android:textColor="#0F172A"
+            android:textColor="@color/text_primary"
             android:textSize="15sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toStartOf="@id/layoutQuantidade"
@@ -58,7 +58,7 @@
             android:layout_marginStart="12dp"
             android:layout_marginTop="2dp"
             android:layout_marginEnd="8dp"
-            android:textColor="#64748B"
+            android:textColor="@color/text_secondary"
             android:textSize="13sp"
             app:layout_constraintEnd_toStartOf="@id/layoutQuantidade"
             app:layout_constraintStart_toEndOf="@id/cardIcon"
@@ -79,7 +79,7 @@
                 android:id="@+id/txtQuantidade"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#0F172A"
+                android:textColor="@color/text_primary"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 tools:text="34" />
@@ -88,7 +88,7 @@
                 android:id="@+id/txtUnidade"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#64748B"
+                android:textColor="@color/text_secondary"
                 android:textSize="12sp"
                 tools:text="un" />
         </LinearLayout>
@@ -111,7 +111,7 @@
             android:id="@+id/txtMinimo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#94A3B8"
+            android:textColor="@color/hint"
             android:textSize="11sp"
             app:layout_constraintBottom_toBottomOf="@id/progressEstoque"
             app:layout_constraintEnd_toEndOf="parent"

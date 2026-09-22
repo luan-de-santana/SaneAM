@@ -13,7 +13,7 @@
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingHorizontal="20dp"
-        android:paddingTop="16dp"
+        android:paddingTop="20dp"
         android:paddingBottom="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -61,50 +61,9 @@
             android:paddingHorizontal="20dp"
             android:paddingBottom="24dp">
 
-            <!-- Card de Saudação / Unidade -->
-            <androidx.cardview.widget.CardView
+            <include
                 android:id="@+id/cardWelcome"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                app:cardBackgroundColor="@color/md_theme_light_primaryContainer"
-                app:cardCornerRadius="20dp"
-                app:cardElevation="2dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="20dp">
-
-                    <TextView
-                        android:id="@+id/text_saudacao"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Bom dia, Kaíque Batista"
-                        android:textColor="@color/md_theme_light_onPrimaryContainer"
-                        android:textSize="14sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:text="Controle de Estoque da CPR AM"
-                        android:textColor="@color/md_theme_light_onPrimaryContainer"
-                        android:textSize="20sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/text_data_atual"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
-                        android:alpha="0.8"
-                        android:text="13 de setembro de 2026"
-                        android:textColor="@color/md_theme_light_onPrimaryContainer"
-                        android:textSize="13sp" />
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
+                layout="@layout/card_welcome" />
 
             <!-- Cards de Estatísticas (Grid 4 colunas) -->
             <LinearLayout
@@ -136,7 +95,7 @@
                             android:id="@+id/text_depositos_value"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="0"
+                            android:text="@string/zero"
                             android:textColor="@color/badge_blue_text"
                             android:textSize="24sp"
                             android:textStyle="bold" />
@@ -145,7 +104,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
-                            android:text="Depósitos"
+                            android:text="@string/depositos"
                             android:textColor="@color/badge_blue_text"
                             android:textSize="11sp"
                             android:textStyle="bold" />
@@ -173,7 +132,7 @@
                             android:id="@+id/text_grupos_value"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="0"
+                            android:text="@string/zero"
                             android:textColor="@color/badge_green_text"
                             android:textSize="24sp"
                             android:textStyle="bold" />
@@ -182,7 +141,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
-                            android:text="Grupos"
+                            android:text="@string/grupos"
                             android:textColor="@color/badge_green_text"
                             android:textSize="11sp"
                             android:textStyle="bold" />
@@ -210,7 +169,7 @@
                             android:id="@+id/text_materiais_value"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="0"
+                            android:text="@string/zero"
                             android:textColor="@color/badge_amber_text"
                             android:textSize="24sp"
                             android:textStyle="bold" />
@@ -219,7 +178,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
-                            android:text="Materiais"
+                            android:text="@string/materiais"
                             android:textColor="@color/badge_amber_text"
                             android:textSize="11sp"
                             android:textStyle="bold" />
@@ -247,7 +206,7 @@
                             android:id="@+id/text_criticos_value"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="0"
+                            android:text="@string/zero"
                             android:textColor="@color/badge_red_text"
                             android:textSize="24sp"
                             android:textStyle="bold" />
@@ -256,7 +215,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
-                            android:text="Críticos"
+                            android:text="@string/criticos"
                             android:textColor="@color/badge_red_text"
                             android:textSize="11sp"
                             android:textStyle="bold" />
@@ -271,7 +230,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:letterSpacing="0.05"
-                android:text="AÇÕES RÁPIDAS"
+                android:text="@string/acoes_rapidas"
                 android:textColor="@color/md_theme_light_outline"
                 android:textSize="13sp"
                 android:textStyle="bold" />
@@ -320,7 +279,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="12dp"
-                            android:text="Nova Entrada"
+                            android:text="@string/nova_entrada"
                             android:textColor="@color/md_theme_light_onSurface"
                             android:textSize="15sp"
                             android:textStyle="bold" />
@@ -329,7 +288,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="2dp"
-                            android:text="Registrar recebimento"
+                            android:text="@string/registrar_recebimento"
                             android:textColor="@color/md_theme_light_outline"
                             android:textSize="12sp" />
                     </LinearLayout>
@@ -372,7 +331,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="12dp"
-                            android:text="Nova Saída"
+                            android:text="@string/nova_saida"
                             android:textColor="@color/md_theme_light_onSurface"
                             android:textSize="15sp"
                             android:textStyle="bold" />
@@ -381,7 +340,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="2dp"
-                            android:text="Baixar para serviço"
+                            android:text="@string/baixar_servico"
                             android:textColor="@color/md_theme_light_outline"
                             android:textSize="12sp" />
                     </LinearLayout>
@@ -423,7 +382,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="12dp"
-                            android:text="Transferência"
+                            android:text="@string/transferencia"
                             android:textColor="@color/md_theme_light_onSurface"
                             android:textSize="15sp"
                             android:textStyle="bold" />
@@ -432,7 +391,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="2dp"
-                            android:text="Entre depósitos"
+                            android:text="@string/entre_depositos"
                             android:textColor="@color/md_theme_light_outline"
                             android:textSize="12sp" />
                     </LinearLayout>
@@ -474,7 +433,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="12dp"
-                            android:text="Ver Inventário"
+                            android:text="@string/ver_inventario"
                             android:textColor="@color/md_theme_light_onSurface"
                             android:textSize="15sp"
                             android:textStyle="bold" />
@@ -483,7 +442,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="2dp"
-                            android:text="Todos os materiais"
+                            android:text="@string/todos_materiais"
                             android:textColor="@color/md_theme_light_outline"
                             android:textSize="12sp" />
                     </LinearLayout>
@@ -503,7 +462,7 @@
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
                     android:letterSpacing="0.05"
-                    android:text="ÚLTIMAS MOVIMENTAÇÕES"
+                    android:text="@string/ultimas_movimentacoes"
                     android:textColor="@color/md_theme_light_outline"
                     android:textSize="13sp"
                     android:textStyle="bold" />
@@ -514,7 +473,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-                    android:text="Ver tudo"
+                    android:text="@string/ver_tudo"
                     android:textColor="@color/md_theme_light_primary"
                     android:textSize="14sp"
                     android:textStyle="bold" />
@@ -556,7 +515,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Registro de Gaveta 50mm"
+                                android:text="@string/material_exemplo"
                                 android:textColor="@color/md_theme_light_onSurface"
                                 android:textSize="14sp"
                                 android:textStyle="bold" />
@@ -565,7 +524,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="2dp"
-                                android:text="Galpão A"
+                                android:text="@string/deposito_exemplo"
                                 android:textColor="@color/md_theme_light_outline"
                                 android:textSize="12sp" />
                         </LinearLayout>
@@ -580,7 +539,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="+20 un"
+                                android:text="@string/movimentacao_exemplo"
                                 android:textColor="@color/badge_green_text"
                                 android:textSize="14sp"
                                 android:textStyle="bold" />
@@ -589,7 +548,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="2dp"
-                                android:text="14:32"
+                                android:text="@string/hora_exemplo"
                                 android:textColor="@color/md_theme_light_outline"
                                 android:textSize="12sp" />
                         </LinearLayout>

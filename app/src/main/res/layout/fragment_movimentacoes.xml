@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/md_theme_light_background">
@@ -13,17 +11,16 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:paddingHorizontal="20dp"
-        android:paddingTop="16dp"
+        android:paddingTop="20dp"
         android:paddingBottom="12dp"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
@@ -46,7 +43,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
-                android:text="Movimentações"
+                android:text="@string/movimentacoes"
                 android:textColor="@color/md_theme_light_onBackground"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -58,16 +55,15 @@
             android:layout_width="wrap_content"
             android:layout_height="44dp"
             android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:text="Transferir"
+            android:text="@string/transferir"
+            android:textAllCaps="false"
             android:textColor="@color/md_theme_light_onPrimary"
             android:textSize="13sp"
-            android:textAllCaps="false"
-            app:icon="@drawable/ic_swap_horizontal"
-            app:iconTint="@color/md_theme_light_onPrimary"
             app:backgroundTint="@color/md_theme_light_primary"
             app:cornerRadius="12dp"
-            app:elevation="0dp" />
+            app:elevation="0dp"
+            app:icon="@drawable/ic_swap_horizontal"
+            app:iconTint="@color/md_theme_light_onPrimary" />
     </RelativeLayout>
 
     <!-- Barra de Abas (Segmented Control / Switcher) -->
@@ -77,18 +73,18 @@
         android:layout_height="52dp"
         android:layout_marginHorizontal="20dp"
         android:layout_marginTop="8dp"
-        app:cardBackgroundColor="#E6EEF7"
+        app:cardBackgroundColor="@color/movement_surface"
         app:cardCornerRadius="16dp"
         app:cardElevation="0dp"
-        app:layout_constraintTop_toBottomOf="@id/headerMovimentacoes"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/headerMovimentacoes">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="4dp"
             android:orientation="horizontal"
+            android:padding="4dp"
             android:weightSum="3">
 
             <!-- Aba Entrada -->
@@ -106,7 +102,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="Entrada"
+                    android:text="@string/entrada"
                     android:textColor="@color/badge_green_line"
                     android:textSize="14sp"
                     android:textStyle="bold" />
@@ -127,7 +123,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="Saída"
+                    android:text="@string/saida"
                     android:textColor="@color/md_theme_light_outline"
                     android:textSize="14sp"
                     android:textStyle="bold" />
@@ -148,7 +144,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="Acerto"
+                    android:text="@string/acerto"
                     android:textColor="@color/md_theme_light_outline"
                     android:textSize="14sp"
                     android:textStyle="bold" />
@@ -163,9 +159,9 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@id/cardTabs"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/cardTabs" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

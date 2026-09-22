@@ -14,13 +14,109 @@
 
         🚀 Principais Funcionalidades:\n
         ☑ Entrada: realizar a entrada de materiais nos depósitos.\n
-        ☑ Saída: registrar a saída de itens para as equipes de manutenção usarem em atividades em campo.\n
-        ☑ Acerto: ajuste do estoque atual para devido avarias.\n
+        ☑ Saída: registrar a saída de itens para as equipes durante os serviços em campo.\n
+        ☑ Acerto: ajuste do estoque atual em decorrência de avarias.\n
         ☑ Inventário: relação atualizada da quantidade dos materiais.\n\n
 
-        👨‍💻 Autor:\n
-        ✔ Luan Pimentel de Santana - graduando em Análise e Desenvolvimento de Sistemas (RU:5091214) e Agente de Saneamento (Mat:10703)
-
+        👨‍💻 Programador:\n
+        ✔ Luan Pimentel de Santana - graduando em Análise e Desenvolvimento de Sistemas (RU: 5091214) e Agente de Saneamento (Mat: 10703)
     </string>
     <string name="desenvolvido_por">Desenvolvido por Luan de Santana</string>
+    <string name="foto_perfil">Foto de perfil do usuário</string>
+    <string name="screen_configuracoes">Configurações</string>
+    <string name="usuarios">Usuários</string>
+    <string name="desconectar">Desconectar do app</string>
+    <string name="sobre_aplicativo">SOBRE O APLICATIVO</string>
+    <string name="bom_dia_usuario">Bom dia, Usuário</string>
+    <string name="controle_estoque">Controle de Estoque de Materiais da CPR/GNR AM</string>
+    <string name="data_exemplo">13 de setembro de 2026</string>
+    <string name="inventario">Inventário</string>
+    <string name="buscar_material">Buscar material…</string>
+    <string name="todos">Todos</string>
+    <string name="selecionar_material">Selecionar Material</string>
+    <string name="email">E-mail</string>
+    <string name="senha_minima">Senha (mínimo 6 caracteres)</string>
+    <string name="entrar">Entrar</string>
+    <string name="ou">OU</string>
+    <string name="continuar_google">Continuar com o Google</string>
+    <string name="criar_conta">Não tem uma conta? Criar nova conta</string>
+    <string name="voltar">Voltar</string>
+    <string name="transferencia">Transferência</string>
+    <string name="voltar_acessibilidade">Voltar</string>
+    <string name="diminuir">Diminuir</string>
+    <string name="aumentar">Aumentar</string>
+    <string name="faca_login">Faça login para continuar</string>
+    <string name="transferencia_interna">Transferência Interna</string>
+    <string name="mover_material">Mover material entre depósitos</string>
+    <string name="material">MATERIAL</string>
+    <string name="deposito">DEPÓSITO</string>
+    <string name="quantidade">QUANTIDADE</string>
+    <string name="motivo">MOTIVO</string>
+    <string name="confirmar_transferencia">Confirmar Transferência</string>
+    <string name="ajustar_saldo">Ajustar saldo após inventário físico</string>
+    <string name="saldo_sistema">SALDO SISTEMA</string>
+    <string name="saldo_atual">Saldo atual</string>
+    <string name="saldo_real">SALDO REAL</string>
+    <string name="novo_saldo">Novo saldo</string>
+    <string name="justificativa">JUSTIFICATIVA</string>
+    <string name="motivo_ajuste">Motivo do ajuste…</string>
+    <string name="confirmar_acerto">Confirmar Acerto de Estoque</string>
+    <string name="entrada_descricao">Registrar entrada de material no estoque</string>
+    <string name="deposito_destino">DEPÓSITO DE DESTINO</string>
+    <string name="exemplo_50">Ex: 50</string>
+    <string name="motivo_entrada">Motivo da entrada…</string>
+    <string name="confirmar_entrada">Confirmar Entrada</string>
+    <string name="saida_descricao">Baixar material para uso em serviço</string>
+    <string name="deposito_origem">DEPÓSITO DE ORIGEM</string>
+    <string name="exemplo_5">Ex: 5</string>
+    <string name="motivo_saida">Motivo da saída…</string>
+    <string name="confirmar_saida">Confirmar Saída</string>
+    <string name="unidade">un</string>
+    <string name="motivo_transferencia">Motivo da transferência…</string>
+    <string name="movimentacoes">Movimentações</string>
+    <string name="transferir">Transferir</string>
+    <string name="entrada">Entrada</string>
+    <string name="saida">Saída</string>
+    <string name="acerto">Acerto</string>
+    <string name="acoes_rapidas">AÇÕES RÁPIDAS</string>
+    <string name="nova_entrada">Nova Entrada</string>
+    <string name="registrar_recebimento">Registrar recebimento</string>
+    <string name="nova_saida">Nova Saída</string>
+    <string name="baixar_servico">Baixar para serviço</string>
+    <string name="entre_depositos">Entre depósitos</string>
+    <string name="ver_inventario">Ver Inventário</string>
+    <string name="todos_materiais">Todos os materiais</string>
+    <string name="ultimas_movimentacoes">ÚLTIMAS MOVIMENTAÇÕES</string>
+    <string name="ver_tudo">Ver tudo</string>
+    <string name="acesso_depositos">ACESSO AOS DEPÓSITOS</string>
+    <string name="salvar_acessos">Salvar acessos</string>
+    <string name="deposito_label">Depósito</string>
+    <string name="depositos">Depósitos</string>
+    <string name="grupos">Grupos</string>
+    <string name="materiais">Materiais</string>
+    <string name="criticos">Críticos</string>
+    <string name="finalizar_cadastro">Finalizar Cadastro</string>
+    <string name="como_chamado">Como gostaria de ser chamado?</string>
+    <string name="nome_necessario">O nome é necessário para o cadastro.</string>
+    <string name="desconectar_titulo">Desconectar</string>
+    <string name="confirmar_saida_conta">Tem certeza que deseja sair da sua conta?</string>
+    <string name="erro_sair">Erro ao sair: %1$s</string>
+    <string name="erro_carregar_depositos">Não foi possível carregar os depósitos: %1$s</string>
+    <string name="transferencia_sucesso">Transferência realizada com sucesso!</string>
+    <string name="saida_sucesso">Saída realizada com sucesso!</string>
+    <string name="entrada_sucesso">Entrada realizada com sucesso!</string>
+    <string name="acerto_sucesso">Acerto realizado com sucesso!</string>
+    <string name="selecione_material">Selecione um material</string>
+    <string name="selecione_depositos">Selecione os depósitos</string>
+    <string name="selecione_deposito">Selecione um depósito</string>
+    <string name="origem_destino_diferentes">Origem e destino devem ser diferentes</string>
+    <string name="informe_quantidade">Informe a quantidade</string>
+    <string name="material_invalido">Material inválido. Selecione outro item.</string>
+    <string name="app_name_sane">Sane</string>
+    <string name="app_name_am">AM</string>
+    <string name="zero">0</string>
+    <string name="material_exemplo">Registro de Gaveta 50mm</string>
+    <string name="deposito_exemplo">Galpão A</string>
+    <string name="movimentacao_exemplo">+20 un</string>
+    <string name="hora_exemplo">14:32</string>
 </resources>

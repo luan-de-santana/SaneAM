@@ -1,16 +1,17 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.secrets)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
-    namespace = "com.luandev.saneam"
+    namespace = "com.luanpsantanadev.saneam"
     compileSdk {
         version = release(37)
     }
 
     defaultConfig {
-        applicationId = "com.luandev.saneam"
+        applicationId = "com.luanpsantanadev.saneam"
         minSdk = 24
         targetSdk = 37
         versionCode = 1
@@ -59,6 +60,8 @@ dependencies {
     implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.googleid)
     implementation(libs.material)
+    implementation(libs.androidx.datastore.preferences)
+    implementation(libs.coil)
     implementation(libs.bundles.supabase)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.espresso.core)
