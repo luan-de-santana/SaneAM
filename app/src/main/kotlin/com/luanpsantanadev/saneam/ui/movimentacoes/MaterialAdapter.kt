@@ -28,10 +28,11 @@ class MaterialAdapter(
 
         with(holder.binding) {
             val resId = IconeHelper.obterIconeGrupo(item.iconeGrupo)
+            val textSubtitulo = "${item.codigoAlpha} • ${item.unidadeMedida}"
 
             txtNome.text = item.nome
             imgIcone.setImageResource(resId)
-            "Unidade: ${item.unidadeMedida}".also { txtSubtitulo.text = it }
+            txtSubtitulo.text = textSubtitulo
 
             root.setOnClickListener {
                 onItemClick(item)
@@ -44,11 +45,17 @@ class MaterialAdapter(
     }
 
     companion object DiffCallback : DiffUtil.ItemCallback<ResumoMaterialGrupo>() {
-        override fun areItemsTheSame(oldItem: ResumoMaterialGrupo, newItem: ResumoMaterialGrupo): Boolean {
+        override fun areItemsTheSame(
+            oldItem: ResumoMaterialGrupo,
+            newItem: ResumoMaterialGrupo
+        ): Boolean {
             return oldItem.id == newItem.id
         }
 
-        override fun areContentsTheSame(oldItem: ResumoMaterialGrupo, newItem: ResumoMaterialGrupo): Boolean {
+        override fun areContentsTheSame(
+            oldItem: ResumoMaterialGrupo,
+            newItem: ResumoMaterialGrupo
+        ): Boolean {
             return oldItem == newItem
         }
     }

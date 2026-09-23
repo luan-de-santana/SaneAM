@@ -271,7 +271,7 @@ class AuthActivity : AppCompatActivity() {
             )
         }
 
-        AlertDialog.Builder(this, com.luanpsantanadev.saneam.R.style.Theme_SaneAM_LightDialog)
+        AlertDialog.Builder(this, R.style.Theme_SaneAM_LightDialog)
             .setTitle(getString(R.string.finalizar_cadastro))
             .setMessage(getString(R.string.como_chamado))
             .setView(inputContainer)

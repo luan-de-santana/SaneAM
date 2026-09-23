@@ -13,7 +13,9 @@ import com.luanpsantanadev.saneam.service.model.ResumoMaterialDeposito
 import com.luanpsantanadev.saneam.databinding.ItemMaterialInventarioBinding
 import com.luanpsantanadev.saneam.service.util.IconeHelper
 
-class InventarioAdapter : ListAdapter<ResumoMaterialDeposito, InventarioAdapter.MaterialViewHolder>(DiffCallback) {
+class InventarioAdapter(
+    private val onItemClick: (ResumoMaterialDeposito) -> Unit
+) : ListAdapter<ResumoMaterialDeposito, InventarioAdapter.MaterialViewHolder>(DiffCallback) {
 
     class MaterialViewHolder(val binding: ItemMaterialInventarioBinding) :
         RecyclerView.ViewHolder(binding.root)
@@ -31,6 +33,7 @@ class InventarioAdapter : ListAdapter<ResumoMaterialDeposito, InventarioAdapter.
 
         with(holder.binding) {
             val textQuantMinima = "mín ${item.quantidadeMinima}"
+            val textSubtitulo = "${item.codigoAlpha} • ${item.nomeDeposito}"
             val resId = IconeHelper.obterIconeGrupo(item.iconeGrupo)
 
             txtNome.text = item.nomeMaterial
@@ -38,7 +41,10 @@ class InventarioAdapter : ListAdapter<ResumoMaterialDeposito, InventarioAdapter.
             txtQuantidade.text = item.quantidade.toString()
             txtUnidade.text = item.unidadeMedida
             txtMinimo.text = textQuantMinima
-            txtSubtitulo.text = item.nomeDeposito
+            txtSubtitulo.text = textSubtitulo
+            cardItemContainer.setOnClickListener {
+                onItemClick(item)
+            }
 
             val backgroundDrawable = GradientDrawable().apply {
                 setColor(ContextCompat.getColor(context, R.color.white))

@@ -35,7 +35,8 @@ class TransferenciaActivity : AppCompatActivity() {
             this
         ) { _, result ->
             materialSelecionado = MaterialSelectorBottomSheet.materialFromResult(result)
-            binding.edtMaterial.setText(materialSelecionado?.nome)
+            val texto = materialSelecionado?.let { "${it.codigoAlpha} - ${it.nome}" } ?: ""
+            binding.edtMaterial.setText(texto)
         }
 
         setupListeners()

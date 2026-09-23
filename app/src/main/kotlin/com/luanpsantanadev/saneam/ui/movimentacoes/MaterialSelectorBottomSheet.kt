@@ -124,12 +124,12 @@ class MaterialSelectorBottomSheet : BottomSheetDialogFragment() {
         fun materialFromResult(result: Bundle): ResumoMaterialGrupo =
             ResumoMaterialGrupo(
                 id = result.getLong(RESULT_ID).takeUnless { it == 0L },
-                codigoAlpha = result.getInt(RESULT_CODIGO_ALPHA),
+                codigoAlpha = result.getString(RESULT_CODIGO_ALPHA).orEmpty(),
                 nome = result.getString(RESULT_NOME).orEmpty(),
                 unidadeMedida = result.getString(RESULT_UNIDADE_MEDIDA).orEmpty(),
                 idGrupo = result.getLong(RESULT_ID_GRUPO),
                 nomeGrupo = result.getString(RESULT_NOME_GRUPO).orEmpty(),
-                iconeGrupo = result.getString(RESULT_ICONE_GRUPO).orEmpty()
+                iconeGrupo = result.getString(RESULT_ICONE_GRUPO)
             )
     }
 }

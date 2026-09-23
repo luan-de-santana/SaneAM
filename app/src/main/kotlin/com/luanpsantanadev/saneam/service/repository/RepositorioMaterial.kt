@@ -14,6 +14,11 @@ import kotlinx.coroutines.withContext
 
 class RepositorioMaterial(private val cliente: SupabaseClient = SupabaseClientProvider.client) {
 
+    private fun termosDaBusca(textoPesquisa: String): List<String> =
+        textoPesquisa.trim()
+            .split(Regex("\\s+"))
+            .filter(String::isNotBlank)
+
     suspend fun criarGrupo(grupo: Grupo): Result<Unit> = runCatching {
         withContext(Dispatchers.IO) {
             cliente.postgrest[Supabase.GRUPOS].insert(grupo)
@@ -38,7 +43,7 @@ class RepositorioMaterial(private val cliente: SupabaseClient = SupabaseClientPr
         }
     }
 
-    suspend fun obterMaterialPorCodigoAlpha(codigoAlpha: Int): Result<Material?> = runCatching {
+    suspend fun obterMaterialPorCodigoAlpha(codigoAlpha: String): Result<Material?> = runCatching {
         withContext(Dispatchers.IO) {
             cliente.postgrest[Supabase.MATERIAIS]
                 .select { filter { eq(Supabase.COL_CODIGO_ALPHA, codigoAlpha) } }
@@ -72,7 +77,7 @@ class RepositorioMaterial(private val cliente: SupabaseClient = SupabaseClientPr
         }
     }
 
-    suspend fun obterResumoMaterialPorCodigoAlpha(codigoAlpha: Int): Result<ResumoMaterial?> =
+    suspend fun obterResumoMaterialPorCodigoAlpha(codigoAlpha: String): Result<ResumoMaterial?> =
         runCatching {
             withContext(Dispatchers.IO) {
                 cliente.postgrest[Supabase.VISAO_RESUMO_MATERIAIS]
@@ -111,10 +116,14 @@ class RepositorioMaterial(private val cliente: SupabaseClient = SupabaseClientPr
             cliente.postgrest[Supabase.VISAO_RESUMO_MATERIAIS_GRUPOS]
                 .select {
                     // Aplica a busca parcial no nome apenas quando há texto de pesquisa
-                    if (textoPesquisa.isNotBlank()) {
+                    termosDaBusca(textoPesquisa).takeIf { it.isNotEmpty() }?.let { termos ->
                         filter {
-                            // ilike ignora maiúsculas/minúsculas e % busca o texto em qualquer posição
-                            ilike(Supabase.COL_NOME, "%${textoPesquisa.trim()}%")
+                            and {
+                                termos.forEach { termo ->
+                                    // Todos os termos precisam aparecer em qualquer parte do nome.
+                                    ilike(Supabase.COL_NOME, "%$termo%")
+                                }
+                            }
                         }
                     }
 
@@ -146,10 +155,14 @@ class RepositorioMaterial(private val cliente: SupabaseClient = SupabaseClientPr
                     }
 
                     // Aplica a busca parcial no nome apenas quando há texto de pesquisa
-                    if (!textoPesquisa.isNullOrBlank()) {
+                    termosDaBusca(textoPesquisa).takeIf { it.isNotEmpty() }?.let { termos ->
                         filter {
-                            // ilike ignora maiúsculas/minúsculas e % busca o texto em qualquer posição
-                            ilike(Supabase.COL_NOME_MATERIAL, "%${textoPesquisa.trim()}%")
+                            and {
+                                termos.forEach { termo ->
+                                    // Todos os termos precisam aparecer em qualquer parte do nome.
+                                    ilike(Supabase.COL_NOME_MATERIAL, "%$termo%")
+                                }
+                            }
                         }
                     }
 

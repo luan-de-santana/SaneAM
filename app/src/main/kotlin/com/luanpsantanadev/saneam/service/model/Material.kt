@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class Material(
     val id: Long? = null,
-    @SerialName("codigo_alpha") val codigoAlpha: Int,
+    @SerialName("codigo_alpha") val codigoAlpha: String,
     val nome: String,
     @SerialName("unidade_medida") val unidadeMedida: String,
     @SerialName("id_grupo") val idGrupo: Long

@@ -18,19 +18,21 @@
         <!-- Icon Box -->
         <androidx.cardview.widget.CardView
             android:id="@+id/cardIcon"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="32dp"
+            android:layout_marginTop="4dp"
+            android:layout_height="32dp"
             app:cardBackgroundColor="@color/surface_muted"
-            app:cardCornerRadius="12dp"
+            app:cardCornerRadius="8dp"
             app:cardElevation="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toBottomOf="@id/txtSubtitulo"
+            app:layout_constraintVertical_bias="1">
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/imgIcone"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
                 android:layout_gravity="center"
                 android:src="@drawable/ic_build"
                 app:tint="@color/hint" />
@@ -41,27 +43,26 @@
             android:id="@+id/txtNome"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
             android:layout_marginEnd="8dp"
+            android:includeFontPadding="false"
             android:textColor="@color/text_primary"
-            android:textSize="15sp"
+            android:textSize="13sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toStartOf="@id/layoutQuantidade"
-            app:layout_constraintStart_toEndOf="@id/cardIcon"
-            app:layout_constraintTop_toTopOf="@id/cardIcon"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             tools:text="Registro de Gaveta 50mm" />
 
         <TextView
             android:id="@+id/txtSubtitulo"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
             android:layout_marginTop="2dp"
             android:layout_marginEnd="8dp"
             android:textColor="@color/text_secondary"
-            android:textSize="13sp"
+            android:textSize="12sp"
             app:layout_constraintEnd_toStartOf="@id/layoutQuantidade"
-            app:layout_constraintStart_toEndOf="@id/cardIcon"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/txtNome"
             tools:text="Galpão A" />
 
@@ -73,7 +74,7 @@
             android:gravity="end"
             android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/cardIcon">
+            app:layout_constraintTop_toTopOf="parent">
 
             <TextView
                 android:id="@+id/txtQuantidade"
@@ -100,10 +101,12 @@
             android:layout_width="0dp"
             android:layout_height="6dp"
             android:layout_marginTop="12dp"
+            android:layout_marginStart="8dp"
             android:layout_marginEnd="12dp"
             android:progressDrawable="@drawable/custom_progress_green"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/txtMinimo"
-            app:layout_constraintStart_toStartOf="@id/txtSubtitulo"
+            app:layout_constraintStart_toEndOf="@id/cardIcon"
             app:layout_constraintTop_toBottomOf="@id/txtSubtitulo"
             tools:progress="60" />
 

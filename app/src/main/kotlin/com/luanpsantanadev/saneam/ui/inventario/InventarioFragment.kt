@@ -2,6 +2,8 @@ package com.luanpsantanadev.saneam.ui.inventario
 
 import android.graphics.Color
 import android.os.Bundle
+import android.content.ActivityNotFoundException
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,12 +13,14 @@ import androidx.cardview.widget.CardView
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.luanpsantanadev.saneam.R
 import com.luanpsantanadev.saneam.databinding.FragmentInventarioBinding
 import com.luanpsantanadev.saneam.service.util.aplicarInsetsBarrasSistema
 import com.luanpsantanadev.saneam.service.model.Deposito
+import com.luanpsantanadev.saneam.service.model.ResumoMaterialDeposito
 import com.luanpsantanadev.saneam.viewmodel.InventarioViewModel
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.awaitClose
@@ -34,7 +38,7 @@ class InventarioFragment : Fragment() {
 
     private val viewModel: InventarioViewModel by viewModels()
     private lateinit var adapter: InventarioAdapter
-    
+
     private var idDepositoSelecionado: Long? = null // null significa "Todos"
     private var termoBusca: String = ""
 
@@ -58,7 +62,9 @@ class InventarioFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        adapter = InventarioAdapter()
+        adapter = InventarioAdapter { material ->
+            exibirDialogoCompartilhamento(material)
+        }
         binding.rvMateriais.layoutManager = LinearLayoutManager(requireContext())
         binding.rvMateriais.adapter = adapter
     }
@@ -102,6 +108,55 @@ class InventarioFragment : Fragment() {
         }
     }
 
+    private fun exibirDialogoCompartilhamento(
+        material: ResumoMaterialDeposito
+    ) {
+        AlertDialog.Builder(requireContext(), R.style.Theme_SaneAM_LightDialog)
+            .setTitle("Compartilhar inventário")
+            .setMessage("Deseja compartilhar este material ou todos os materiais da lista pelo WhatsApp?")
+            .setNeutralButton("Cancelar", null)
+            .setPositiveButton("Apenas este") { _, _ ->
+                compartilharPeloWhatsApp(formatarMaterial(material))
+
+            }.setNegativeButton("Todos da lista") { _, _ ->
+                val texto = adapter.currentList.joinToString(
+                    separator = "\n\n",
+                    prefix = "Inventário:\n\n"
+                ) { formatarMaterial(it) }
+                compartilharPeloWhatsApp(texto)
+            }
+            .show()
+    }
+
+    private fun formatarMaterial(
+        material: ResumoMaterialDeposito
+    ): String = buildString {
+        append("Código: ${material.codigoAlpha}\n")
+        append("Material: ${material.nomeMaterial}\n")
+        append("Unidade: ${material.unidadeMedida}\n")
+        append("Depósito: ${material.nomeDeposito}\n")
+        append("Quantidade: ${material.quantidade}\n")
+        append("Quantidade mínima: ${material.quantidadeMinima}")
+    }
+
+    private fun compartilharPeloWhatsApp(texto: String) {
+        val intent = Intent(Intent.ACTION_SEND).apply {
+            type = "text/plain"
+            putExtra(Intent.EXTRA_TEXT, texto)
+            setPackage("com.whatsapp")
+        }
+
+        try {
+            startActivity(intent)
+        } catch (_: ActivityNotFoundException) {
+            Toast.makeText(
+                requireContext(),
+                "O WhatsApp não está instalado neste dispositivo.",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
+
     private fun renderizarAbasDepositos(lista: List<Deposito>) {
         // "Todos" é o índice 0
         if (binding.containerDepositos.childCount > 1) {
@@ -109,9 +164,13 @@ class InventarioFragment : Fragment() {
         }
 
         lista.forEach { deposito ->
-            val cardAba = layoutInflater.inflate(R.layout.item_aba_deposito, binding.containerDepositos, false) as CardView
+            val cardAba = layoutInflater.inflate(
+                R.layout.item_aba_deposito,
+                binding.containerDepositos,
+                false
+            ) as CardView
             val textAba = cardAba.findViewById<TextView>(R.id.txtTabNome)
-            
+
             textAba.text = deposito.nome
             cardAba.tag = deposito.id // Salva o ID para identificar no clique
 
@@ -123,7 +182,7 @@ class InventarioFragment : Fragment() {
 
             binding.containerDepositos.addView(cardAba)
         }
-        
+
         atualizarFiltroVisual() // Garante que a seleção atual seja refletida
     }
 
