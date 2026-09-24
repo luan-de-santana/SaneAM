@@ -37,11 +37,12 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
+            android:layout_marginStart="10dp"
             android:layout_weight="1"
+            android:fontFamily="@font/poppins"
             android:text="@string/screen_configuracoes"
             android:textColor="@color/md_theme_light_onBackground"
-            android:textSize="22sp"
+            android:textSize="18sp"
             android:textStyle="bold" />
 
         <com.google.android.material.button.MaterialButton
