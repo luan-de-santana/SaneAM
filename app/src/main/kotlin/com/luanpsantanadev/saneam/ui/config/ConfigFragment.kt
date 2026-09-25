@@ -11,6 +11,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import com.luanpsantanadev.saneam.BuildConfig
+import com.luanpsantanadev.saneam.R
 import com.luanpsantanadev.saneam.databinding.FragmentConfiguracoesBinding
 import com.luanpsantanadev.saneam.service.repository.RepositorioDeposito
 import com.luanpsantanadev.saneam.service.util.aplicarInsetsBarrasSistema
@@ -42,6 +44,11 @@ class ConfigFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.root.aplicarInsetsBarrasSistema()
 
+        binding.textVersao.text = getString(
+            R.string.versao_aplicativo,
+            BuildConfig.VERSION_NAME,
+            BuildConfig.VERSION_CODE
+        )
         configurarObservadorPerfil()
         configurarCliques()
         configurarObservadores()

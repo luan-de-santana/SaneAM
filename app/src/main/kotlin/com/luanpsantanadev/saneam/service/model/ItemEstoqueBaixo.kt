@@ -7,6 +7,7 @@ import kotlinx.serialization.Serializable
 data class ItemEstoqueBaixo(
     val id: Long,
     @SerialName("id_material") val idMaterial: Long,
+    @SerialName("codigo_alpha") val codigoAlpha: String,
     @SerialName("nome_material") val nomeMaterial: String,
     @SerialName("id_deposito") val idDeposito: Long,
     @SerialName("nome_deposito") val nomeDeposito: String,

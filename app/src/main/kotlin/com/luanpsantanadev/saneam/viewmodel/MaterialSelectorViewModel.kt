@@ -18,6 +18,9 @@ class MaterialSelectorViewModel(
     private val _carregando = MutableLiveData<Boolean>()
     val carregando: LiveData<Boolean> get() = _carregando
 
+    private val _erro = MutableLiveData<Throwable>()
+    val erro: LiveData<Throwable> get() = _erro
+
     fun buscarMateriais(busca: String) {
         _carregando.value = true
         viewModelScope.launch {
@@ -26,7 +29,8 @@ class MaterialSelectorViewModel(
                     _materiais.value = it
                     _carregando.value = false
                 }
-                .onFailure { 
+                .onFailure {
+                    _erro.value = it
                     _carregando.value = false
                 }
         }

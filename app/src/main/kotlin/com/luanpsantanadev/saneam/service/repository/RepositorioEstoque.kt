@@ -3,14 +3,34 @@ package com.luanpsantanadev.saneam.service.repository
 import com.luanpsantanadev.saneam.service.model.ItemEstoque
 import com.luanpsantanadev.saneam.service.model.ItemEstoqueBaixo
 import com.luanpsantanadev.saneam.service.model.MovimentacaoEstoque
-import com.luanpsantanadev.saneam.service.model.TipoMovimentacao
 import com.luanpsantanadev.saneam.service.util.ConstantsSaneAM.Supabase
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.postgrest.postgrest
 import io.github.jan.supabase.postgrest.query.Order
 import io.github.jan.supabase.postgrest.rpc
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+
+@Serializable
+private data class ExecutarMovimentacaoParams(
+    @SerialName("p_tipo") val tipo: String,
+    @SerialName("p_id_material") val idMaterial: Long,
+    @SerialName("p_id_deposito") val idDeposito: Long,
+    @SerialName("p_quantidade") val quantidade: Double,
+    @SerialName("p_motivo") val motivo: String?
+)
+
+@Serializable
+private data class TransferirEstoqueParams(
+    @SerialName("p_id_material") val idMaterial: Long,
+    @SerialName("p_id_origem") val idOrigem: Long,
+    @SerialName("p_id_destino") val idDestino: Long,
+    @SerialName("p_quantidade") val quantidade: Double,
+    @SerialName("p_id_usuario") val idUsuario: String,
+    @SerialName("p_motivo") val motivo: String?
+)
 
 class RepositorioEstoque(private val cliente: SupabaseClient = SupabaseClientProvider.client) {
 
@@ -31,29 +51,16 @@ class RepositorioEstoque(private val cliente: SupabaseClient = SupabaseClientPro
         }
 
         withContext(Dispatchers.IO) {
-            val estoqueAtual = obterItemEstoque(movimentacao.idMaterial, movimentacao.idDeposito).getOrThrow()
-
-            val quantidadeAtual = estoqueAtual?.quantidade ?: 0.0
-            val novaQuantidade = when (movimentacao.tipo) {
-                TipoMovimentacao.ENTRADA -> quantidadeAtual + movimentacao.quantidade
-                TipoMovimentacao.SAIDA -> {
-                    val restante = quantidadeAtual - movimentacao.quantidade
-                    if (restante < 0) throw IllegalStateException("Estoque insuficiente!")
-                    restante
-                }
-                TipoMovimentacao.ACERTO -> movimentacao.quantidade
-            }
-
-            val estoqueAtualizado = ItemEstoque(
-                id = estoqueAtual?.id,
-                idMaterial = movimentacao.idMaterial,
-                idDeposito = movimentacao.idDeposito,
-                quantidade = novaQuantidade,
-                quantidadeMinima = estoqueAtual?.quantidadeMinima ?: 0.0
+            cliente.postgrest.rpc(
+                Supabase.RPC_EXECUTAR_MOVIMENTACAO_ESTOQUE,
+                ExecutarMovimentacaoParams(
+                    tipo = movimentacao.tipo.name,
+                    idMaterial = movimentacao.idMaterial,
+                    idDeposito = movimentacao.idDeposito,
+                    quantidade = movimentacao.quantidade,
+                    motivo = movimentacao.motivo
+                )
             )
-
-            cliente.postgrest[Supabase.ESTOQUES].upsert(estoqueAtualizado)
-            cliente.postgrest[Supabase.MOVIMENTACOES].insert(movimentacao)
         }
     }
 
@@ -70,13 +77,13 @@ class RepositorioEstoque(private val cliente: SupabaseClient = SupabaseClientPro
         withContext(Dispatchers.IO) {
             cliente.postgrest.rpc(
                 Supabase.RPC_TRANSFERIR_ESTOQUE,
-                mapOf(
-                    "p_id_material" to idMaterial,
-                    "p_id_origem" to idOrigem,
-                    "p_id_destino" to idDestino,
-                    "p_quantidade" to quantidade,
-                    "p_id_usuario" to idUsuario,
-                    "p_motivo" to motivo
+                TransferirEstoqueParams(
+                    idMaterial = idMaterial,
+                    idOrigem = idOrigem,
+                    idDestino = idDestino,
+                    quantidade = quantidade,
+                    idUsuario = idUsuario,
+                    motivo = motivo
                 )
             )
         }

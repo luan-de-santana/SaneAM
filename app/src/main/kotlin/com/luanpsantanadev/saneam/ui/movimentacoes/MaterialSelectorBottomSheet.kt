@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
@@ -32,15 +33,15 @@ class MaterialSelectorBottomSheet : BottomSheetDialogFragment() {
     private val adapter = MaterialAdapter { material ->
         parentFragmentManager.setFragmentResult(
             REQUEST_KEY,
-            bundleOf(
-                RESULT_ID to material.id,
-                RESULT_CODIGO_ALPHA to material.codigoAlpha,
-                RESULT_NOME to material.nome,
-                RESULT_UNIDADE_MEDIDA to material.unidadeMedida,
-                RESULT_ID_GRUPO to material.idGrupo,
-                RESULT_NOME_GRUPO to material.nomeGrupo,
-                RESULT_ICONE_GRUPO to material.iconeGrupo
-            )
+            Bundle().apply {
+                putLong(RESULT_ID, material.id)
+                putString(RESULT_CODIGO_ALPHA, material.codigoAlpha)
+                putString(RESULT_NOME, material.nome)
+                putString(RESULT_UNIDADE_MEDIDA, material.unidadeMedida)
+                putLong(RESULT_ID_GRUPO, material.idGrupo)
+                putString(RESULT_NOME_GRUPO, material.nomeGrupo)
+                putString(RESULT_ICONE_GRUPO, material.iconeGrupo)
+            }
         )
         dismiss()
     }
@@ -100,6 +101,14 @@ class MaterialSelectorBottomSheet : BottomSheetDialogFragment() {
         viewModel.carregando.observe(viewLifecycleOwner) { carregando ->
             binding.progressBar.visibility = if (carregando) View.VISIBLE else View.GONE
         }
+
+        viewModel.erro.observe(viewLifecycleOwner) { erro ->
+            Toast.makeText(
+                requireContext(),
+                erro.message ?: erro.toString(),
+                Toast.LENGTH_LONG
+            ).show()
+        }
     }
 
     override fun onDestroyView() {
@@ -111,7 +120,7 @@ class MaterialSelectorBottomSheet : BottomSheetDialogFragment() {
         const val TAG = "MaterialSelectorBottomSheet"
         const val REQUEST_KEY = "material_selector_result"
 
-        private const val RESULT_ID = "id"
+        private const val RESULT_ID = "id_material"
         private const val RESULT_CODIGO_ALPHA = "codigo_alpha"
         private const val RESULT_NOME = "nome"
         private const val RESULT_UNIDADE_MEDIDA = "unidade_medida"
@@ -123,7 +132,7 @@ class MaterialSelectorBottomSheet : BottomSheetDialogFragment() {
 
         fun materialFromResult(result: Bundle): ResumoMaterialGrupo =
             ResumoMaterialGrupo(
-                id = result.getLong(RESULT_ID).takeUnless { it == 0L },
+                id = result.getLong(RESULT_ID),
                 codigoAlpha = result.getString(RESULT_CODIGO_ALPHA).orEmpty(),
                 nome = result.getString(RESULT_NOME).orEmpty(),
                 unidadeMedida = result.getString(RESULT_UNIDADE_MEDIDA).orEmpty(),

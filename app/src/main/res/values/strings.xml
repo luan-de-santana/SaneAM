@@ -14,7 +14,7 @@
 
         🚀 Principais Funcionalidades:\n
         ☑ Entrada: realizar a entrada de materiais nos depósitos.\n
-        ☑ Saída: registrar a saída de itens para as equipes durante os serviços em campo.\n
+        ☑ Saída: registrar a saída de itens para as equipes realizarem os serviços em campo.\n
         ☑ Acerto: ajuste do estoque atual em decorrência de avarias.\n
         ☑ Inventário: relação atualizada da quantidade dos materiais.\n\n
 
@@ -27,6 +27,7 @@
     <string name="usuarios">Usuários</string>
     <string name="desconectar">Desconectar do app</string>
     <string name="sobre_aplicativo">SOBRE O APLICATIVO</string>
+    <string name="versao_aplicativo">Versão %1$s (%2$d)</string>
     <string name="bom_dia_usuario">Bom dia, Usuário</string>
     <string name="controle_estoque">Controle de Estoque de Materiais da CPR/GNR AM</string>
     <string name="data_exemplo">13 de setembro de 2026</string>
@@ -102,6 +103,29 @@
     <string name="confirmar_saida_conta">Tem certeza que deseja sair da sua conta?</string>
     <string name="erro_sair">Erro ao sair: %1$s</string>
     <string name="erro_carregar_depositos">Não foi possível carregar os depósitos: %1$s</string>
+    <string name="erro_usuario_nao_autenticado">Não foi possível identificar o usuário autenticado.</string>
+    <string name="erro_carregar_grupos">Não foi possível carregar os grupos: %1$s</string>
+    <string name="erro_carregar_materiais">Não foi possível carregar os materiais: %1$s</string>
+    <string name="depositos_com_acesso">Depósitos com acesso</string>
+    <string name="nenhum_deposito_com_acesso">Nenhum depósito disponível</string>
+    <string name="deposito_com_permissao">%1$s — %2$s</string>
+    <string name="permissao_leitura">Leitura</string>
+    <string name="permissao_operador">Operador</string>
+    <string name="permissao_administrador">Administrador</string>
+    <string name="grupos_e_materiais">Grupos e materiais</string>
+    <string name="grupo_com_quantidade">%1$s — %2$s</string>
+    <string name="icone_grupo">Ícone do grupo %1$s</string>
+    <string name="materiais_estoque_critico">Materiais abaixo do mínimo</string>
+    <string name="nenhum_material_estoque_critico">Nenhum material está abaixo da quantidade mínima nos seus depósitos.</string>
+    <string name="codigo_alpha_label">Código: %1$s</string>
+    <string name="nome_material_label">Material: %1$s</string>
+    <string name="deposito_material_label">Depósito: %1$s</string>
+    <string name="quantidade_atual_label">Quantidade atual: %1$s</string>
+    <string name="quantidade_minima_label">Quantidade mínima: %1$s</string>
+    <string name="compartilhar_whatsapp">Compartilhar pelo WhatsApp</string>
+    <string name="whatsapp_nao_instalado">O WhatsApp não está instalado neste dispositivo.</string>
+    <string name="quantidade_um_material">1 material</string>
+    <string name="quantidade_materiais_plural">%1$d materiais</string>
     <string name="transferencia_sucesso">Transferência realizada com sucesso!</string>
     <string name="saida_sucesso">Saída realizada com sucesso!</string>
     <string name="entrada_sucesso">Entrada realizada com sucesso!</string>

@@ -2,11 +2,13 @@ package com.luanpsantanadev.saneam.service.repository
 
 import com.luanpsantanadev.saneam.SaneAMApplication
 import com.luanpsantanadev.saneam.service.model.Deposito
+import com.luanpsantanadev.saneam.service.model.DepositoComAcesso
 import com.luanpsantanadev.saneam.service.util.ConstantsSaneAM.Supabase
 import io.github.jan.supabase.SupabaseClient
+import io.github.jan.supabase.gotrue.auth
 import io.github.jan.supabase.postgrest.postgrest
 import io.github.jan.supabase.postgrest.query.Order
-import io.github.jan.supabase.gotrue.auth
+import io.github.jan.supabase.postgrest.rpc
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -43,6 +45,14 @@ class RepositorioDeposito(
             cacheMemoria[idUsuario] = CacheMemoria(depositos, System.currentTimeMillis())
             cache.salvar(idUsuario, depositos)
             depositos
+        }
+    }
+
+    suspend fun obterDepositosComAcesso(): Result<List<DepositoComAcesso>> = runCatching {
+        withContext(Dispatchers.IO) {
+            cliente.postgrest
+                .rpc(Supabase.RPC_OBTER_DEPOSITOS_COM_ACESSO)
+                .decodeList<DepositoComAcesso>()
         }
     }
 

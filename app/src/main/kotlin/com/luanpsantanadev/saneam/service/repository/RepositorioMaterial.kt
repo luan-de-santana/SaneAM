@@ -1,6 +1,7 @@
 package com.luanpsantanadev.saneam.service.repository
 
 import com.luanpsantanadev.saneam.service.model.Grupo
+import com.luanpsantanadev.saneam.service.model.GrupoComContagem
 import com.luanpsantanadev.saneam.service.model.Material
 import com.luanpsantanadev.saneam.service.model.ResumoMaterial
 import com.luanpsantanadev.saneam.service.model.ResumoMaterialDeposito
@@ -19,6 +20,10 @@ class RepositorioMaterial(private val cliente: SupabaseClient = SupabaseClientPr
             .split(Regex("\\s+"))
             .filter(String::isNotBlank)
 
+    private fun codigoAlphaDaBusca(textoPesquisa: String): String? =
+        textoPesquisa.filterNot(Char::isWhitespace)
+            .takeIf { codigo -> codigo.isNotEmpty() && codigo.all { it in '0'..'9' } }
+
     suspend fun criarGrupo(grupo: Grupo): Result<Unit> = runCatching {
         withContext(Dispatchers.IO) {
             cliente.postgrest[Supabase.GRUPOS].insert(grupo)
@@ -28,6 +33,17 @@ class RepositorioMaterial(private val cliente: SupabaseClient = SupabaseClientPr
     suspend fun obterTodosGrupos(): Result<List<Grupo>> = runCatching {
         withContext(Dispatchers.IO) {
             cliente.postgrest[Supabase.GRUPOS].select().decodeList<Grupo>()
+        }
+    }
+
+    suspend fun obterGruposComContagem(): Result<List<GrupoComContagem>> = runCatching {
+        withContext(Dispatchers.IO) {
+            cliente.postgrest[Supabase.VISAO_GRUPOS_COM_CONTAGEM]
+                .select {
+                    order("quantidade_materiais", Order.DESCENDING)
+                    order(Supabase.COL_NOME, Order.ASCENDING)
+                }
+                .decodeList<GrupoComContagem>()
         }
     }
 
@@ -112,15 +128,19 @@ class RepositorioMaterial(private val cliente: SupabaseClient = SupabaseClientPr
         withContext(Dispatchers.IO) {
             val de = pagina * tamanhoPagina
             val ate = de + tamanhoPagina - 1
+            val codigoAlpha = codigoAlphaDaBusca(textoPesquisa)
+            val termos = if (codigoAlpha == null) termosDaBusca(textoPesquisa) else emptyList()
 
             cliente.postgrest[Supabase.VISAO_RESUMO_MATERIAIS_GRUPOS]
                 .select {
-                    // Aplica a busca parcial no nome apenas quando há texto de pesquisa
-                    termosDaBusca(textoPesquisa).takeIf { it.isNotEmpty() }?.let { termos ->
+                    if (codigoAlpha != null) {
+                        filter {
+                            ilike(Supabase.COL_CODIGO_ALPHA, "$codigoAlpha%")
+                        }
+                    } else if (termos.isNotEmpty()) {
                         filter {
                             and {
                                 termos.forEach { termo ->
-                                    // Todos os termos precisam aparecer em qualquer parte do nome.
                                     ilike(Supabase.COL_NOME, "%$termo%")
                                 }
                             }
@@ -146,6 +166,8 @@ class RepositorioMaterial(private val cliente: SupabaseClient = SupabaseClientPr
         withContext(Dispatchers.IO) {
             val de = pagina * tamanhoPagina
             val ate = de + tamanhoPagina - 1
+            val codigoAlpha = codigoAlphaDaBusca(textoPesquisa)
+            val termos = if (codigoAlpha == null) termosDaBusca(textoPesquisa) else emptyList()
 
             cliente.postgrest[Supabase.VISAO_RESUMO_MATERIAIS_DEPOSITOS]
                 .select {
@@ -154,12 +176,14 @@ class RepositorioMaterial(private val cliente: SupabaseClient = SupabaseClientPr
                         filter { eq(Supabase.COL_ID_DEPOSITO, id) }
                     }
 
-                    // Aplica a busca parcial no nome apenas quando há texto de pesquisa
-                    termosDaBusca(textoPesquisa).takeIf { it.isNotEmpty() }?.let { termos ->
+                    if (codigoAlpha != null) {
+                        filter {
+                            ilike(Supabase.COL_CODIGO_ALPHA, "$codigoAlpha%")
+                        }
+                    } else if (termos.isNotEmpty()) {
                         filter {
                             and {
                                 termos.forEach { termo ->
-                                    // Todos os termos precisam aparecer em qualquer parte do nome.
                                     ilike(Supabase.COL_NOME_MATERIAL, "%$termo%")
                                 }
                             }

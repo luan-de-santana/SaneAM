@@ -61,6 +61,7 @@ dependencies {
     implementation(libs.googleid)
     implementation(libs.material)
     implementation(libs.androidx.datastore.preferences)
+    implementation(libs.androidx.swiperefreshlayout)
     implementation(libs.coil)
     implementation(libs.bundles.supabase)
     testImplementation(libs.junit)

@@ -15,7 +15,7 @@ Este projeto foi construído unindo o rigor acadêmico da disciplina de **Trabal
 
 ### 🚀 Principais Funcionalidades
 * **☑ Entrada:** Realizar a entrada de materiais nos depósitos.
-* **☑ Saída:** Registrar a saída de itens para as equipes de manutenção usarem em atividades em campo.
+* **☑ Saída:** registrar a saída de itens para as equipes realizarem os serviços em campo.
 * **☑ Acerto:** Ajustar o estoque atual em decorrência de avarias.
 * **☑ Inventário:** Relação atualizada da quantidade dos materiais.
 

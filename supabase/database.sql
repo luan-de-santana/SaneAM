@@ -48,6 +48,9 @@ CREATE TABLE materiais (
     id_grupo BIGINT REFERENCES grupos(id) ON DELETE RESTRICT
 );
 
+CREATE INDEX IF NOT EXISTS idx_materiais_id_grupo
+ON materiais (id_grupo);
+
 -- Estoque por Depósito
 CREATE TABLE estoques (
     id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -88,7 +91,9 @@ FROM materiais m
 JOIN grupos g ON m.id_grupo = g.id;
 
 -- View 2: Resumo Geral de Materiais (com o estoque de depósitos específicos)
-CREATE OR REPLACE VIEW visao_resumo_materiais_depositos AS
+CREATE OR REPLACE VIEW visao_resumo_materiais_depositos
+WITH (security_invoker = true)
+AS
 SELECT 
     e.id AS id_estoque,
     m.id AS id_material,
@@ -131,7 +136,9 @@ GROUP BY
 	g.icone_res;
 
 -- View 4: Itens com Estoque Baixo (com nomes e percentual crítico)
-CREATE OR REPLACE VIEW visao_itens_estoque_baixo AS
+CREATE OR REPLACE VIEW visao_itens_estoque_baixo
+WITH (security_invoker = true)
+AS
 SELECT 
     e.id,
     e.id_material,
@@ -142,11 +149,26 @@ SELECT
     e.quantidade_minima,
     ROUND(
         (e.quantidade / NULLIF(e.quantidade_minima, 0) * 100)::numeric, 2
-    )::double precision AS percentual_restante
+    )::double precision AS percentual_restante,
+    m.codigo_alpha
 FROM estoques e
 JOIN materiais m ON e.id_material = m.id
 JOIN depositos d ON e.id_deposito = d.id
-WHERE e.quantidade <= e.quantidade_minima;
+WHERE e.quantidade < e.quantidade_minima;
+
+-- View 5: Contagem de materiais por grupo
+CREATE OR REPLACE VIEW visao_grupos_com_contagem
+WITH (security_invoker = true)
+AS
+SELECT
+    g.id,
+    g.nome,
+    g.icone_res,
+    COUNT(m.id)::BIGINT AS quantidade_materiais
+FROM public.grupos g
+LEFT JOIN public.materiais m ON m.id_grupo = g.id
+GROUP BY g.id, g.nome, g.icone_res
+ORDER BY quantidade_materiais DESC, g.nome ASC;
 
 -- =============================================================================
 -- 4. FUNCTIONS / RPC
@@ -231,6 +253,35 @@ BEGIN
 END;
 $$;
 
+CREATE OR REPLACE FUNCTION public.obter_depositos_com_acesso()
+RETURNS TABLE (
+    id BIGINT,
+    nome TEXT,
+    endereco TEXT,
+    papel public.papel_usuario
+)
+LANGUAGE SQL
+STABLE
+SECURITY INVOKER
+SET search_path = public, pg_temp
+AS $$
+    SELECT
+        d.id,
+        d.nome,
+        d.endereco,
+        CASE
+            WHEN public.eh_admin() THEN NULL::public.papel_usuario
+            ELSE pu.papel
+        END AS papel
+    FROM public.depositos d
+    LEFT JOIN public.permissoes_usuario pu
+        ON pu.id_deposito = d.id
+       AND pu.id_usuario = auth.uid()
+    WHERE public.eh_admin()
+       OR pu.id_deposito IS NOT NULL
+    ORDER BY d.nome;
+$$;
+
 -- =============================================================================
 -- 3. POLÍTICAS: PERFIS DE USUÁRIOS
 -- =============================================================================
@@ -300,7 +351,9 @@ USING (
     eh_admin() OR 
     EXISTS (
         SELECT 1 FROM permissoes_usuario 
-        WHERE id_usuario = auth.uid() AND id_deposito = estoques.id_deposito
+        WHERE id_usuario = auth.uid()
+          AND id_deposito = estoques.id_deposito
+          AND papel IN ('LEITOR', 'OPERADOR')
     )
 );
 
@@ -357,18 +410,131 @@ GRANT SELECT ON TABLE
     public.visao_resumo_materiais_grupos,
     public.visao_resumo_materiais_depositos,
     public.visao_resumo_materiais,
-    public.visao_itens_estoque_baixo
+    public.visao_itens_estoque_baixo,
+    public.visao_grupos_com_contagem
 TO authenticated;
 
 GRANT INSERT, UPDATE, DELETE ON TABLE public.permissoes_usuario
 TO authenticated;
 
+GRANT INSERT, UPDATE ON TABLE public.estoques
+TO authenticated;
+
+GRANT INSERT ON TABLE public.movimentacoes
+TO authenticated;
+
 GRANT EXECUTE ON FUNCTION public.eh_admin()
+TO authenticated;
+
+REVOKE ALL ON FUNCTION public.obter_depositos_com_acesso()
+FROM PUBLIC, anon;
+
+GRANT EXECUTE ON FUNCTION public.obter_depositos_com_acesso()
 TO authenticated;
 
 -- =============================================================================
 -- FUNÇÕES
 -- =============================================================================
+CREATE OR REPLACE FUNCTION public.executar_movimentacao_estoque(
+    p_tipo public.tipo_movimentacao,
+    p_id_material BIGINT,
+    p_id_deposito BIGINT,
+    p_quantidade DOUBLE PRECISION,
+    p_motivo TEXT DEFAULT NULL
+)
+RETURNS VOID
+LANGUAGE plpgsql
+SECURITY INVOKER
+SET search_path = public, pg_temp
+AS $$
+DECLARE
+    v_id_usuario UUID := auth.uid();
+    v_estoque public.estoques%ROWTYPE;
+    v_nova_quantidade DOUBLE PRECISION;
+BEGIN
+    IF v_id_usuario IS NULL THEN
+        RAISE EXCEPTION 'Usuário não autenticado.';
+    END IF;
+
+    IF p_quantidade IS NULL
+       OR p_quantidade <= 0
+       OR p_quantidade::TEXT IN ('NaN', 'Infinity', '-Infinity') THEN
+        RAISE EXCEPTION 'Quantidade deve ser um número finito maior que zero.';
+    END IF;
+
+    INSERT INTO public.estoques (
+        id_material,
+        id_deposito,
+        quantidade,
+        quantidade_minima
+    )
+    VALUES (p_id_material, p_id_deposito, 0, 0)
+    ON CONFLICT (id_material, id_deposito) DO NOTHING;
+
+    SELECT *
+    INTO v_estoque
+    FROM public.estoques
+    WHERE id_material = p_id_material
+      AND id_deposito = p_id_deposito
+    FOR UPDATE;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Estoque não encontrado ou sem permissão para o depósito.';
+    END IF;
+
+    CASE p_tipo
+        WHEN 'ENTRADA' THEN
+            v_nova_quantidade := v_estoque.quantidade + p_quantidade;
+        WHEN 'SAIDA' THEN
+            v_nova_quantidade := v_estoque.quantidade - p_quantidade;
+            IF v_nova_quantidade < 0 THEN
+                RAISE EXCEPTION 'Estoque insuficiente.';
+            END IF;
+        WHEN 'ACERTO' THEN
+            v_nova_quantidade := p_quantidade;
+        ELSE
+            RAISE EXCEPTION 'Tipo de movimentação inválido.';
+    END CASE;
+
+    UPDATE public.estoques
+    SET quantidade = v_nova_quantidade
+    WHERE id = v_estoque.id;
+
+    INSERT INTO public.movimentacoes (
+        tipo,
+        id_material,
+        id_deposito,
+        id_usuario,
+        quantidade,
+        motivo
+    )
+    VALUES (
+        p_tipo,
+        p_id_material,
+        p_id_deposito,
+        v_id_usuario,
+        p_quantidade,
+        p_motivo
+    );
+END;
+$$;
+
+REVOKE ALL ON FUNCTION public.executar_movimentacao_estoque(
+    public.tipo_movimentacao,
+    BIGINT,
+    BIGINT,
+    DOUBLE PRECISION,
+    TEXT
+) FROM PUBLIC, anon;
+
+GRANT EXECUTE ON FUNCTION public.executar_movimentacao_estoque(
+    public.tipo_movimentacao,
+    BIGINT,
+    BIGINT,
+    DOUBLE PRECISION,
+    TEXT
+) TO authenticated;
+
 create or replace function public.transferir_estoque(
   p_id_material bigint,
   p_id_origem bigint,

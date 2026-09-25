@@ -124,13 +124,27 @@
                 app:cardCornerRadius="16dp"
                 app:cardElevation="2dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="16dp"
-                    android:text="@string/sobre"
-                    android:textColor="@color/md_theme_light_onSurface"
-                    android:textSize="14sp" />
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/sobre"
+                        android:textColor="@color/md_theme_light_onSurface"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/textVersao"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:textColor="@color/md_theme_light_outline"
+                        android:textSize="12sp" />
+                </LinearLayout>
 
             </androidx.cardview.widget.CardView>
 

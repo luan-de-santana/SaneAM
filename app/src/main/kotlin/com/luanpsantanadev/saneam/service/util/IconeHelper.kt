@@ -12,6 +12,7 @@ object IconeHelper {
             "ic_build" -> R.drawable.ic_build
             "ic_handyman" -> R.drawable.ic_handyman
             "ic_cleaning" -> R.drawable.ic_cleaning
+            "ic_electricity" -> R.drawable.ic_electricity
             "ic_engineering" -> R.drawable.ic_engineering
             "ic_inventory" -> R.drawable.ic_inventory
             "ic_manufacturing" -> R.drawable.ic_manufacturing

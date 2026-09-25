@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.luanpsantanadev.saneam.service.model.ItemEstoque
 import com.luanpsantanadev.saneam.service.repository.RepositorioEstoque
 import kotlinx.coroutines.launch
 
@@ -12,7 +11,7 @@ class EstoqueViewModel(
     private val repositorio: RepositorioEstoque = RepositorioEstoque()
 ) : ViewModel() {
 
-    private val _saldoAtual = MutableLiveData<Double?>(0.0)
+    private val _saldoAtual = MutableLiveData(0.0)
     val saldoAtual: LiveData<Double?> get() = _saldoAtual
 
     private val _erro = MutableLiveData<String>()

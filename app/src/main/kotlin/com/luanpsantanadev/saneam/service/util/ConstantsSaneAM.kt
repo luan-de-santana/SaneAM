@@ -19,10 +19,13 @@ class ConstantsSaneAM {
         const val VISAO_RESUMO_MATERIAIS = "visao_resumo_materiais"
         const val VISAO_RESUMO_MATERIAIS_GRUPOS = "visao_resumo_materiais_grupos"
         const val VISAO_RESUMO_MATERIAIS_DEPOSITOS = "visao_resumo_materiais_depositos"
+        const val VISAO_GRUPOS_COM_CONTAGEM = "visao_grupos_com_contagem"
 
         // Funções RPC
         const val RPC_OBTER_RESUMO_DASHBOARD = "obter_resumo_dashboard"
+        const val RPC_OBTER_DEPOSITOS_COM_ACESSO = "obter_depositos_com_acesso"
         const val RPC_TRANSFERIR_ESTOQUE = "transferir_estoque"
+        const val RPC_EXECUTAR_MOVIMENTACAO_ESTOQUE = "executar_movimentacao_estoque"
 
         // Colunas e Filtros
         const val COL_ID = "id"

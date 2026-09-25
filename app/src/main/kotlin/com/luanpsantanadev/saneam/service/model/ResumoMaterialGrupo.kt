@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ResumoMaterialGrupo(
-    val id: Long? = null,
+    @SerialName("id_material") val id: Long,
     @SerialName("codigo_alpha") val codigoAlpha: String,
     val nome: String,
     @SerialName("unidade_medida") val unidadeMedida: String,

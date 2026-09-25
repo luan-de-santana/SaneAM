@@ -46,519 +46,524 @@
     </LinearLayout>
 
     <!-- Scrollable Content -->
-    <androidx.core.widget.NestedScrollView
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshDashboard"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:fillViewport="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/headerLayout">
 
-        <LinearLayout
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingHorizontal="20dp"
-            android:paddingBottom="24dp">
+            android:layout_height="match_parent"
+            android:fillViewport="true">
 
-            <include
-                android:id="@+id/cardWelcome"
-                layout="@layout/card_welcome" />
-
-            <!-- Cards de Estatísticas (Grid 4 colunas) -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:orientation="horizontal"
-                android:weightSum="4">
+                android:orientation="vertical"
+                android:paddingHorizontal="20dp"
+                android:paddingBottom="24dp">
 
-                <!-- Depósitos -->
-                <!-- Card Depósitos (Azul) -->
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/cardDepositos"
-                    android:layout_width="0dp"
-                    android:layout_height="90dp"
-                    android:layout_marginEnd="6dp"
-                    android:layout_weight="1"
-                    app:cardBackgroundColor="@color/badge_blue_bg"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="0dp">
+                <include
+                    android:id="@+id/cardWelcome"
+                    layout="@layout/card_welcome" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/text_depositos_value"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/zero"
-                            android:textColor="@color/badge_blue_text"
-                            android:textSize="24sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
-                            android:text="@string/depositos"
-                            android:textColor="@color/badge_blue_text"
-                            android:textSize="11sp"
-                            android:textStyle="bold" />
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
-
-                <!-- Itens -->
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/cardGrupos"
-                    android:layout_width="0dp"
-                    android:layout_height="90dp"
-                    android:layout_marginHorizontal="3dp"
-                    android:layout_weight="1"
-                    app:cardBackgroundColor="@color/badge_green_bg"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="0dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/text_grupos_value"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/zero"
-                            android:textColor="@color/badge_green_text"
-                            android:textSize="24sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
-                            android:text="@string/grupos"
-                            android:textColor="@color/badge_green_text"
-                            android:textSize="11sp"
-                            android:textStyle="bold" />
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
-
-                <!-- Críticos -->
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/cardMateriais"
-                    android:layout_width="0dp"
-                    android:layout_height="90dp"
-                    android:layout_marginHorizontal="3dp"
-                    android:layout_weight="1"
-                    app:cardBackgroundColor="@color/badge_amber_bg"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="0dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/text_materiais_value"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/zero"
-                            android:textColor="@color/badge_amber_text"
-                            android:textSize="24sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
-                            android:text="@string/materiais"
-                            android:textColor="@color/badge_amber_text"
-                            android:textSize="11sp"
-                            android:textStyle="bold" />
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
-
-                <!-- Vencendo -->
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/cardCriticos"
-                    android:layout_width="0dp"
-                    android:layout_height="90dp"
-                    android:layout_marginStart="6dp"
-                    android:layout_weight="1"
-                    app:cardBackgroundColor="@color/badge_red_bg"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="0dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/text_criticos_value"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/zero"
-                            android:textColor="@color/badge_red_text"
-                            android:textSize="24sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
-                            android:text="@string/criticos"
-                            android:textColor="@color/badge_red_text"
-                            android:textSize="11sp"
-                            android:textStyle="bold" />
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
-
-            </LinearLayout>
-
-            <!-- Seção: AÇÕES RÁPIDAS -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:letterSpacing="0.05"
-                android:text="@string/acoes_rapidas"
-                android:textColor="@color/md_theme_light_outline"
-                android:textSize="13sp"
-                android:textStyle="bold" />
-
-            <GridLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:columnCount="2"
-                android:rowCount="2">
-
-                <!-- Nova Entrada -->
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/cardNovaEntrada"
-                    android:layout_width="0dp"
+                <!-- Cards de Estatísticas (Grid 4 colunas) -->
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_columnWeight="1"
-                    android:layout_marginEnd="6dp"
-                    android:layout_marginBottom="12dp"
-                    app:cardBackgroundColor="@color/md_theme_light_surface"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="1dp">
+                    android:layout_marginTop="16dp"
+                    android:orientation="horizontal"
+                    android:weightSum="4">
+                    <!-- Depósitos -->
+                    <!-- Card Depósitos (Azul) -->
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cardDepositos"
+                        android:layout_width="0dp"
+                        android:layout_height="90dp"
+                        android:layout_marginEnd="6dp"
+                        android:layout_weight="1"
+                        app:cardBackgroundColor="@color/badge_blue_bg"
+                        app:cardCornerRadius="16dp"
+                        app:cardElevation="0dp">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="16dp">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:orientation="vertical">
 
-                        <androidx.cardview.widget.CardView
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            app:cardBackgroundColor="@color/badge_green_bg"
-                            app:cardCornerRadius="10dp"
-                            app:cardElevation="0dp">
+                            <TextView
+                                android:id="@+id/text_depositos_value"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/zero"
+                                android:textColor="@color/badge_blue_text"
+                                android:textSize="24sp"
+                                android:textStyle="bold" />
 
-                            <androidx.appcompat.widget.AppCompatImageView
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
-                                android:layout_gravity="center"
-                                app:srcCompat="@drawable/ic_arrow_up"
-                                app:tint="@color/badge_green_text" />
-                        </androidx.cardview.widget.CardView>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:text="@string/depositos"
+                                android:textColor="@color/badge_blue_text"
+                                android:textSize="11sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="12dp"
-                            android:text="@string/nova_entrada"
-                            android:textColor="@color/md_theme_light_onSurface"
-                            android:textSize="15sp"
-                            android:textStyle="bold" />
+                    <!-- Itens -->
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cardGrupos"
+                        android:layout_width="0dp"
+                        android:layout_height="90dp"
+                        android:layout_marginHorizontal="3dp"
+                        android:layout_weight="1"
+                        app:cardBackgroundColor="@color/badge_green_bg"
+                        app:cardCornerRadius="16dp"
+                        app:cardElevation="0dp">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="2dp"
-                            android:text="@string/registrar_recebimento"
-                            android:textColor="@color/md_theme_light_outline"
-                            android:textSize="12sp" />
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:orientation="vertical">
 
-                <!-- Nova Saída -->
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/cardNovaSaida"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_columnWeight="1"
-                    android:layout_marginStart="6dp"
-                    android:layout_marginBottom="12dp"
-                    app:cardBackgroundColor="@color/md_theme_light_surface"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="1dp">
+                            <TextView
+                                android:id="@+id/text_grupos_value"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/zero"
+                                android:textColor="@color/badge_green_text"
+                                android:textSize="24sp"
+                                android:textStyle="bold" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="16dp">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:text="@string/grupos"
+                                android:textColor="@color/badge_green_text"
+                                android:textSize="11sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
 
-                        <androidx.cardview.widget.CardView
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            app:cardBackgroundColor="@color/badge_red_bg"
-                            app:cardCornerRadius="10dp"
-                            app:cardElevation="0dp">
+                    <!-- Críticos -->
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cardMateriais"
+                        android:layout_width="0dp"
+                        android:layout_height="90dp"
+                        android:layout_marginHorizontal="3dp"
+                        android:layout_weight="1"
+                        app:cardBackgroundColor="@color/badge_amber_bg"
+                        app:cardCornerRadius="16dp"
+                        app:cardElevation="0dp">
 
-                            <androidx.appcompat.widget.AppCompatImageView
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
-                                android:layout_gravity="center"
-                                app:srcCompat="@drawable/ic_arrow_down"
-                                app:tint="@color/badge_red_text" />
-                        </androidx.cardview.widget.CardView>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:orientation="vertical">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="12dp"
-                            android:text="@string/nova_saida"
-                            android:textColor="@color/md_theme_light_onSurface"
-                            android:textSize="15sp"
-                            android:textStyle="bold" />
+                            <TextView
+                                android:id="@+id/text_materiais_value"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/zero"
+                                android:textColor="@color/badge_amber_text"
+                                android:textSize="24sp"
+                                android:textStyle="bold" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="2dp"
-                            android:text="@string/baixar_servico"
-                            android:textColor="@color/md_theme_light_outline"
-                            android:textSize="12sp" />
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:text="@string/materiais"
+                                android:textColor="@color/badge_amber_text"
+                                android:textSize="11sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
 
-                <!-- Transferência -->
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/cardTransferencia"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_columnWeight="1"
-                    android:layout_marginEnd="6dp"
-                    app:cardBackgroundColor="@color/md_theme_light_surface"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="1dp">
+                    <!-- Vencendo -->
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cardCriticos"
+                        android:layout_width="0dp"
+                        android:layout_height="90dp"
+                        android:layout_marginStart="6dp"
+                        android:layout_weight="1"
+                        app:cardBackgroundColor="@color/badge_red_bg"
+                        app:cardCornerRadius="16dp"
+                        app:cardElevation="0dp">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="16dp">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:orientation="vertical">
 
-                        <androidx.cardview.widget.CardView
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            app:cardBackgroundColor="@color/badge_blue_bg"
-                            app:cardCornerRadius="10dp"
-                            app:cardElevation="0dp">
+                            <TextView
+                                android:id="@+id/text_criticos_value"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/zero"
+                                android:textColor="@color/badge_red_text"
+                                android:textSize="24sp"
+                                android:textStyle="bold" />
 
-                            <androidx.appcompat.widget.AppCompatImageView
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
-                                android:layout_gravity="center"
-                                app:srcCompat="@drawable/ic_swap_horizontal"
-                                app:tint="@color/badge_blue_text" />
-                        </androidx.cardview.widget.CardView>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:text="@string/criticos"
+                                android:textColor="@color/badge_red_text"
+                                android:textSize="11sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="12dp"
-                            android:text="@string/transferencia"
-                            android:textColor="@color/md_theme_light_onSurface"
-                            android:textSize="15sp"
-                            android:textStyle="bold" />
+                </LinearLayout>
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="2dp"
-                            android:text="@string/entre_depositos"
-                            android:textColor="@color/md_theme_light_outline"
-                            android:textSize="12sp" />
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
-
-                <!-- Ver Inventário -->
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/cardInventario"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_columnWeight="1"
-                    android:layout_marginStart="6dp"
-                    app:cardBackgroundColor="@color/md_theme_light_surface"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="1dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="16dp">
-
-                        <androidx.cardview.widget.CardView
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            app:cardBackgroundColor="@color/badge_purple_bg"
-                            app:cardCornerRadius="10dp"
-                            app:cardElevation="0dp">
-
-                            <androidx.appcompat.widget.AppCompatImageView
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
-                                android:layout_gravity="center"
-                                app:srcCompat="@drawable/ic_grid"
-                                app:tint="@color/badge_purple_text" />
-                        </androidx.cardview.widget.CardView>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="12dp"
-                            android:text="@string/ver_inventario"
-                            android:textColor="@color/md_theme_light_onSurface"
-                            android:textSize="15sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="2dp"
-                            android:text="@string/todos_materiais"
-                            android:textColor="@color/md_theme_light_outline"
-                            android:textSize="12sp" />
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
-
-            </GridLayout>
-
-            <!-- Seção: ÚLTIMAS MOVIMENTAÇÕES
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp">
-
+                <!-- Seção: AÇÕES RÁPIDAS -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:layout_centerVertical="true"
+                    android:layout_marginTop="24dp"
                     android:letterSpacing="0.05"
-                    android:text="@string/ultimas_movimentacoes"
+                    android:text="@string/acoes_rapidas"
                     android:textColor="@color/md_theme_light_outline"
                     android:textSize="13sp"
                     android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/btnVerTudo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:text="@string/ver_tudo"
-                    android:textColor="@color/md_theme_light_primary"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
-            </RelativeLayout> -->
-
-            <!-- Card Lista de Movimentações
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                app:cardBackgroundColor="@color/md_theme_light_surface"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="2dp">
-
-                <LinearLayout
+                <GridLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="16dp">
+                    android:layout_marginTop="12dp"
+                    android:columnCount="2"
+                    android:rowCount="2">
 
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <View
-                            android:id="@+id/dotStatus"
-                            android:layout_width="8dp"
-                            android:layout_height="8dp"
-                            android:layout_centerVertical="true"
-                            android:background="@drawable/shape_dot_green" />
+                    <!-- Nova Entrada -->
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cardNovaEntrada"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_columnWeight="1"
+                        android:layout_marginEnd="6dp"
+                        android:layout_marginBottom="12dp"
+                        app:cardBackgroundColor="@color/md_theme_light_surface"
+                        app:cardCornerRadius="16dp"
+                        app:cardElevation="1dp">
 
                         <LinearLayout
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="12dp"
-                            android:layout_toEndOf="@id/dotStatus"
-                            android:orientation="vertical">
+                            android:orientation="vertical"
+                            android:padding="16dp">
+
+                            <androidx.cardview.widget.CardView
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                app:cardBackgroundColor="@color/badge_green_bg"
+                                app:cardCornerRadius="10dp"
+                                app:cardElevation="0dp">
+
+                                <androidx.appcompat.widget.AppCompatImageView
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:layout_gravity="center"
+                                    app:srcCompat="@drawable/ic_arrow_up"
+                                    app:tint="@color/badge_green_text" />
+                            </androidx.cardview.widget.CardView>
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/material_exemplo"
+                                android:layout_marginTop="12dp"
+                                android:text="@string/nova_entrada"
                                 android:textColor="@color/md_theme_light_onSurface"
-                                android:textSize="14sp"
+                                android:textSize="15sp"
                                 android:textStyle="bold" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="2dp"
-                                android:text="@string/deposito_exemplo"
+                                android:text="@string/registrar_recebimento"
                                 android:textColor="@color/md_theme_light_outline"
                                 android:textSize="12sp" />
                         </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <!-- Nova Saída -->
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cardNovaSaida"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_columnWeight="1"
+                        android:layout_marginStart="6dp"
+                        android:layout_marginBottom="12dp"
+                        app:cardBackgroundColor="@color/md_theme_light_surface"
+                        app:cardCornerRadius="16dp"
+                        app:cardElevation="1dp">
 
                         <LinearLayout
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentEnd="true"
-                            android:gravity="end"
-                            android:orientation="vertical">
+                            android:orientation="vertical"
+                            android:padding="16dp">
+
+                            <androidx.cardview.widget.CardView
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                app:cardBackgroundColor="@color/badge_red_bg"
+                                app:cardCornerRadius="10dp"
+                                app:cardElevation="0dp">
+
+                                <androidx.appcompat.widget.AppCompatImageView
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:layout_gravity="center"
+                                    app:srcCompat="@drawable/ic_arrow_down"
+                                    app:tint="@color/badge_red_text" />
+                            </androidx.cardview.widget.CardView>
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/movimentacao_exemplo"
-                                android:textColor="@color/badge_green_text"
-                                android:textSize="14sp"
+                                android:layout_marginTop="12dp"
+                                android:text="@string/nova_saida"
+                                android:textColor="@color/md_theme_light_onSurface"
+                                android:textSize="15sp"
                                 android:textStyle="bold" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="2dp"
-                                android:text="@string/hora_exemplo"
+                                android:text="@string/baixar_servico"
                                 android:textColor="@color/md_theme_light_outline"
                                 android:textSize="12sp" />
                         </LinearLayout>
-                    </RelativeLayout>
+                    </androidx.cardview.widget.CardView>
 
-                </LinearLayout>
-            </androidx.cardview.widget.CardView> -->
+                    <!-- Transferência -->
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cardTransferencia"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_columnWeight="1"
+                        android:layout_marginEnd="6dp"
+                        app:cardBackgroundColor="@color/md_theme_light_surface"
+                        app:cardCornerRadius="16dp"
+                        app:cardElevation="1dp">
 
-        </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="16dp">
+
+                            <androidx.cardview.widget.CardView
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                app:cardBackgroundColor="@color/badge_blue_bg"
+                                app:cardCornerRadius="10dp"
+                                app:cardElevation="0dp">
+
+                                <androidx.appcompat.widget.AppCompatImageView
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:layout_gravity="center"
+                                    app:srcCompat="@drawable/ic_swap_horizontal"
+                                    app:tint="@color/badge_blue_text" />
+                            </androidx.cardview.widget.CardView>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="12dp"
+                                android:text="@string/transferencia"
+                                android:textColor="@color/md_theme_light_onSurface"
+                                android:textSize="15sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                android:text="@string/entre_depositos"
+                                android:textColor="@color/md_theme_light_outline"
+                                android:textSize="12sp" />
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <!-- Ver Inventário -->
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cardInventario"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_columnWeight="1"
+                        android:layout_marginStart="6dp"
+                        app:cardBackgroundColor="@color/md_theme_light_surface"
+                        app:cardCornerRadius="16dp"
+                        app:cardElevation="1dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="16dp">
+
+                            <androidx.cardview.widget.CardView
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                app:cardBackgroundColor="@color/badge_purple_bg"
+                                app:cardCornerRadius="10dp"
+                                app:cardElevation="0dp">
+
+                                <androidx.appcompat.widget.AppCompatImageView
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:layout_gravity="center"
+                                    app:srcCompat="@drawable/ic_grid"
+                                    app:tint="@color/badge_purple_text" />
+                            </androidx.cardview.widget.CardView>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="12dp"
+                                android:text="@string/ver_inventario"
+                                android:textColor="@color/md_theme_light_onSurface"
+                                android:textSize="15sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                android:text="@string/todos_materiais"
+                                android:textColor="@color/md_theme_light_outline"
+                                android:textSize="12sp" />
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+
+                </GridLayout>
+
+                <!-- Seção: ÚLTIMAS MOVIMENTAÇÕES
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:letterSpacing="0.05"
+                        android:text="@string/ultimas_movimentacoes"
+                        android:textColor="@color/md_theme_light_outline"
+                        android:textSize="13sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/btnVerTudo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:text="@string/ver_tudo"
+                        android:textColor="@color/md_theme_light_primary"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+                </RelativeLayout> -->
+
+                <!-- Card Lista de Movimentações
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    app:cardBackgroundColor="@color/md_theme_light_surface"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="2dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <View
+                                android:id="@+id/dotStatus"
+                                android:layout_width="8dp"
+                                android:layout_height="8dp"
+                                android:layout_centerVertical="true"
+                                android:background="@drawable/shape_dot_green" />
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="12dp"
+                                android:layout_toEndOf="@id/dotStatus"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/material_exemplo"
+                                    android:textColor="@color/md_theme_light_onSurface"
+                                    android:textSize="14sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="2dp"
+                                    android:text="@string/deposito_exemplo"
+                                    android:textColor="@color/md_theme_light_outline"
+                                    android:textSize="12sp" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:gravity="end"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/movimentacao_exemplo"
+                                    android:textColor="@color/badge_green_text"
+                                    android:textSize="14sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="2dp"
+                                    android:text="@string/hora_exemplo"
+                                    android:textColor="@color/md_theme_light_outline"
+                                    android:textSize="12sp" />
+                            </LinearLayout>
+                        </RelativeLayout>
+
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView> -->
+
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
