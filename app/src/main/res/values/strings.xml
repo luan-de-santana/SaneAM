@@ -21,7 +21,7 @@
         👨‍💻 Programador:\n
         ✔ Luan Pimentel de Santana - graduando em Análise e Desenvolvimento de Sistemas (RU: 5091214) e Agente de Saneamento (Mat: 10703)
     </string>
-    <string name="desenvolvido_por">Desenvolvido por Luan de Santana</string>
+    <string name="desenvolvido_por">Desenvolvido por Luan de Santana 👨‍💻</string>
     <string name="foto_perfil">Foto de perfil do usuário</string>
     <string name="screen_configuracoes">Configurações</string>
     <string name="usuarios">Usuários</string>
@@ -38,6 +38,13 @@
     <string name="email">E-mail</string>
     <string name="senha_minima">Senha (mínimo 6 caracteres)</string>
     <string name="entrar">Entrar</string>
+    <string name="esqueci_senha">Esqueci a senha</string>
+    <string name="redefinir_senha_titulo">Redefinir senha</string>
+    <string name="redefinir_senha_instrucao">Informe e confirme sua nova senha para recuperar o acesso.</string>
+    <string name="nova_senha">Nova senha</string>
+    <string name="confirmar_nova_senha">Confirmar nova senha</string>
+    <string name="salvar_nova_senha">Salvar nova senha</string>
+    <string name="voltar_login">Voltar ao login</string>
     <string name="ou">OU</string>
     <string name="continuar_google">Continuar com o Google</string>
     <string name="criar_conta">Não tem uma conta? Criar nova conta</string>
@@ -143,4 +150,5 @@
     <string name="deposito_exemplo">Galpão A</string>
     <string name="movimentacao_exemplo">+20 un</string>
     <string name="hora_exemplo">14:32</string>
+    <string name="login_com_o_google">Login com o Google</string>
 </resources>

@@ -31,7 +31,7 @@ import com.luanpsantanadev.saneam.viewmodel.DashboardViewModel
 import com.luanpsantanadev.saneam.viewmodel.PerfilViewModel
 import kotlinx.coroutines.launch
 
-class FragmentDashboard : Fragment() {
+class DashboardFragment : Fragment() {
 
     private var _binding: FragmentDashboardBinding? = null
     private val binding get() = _binding!!

@@ -124,14 +124,46 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/inputLayoutPassword" />
 
+            <TextView
+                android:id="@+id/txtEsqueciSenha"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="10dp"
+                android:text="@string/esqueci_senha"
+                android:textColor="@color/indigo"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/btnEntrar" />
+
+            <!-- Botão Criar Conta -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnCriarConta"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="16dp"
+                android:text="@string/criar_conta"
+                android:textAllCaps="false"
+                android:textColor="@color/indigo"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@id/layoutDivider"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/txtEsqueciSenha" />
+
             <LinearLayout
                 android:id="@+id/layoutDivider"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="8dp"
                 android:gravity="center"
                 android:orientation="horizontal"
-                app:layout_constraintTop_toBottomOf="@id/btnEntrar">
+                app:layout_constraintTop_toBottomOf="@id/btnCriarConta">
 
                 <View
                     android:layout_width="0dp"
@@ -156,44 +188,21 @@
             </LinearLayout>
 
             <!-- Botão Continuar com o Google -->
-            <com.google.android.material.button.MaterialButton
+            <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/btnGoogle"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                android:layout_width="match_parent"
-                android:layout_height="54dp"
-                android:layout_marginTop="20dp"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/bg_google_button"
+                android:contentDescription="@string/login_com_o_google"
+                android:elevation="0dp"
+                android:padding="12dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_google_logo"
                 android:text="@string/continuar_google"
-                android:textAllCaps="false"
-                android:textColor="@color/text_button"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                app:cornerRadius="12dp"
-                app:icon="@android:drawable/ic_menu_compass"
-                app:iconGravity="textStart"
-                app:iconTint="@color/text_icon"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/layoutDivider"
-                app:strokeColor="@color/border_button"
-                app:strokeWidth="1dp" />
-
-            <!-- Botão Criar Conta -->
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnCriarConta"
-                style="@style/Widget.MaterialComponents.Button.TextButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:layout_marginBottom="16dp"
-                android:text="@string/criar_conta"
-                android:textAllCaps="false"
-                android:textColor="@color/indigo"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/btnGoogle" />
+                app:layout_constraintTop_toBottomOf="@id/layoutDivider" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
@@ -216,11 +225,11 @@
         android:id="@+id/txtDeveloper"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="4dp"
+        android:layout_marginBottom="16dp"
         android:text="@string/desenvolvido_por"
         android:textColor="@color/text_button"
         android:textSize="12sp"
-        android:textStyle="italic"
+        android:textStyle="normal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

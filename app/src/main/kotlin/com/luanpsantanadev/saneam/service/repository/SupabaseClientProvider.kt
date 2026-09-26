@@ -23,6 +23,8 @@ object SupabaseClientProvider {
             // Instala o módulo de Gerenciamento de Usuários (Auth)
             install(Auth) {
                 alwaysAutoRefresh = true
+                scheme = "saneam"
+                host = "auth"
             }
         }
     }

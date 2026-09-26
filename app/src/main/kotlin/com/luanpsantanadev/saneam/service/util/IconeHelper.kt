@@ -9,11 +9,13 @@ object IconeHelper {
      */
     fun obterIconeGrupo(nomeIcone: String?): Int {
         return when (nomeIcone) {
+            "ic_cup" -> R.drawable.ic_cup
             "ic_oil" -> R.drawable.ic_oil
             "ic_link" -> R.drawable.ic_link
             "ic_fire" -> R.drawable.ic_fire
             "ic_build" -> R.drawable.ic_build
             "ic_paint" -> R.drawable.ic_paint
+            "ic_monitor" -> R.drawable.ic_monitor
             "ic_carpenter" -> R.drawable.ic_carpenter
             "ic_foundation" -> R.drawable.ic_foundation
             "ic_science" -> R.drawable.ic_science

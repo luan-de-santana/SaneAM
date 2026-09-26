@@ -28,8 +28,9 @@ import com.luanpsantanadev.saneam.BuildConfig
 import com.luanpsantanadev.saneam.databinding.ActivityAuthBinding
 import com.luanpsantanadev.saneam.service.util.aplicarInsetsBarrasSistema
 import com.luanpsantanadev.saneam.ui.menu.MenuActivity
-import com.luanpsantanadev.saneam.viewmodel.AuthState
+import com.luanpsantanadev.saneam.viewmodel.AutState
 import com.luanpsantanadev.saneam.viewmodel.AuthViewModel
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 
 class AuthActivity : AppCompatActivity() {
@@ -48,6 +49,7 @@ class AuthActivity : AppCompatActivity() {
 
         configurarCliques()
         configurarObservadores()
+        viewModel.checarSessaoAtiva()
     }
 
     private fun configurarCliques() {
@@ -56,6 +58,10 @@ class AuthActivity : AppCompatActivity() {
             val email = binding.edtEmail.text.toString().trim()
             val password = binding.edtPassword.text.toString().trim()
             viewModel.realizarLogin(email, password)
+        }
+
+        binding.txtEsqueciSenha.setOnClickListener {
+            viewModel.solicitarRecuperacaoSenha(binding.edtEmail.text.toString())
         }
 
         // Evento do botão de Cadastro (Criar Conta)
@@ -87,7 +93,7 @@ class AuthActivity : AppCompatActivity() {
                 autenticarComCredencial(
                     credentialManager.getCredential(this@AuthActivity, request).credential
                 )
-            } catch (e: NoCredentialException) {
+            } catch (_: NoCredentialException) {
                 try {
                     // Fallback para o fluxo explícito, que também permite escolher uma conta
                     // ainda não autorizada para este aplicativo.
@@ -101,7 +107,7 @@ class AuthActivity : AppCompatActivity() {
                     autenticarComCredencial(
                         credentialManager.getCredential(this@AuthActivity, signInRequest).credential
                     )
-                } catch (fallbackError: NoCredentialException) {
+                } catch (_: NoCredentialException) {
                     Toast.makeText(
                         this@AuthActivity,
                         "Nenhuma conta Google está disponível. Adicione uma conta ao dispositivo e verifique se o Google Play Services está atualizado.",
@@ -110,37 +116,37 @@ class AuthActivity : AppCompatActivity() {
                 } catch (fallbackError: GetCredentialException) {
                     mostrarErroCredencial(fallbackError)
                 }
-            } catch (e: GetCredentialCancellationException) {
+            } catch (_: GetCredentialCancellationException) {
                 Toast.makeText(
                     this@AuthActivity,
                     "Login com Google cancelado.",
                     Toast.LENGTH_SHORT
                 ).show()
-            } catch (e: NoCredentialException) {
+            } catch (_: NoCredentialException) {
                 Toast.makeText(
                     this@AuthActivity,
                     "Nenhuma credencial do Google foi encontrada neste dispositivo.",
                     Toast.LENGTH_LONG
                 ).show()
-            } catch (e: GetCredentialInterruptedException) {
+            } catch (_: GetCredentialInterruptedException) {
                 Toast.makeText(
                     this@AuthActivity,
                     "Não foi possível concluir o login. Verifique sua conexão e tente novamente.",
                     Toast.LENGTH_LONG
                 ).show()
-            } catch (e: GetCredentialProviderConfigurationException) {
+            } catch (_: GetCredentialProviderConfigurationException) {
                 Toast.makeText(
                     this@AuthActivity,
                     "O login com Google não está disponível neste dispositivo.",
                     Toast.LENGTH_LONG
                 ).show()
-            } catch (e: GetCredentialUnknownException) {
+            } catch (_: GetCredentialUnknownException) {
                 Toast.makeText(
                     this@AuthActivity,
                     "Falha inesperada ao obter a credencial do Google.",
                     Toast.LENGTH_LONG
                 ).show()
-            } catch (e: GetCredentialException) {
+            } catch (_: GetCredentialException) {
                 Toast.makeText(
                     this@AuthActivity,
                     "Não foi possível obter a credencial do Google.",
@@ -189,32 +195,37 @@ class AuthActivity : AppCompatActivity() {
 
     private fun configurarObservadores() {
         // "Observe" que escuta qualquer alteração de estado vinda da ViewModel
-        viewModel.authState.observe(this) { state ->
+        viewModel.autState.observe(this) { state ->
             when (state) {
-                is AuthState.Parado -> {
+                is AutState.Parado -> {
                     esconderCarregamento()
                 }
 
-                is AuthState.Carregando -> {
+                is AutState.Carregando -> {
                     mostrarCarregamento()
                 }
 
-                is AuthState.Conectado -> {
+                is AutState.Conectado -> {
                     // Redireciona diretamente (Sem mensagem) pois o usuário já estava logado previamente
                     esconderCarregamento()
                     irParaMenu()
                 }
 
-                is AuthState.Sucesso -> {
+                is AutState.Sucesso -> {
                     esconderCarregamento()
                     Toast.makeText(this, state.message, Toast.LENGTH_SHORT).show()
                     // Redireciona após realizar login com sucesso
                     irParaMenu()
                 }
 
-                is AuthState.Erro -> {
+                is AutState.Aviso -> {
                     esconderCarregamento()
-                    Toast.makeText(this, state.errorMessage, Toast.LENGTH_LONG).show()
+                    Snackbar.make(binding.root, state.message, Snackbar.LENGTH_LONG).show()
+                }
+
+                is AutState.Erro -> {
+                    esconderCarregamento()
+                    Snackbar.make(binding.root, state.errorMessage, Snackbar.LENGTH_LONG).show()
                 }
             }
         }
@@ -234,6 +245,7 @@ class AuthActivity : AppCompatActivity() {
         binding.btnEntrar.isEnabled = false
         binding.btnCriarConta.isEnabled = false
         binding.btnGoogle.isEnabled = false
+        binding.txtEsqueciSenha.isEnabled = false
     }
 
     private fun esconderCarregamento() {
@@ -241,6 +253,7 @@ class AuthActivity : AppCompatActivity() {
         binding.btnEntrar.isEnabled = true
         binding.btnCriarConta.isEnabled = true
         binding.btnGoogle.isEnabled = true
+        binding.txtEsqueciSenha.isEnabled = true
     }
 
     private fun exibirDialogNome(email: String, senha: String) {

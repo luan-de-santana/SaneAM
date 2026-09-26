@@ -25,6 +25,23 @@
         </activity>
 
         <activity
+            android:name=".ui.autenticacao.RecuperaSenhaActivity"
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="auth"
+                    android:path="/reset-password"
+                    android:scheme="saneam" />
+            </intent-filter>
+        </activity>
+
+        <activity
             android:name=".ui.menu.MenuActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />

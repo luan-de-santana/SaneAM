@@ -5,6 +5,7 @@ import android.app.Application
 import android.content.Intent
 import com.luanpsantanadev.saneam.service.repository.SupabaseClientProvider
 import com.luanpsantanadev.saneam.ui.autenticacao.AuthActivity
+import com.luanpsantanadev.saneam.ui.autenticacao.RecuperaSenhaActivity
 import io.github.jan.supabase.gotrue.auth
 import io.github.jan.supabase.gotrue.SessionStatus
 import kotlinx.coroutines.CoroutineScope
@@ -18,16 +19,21 @@ class SaneAMApplication : Application() {
     private var sessaoAutenticada = false
     private var sessaoVerificada = false
     private var redirecionandoParaLogin = false
+    @Volatile
+    private var recuperacaoSenhaAtiva = false
 
     override fun onCreate() {
         super.onCreate()
         instance = this
+        recuperacaoSenhaAtiva = preferenciasRecuperacao.getBoolean(CHAVE_RECUPERACAO_ATIVA, false)
         registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks {
             override fun onActivityStarted(activity: Activity) {
                 atividadeAtual = activity
                 if (activity is AuthActivity) {
                     redirecionandoParaLogin = false
-                } else if (sessaoVerificada && !sessaoAutenticada) {
+                } else if (activity !is RecuperaSenhaActivity &&
+                    (recuperacaoSenhaAtiva || (sessaoVerificada && !sessaoAutenticada))
+                ) {
                     redirecionarParaLogin()
                 }
             }
@@ -55,7 +61,11 @@ class SaneAMApplication : Application() {
             auth.awaitInitialization()
             sessaoVerificada = true
             auth.sessionStatus.collect { status ->
-                sessaoAutenticada = status is SessionStatus.Authenticated
+                sessaoAutenticada =
+                    !recuperacaoSenhaAtiva && status is SessionStatus.Authenticated
+                if (recuperacaoSenhaAtiva) {
+                    return@collect
+                }
                 if (status is SessionStatus.NotAuthenticated) {
                     redirecionarParaLogin()
                 }
@@ -63,9 +73,33 @@ class SaneAMApplication : Application() {
         }
     }
 
+    fun iniciarRecuperacaoSenha() {
+        val salvo = preferenciasRecuperacao.edit()
+            .putBoolean(CHAVE_RECUPERACAO_ATIVA, true)
+            .commit()
+        check(salvo) { "Não foi possível proteger a sessão de recuperação de senha." }
+        recuperacaoSenhaAtiva = true
+    }
+
+    fun concluirRecuperacaoSenha() {
+        val salvo = preferenciasRecuperacao.edit()
+            .remove(CHAVE_RECUPERACAO_ATIVA)
+            .commit()
+        check(salvo) { "Não foi possível encerrar o estado de recuperação de senha." }
+        recuperacaoSenhaAtiva = false
+        sessaoAutenticada = SupabaseClientProvider.client.auth.currentSessionOrNull() != null
+    }
+
+    fun isRecuperacaoSenhaAtiva(): Boolean = recuperacaoSenhaAtiva
+
     private fun redirecionarParaLogin() {
         val activity = atividadeAtual
-        if (activity == null || activity is AuthActivity || redirecionandoParaLogin) return
+        if (
+            activity == null ||
+            activity is AuthActivity ||
+            activity is RecuperaSenhaActivity ||
+            redirecionandoParaLogin
+        ) return
 
         redirecionandoParaLogin = true
         activity.startActivity(
@@ -77,7 +111,13 @@ class SaneAMApplication : Application() {
     }
 
     companion object {
+        private const val PREFERENCIAS_RECUPERACAO = "recuperacao_senha"
+        private const val CHAVE_RECUPERACAO_ATIVA = "sessao_ativa"
+
         lateinit var instance: SaneAMApplication
             private set
     }
+
+    private val preferenciasRecuperacao
+        get() = getSharedPreferences(PREFERENCIAS_RECUPERACAO, MODE_PRIVATE)
 }
