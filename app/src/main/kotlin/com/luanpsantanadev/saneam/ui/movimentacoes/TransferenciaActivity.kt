@@ -141,10 +141,7 @@ class TransferenciaActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            val idMaterial = material.id ?: run {
-                Toast.makeText(this, R.string.material_invalido, Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
+            val idMaterial = material.id
 
             movimentacaoViewModel.executarTransferencia(
                 idMaterial = idMaterial,

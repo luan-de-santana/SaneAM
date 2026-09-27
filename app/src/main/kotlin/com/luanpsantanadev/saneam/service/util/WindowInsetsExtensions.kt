@@ -1,5 +1,6 @@
 package com.luanpsantanadev.saneam.service.util
 
+import android.graphics.Rect
 import android.view.View
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -19,6 +20,24 @@ fun View.aplicarInsetsBarrasSistema(
             paddingInicial[2] + if (laterais) barras.right else 0,
             paddingInicial[3] + if (inferior) barras.bottom else 0
         )
+        insets
+    }
+    ViewCompat.requestApplyInsets(this)
+}
+
+fun View.rolarCampoFocadoComTeclado() {
+    ViewCompat.setOnApplyWindowInsetsListener(this) { view, insets ->
+        if (insets.isVisible(WindowInsetsCompat.Type.ime())) {
+            view.post {
+                val campoFocado = view.findFocus()
+                if (campoFocado != null && campoFocado !== view) {
+                    campoFocado.requestRectangleOnScreen(
+                        Rect(0, 0, campoFocado.width, campoFocado.height),
+                        true
+                    )
+                }
+            }
+        }
         insets
     }
     ViewCompat.requestApplyInsets(this)

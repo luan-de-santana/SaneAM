@@ -1,4 +1,4 @@
-# 📱 SaneAM
+# ![ic_launcher_round.webp](app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.webp) SaneAM
 
 [![License: GPL v3](https://shields.io)](https://gnu.org)
 [![Kotlin](https://shields.io)](https://kotlinlang.org)
@@ -48,6 +48,15 @@ Para rodar o projeto localmente em sua máquina, siga os passos abaixo:
 3. **Abrir o projeto:** Abra o Android Studio e selecione a pasta do projeto clonado.
 4. **Sincronizar o Gradle:** Aguarde o Android Studio baixar as dependências (Build -> Make Project).
 5. **Executar:** Conecte um dispositivo físico ou use um Emulador e clique no botão **Run (Play)**.
+
+---
+
+## 📐 Diagramas UML
+
+Os diagramas PlantUML refletem a arquitetura e os fluxos funcionais do projeto:
+
+* [Diagrama de classes](docs/uml/diagrama-de-classes.puml)
+* [Diagrama de casos de uso](docs/uml/diagrama-de-casos-de-uso.puml)
 
 ---
 

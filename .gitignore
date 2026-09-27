@@ -4,6 +4,7 @@
 build/
 app/build/
 *.iml
+*.aab
 
 # Configurações locais do seu computador (contém o caminho do seu SDK)
 local.properties

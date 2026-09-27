@@ -16,6 +16,7 @@ import com.luanpsantanadev.saneam.service.model.ResumoMaterialGrupo
 import com.luanpsantanadev.saneam.service.model.TipoMovimentacao
 import com.luanpsantanadev.saneam.service.util.parseQuantidadeMovimentacao
 import com.luanpsantanadev.saneam.service.util.criarAdapterSpinnerEscuro
+import com.luanpsantanadev.saneam.service.util.rolarCampoFocadoComTeclado
 import com.luanpsantanadev.saneam.viewmodel.DepositoSelectorViewModel
 import com.luanpsantanadev.saneam.viewmodel.EstoqueViewModel
 import com.luanpsantanadev.saneam.viewmodel.MovimentacaoStatus
@@ -43,6 +44,7 @@ class AcertoFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.root.rolarCampoFocadoComTeclado()
 
         childFragmentManager.setFragmentResultListener(
             MaterialSelectorBottomSheet.REQUEST_KEY,

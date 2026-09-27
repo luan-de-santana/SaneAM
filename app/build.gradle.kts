@@ -14,8 +14,8 @@ android {
         applicationId = "com.luanpsantanadev.saneam"
         minSdk = 24
         targetSdk = 37
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 4
+        versionName = "1.0.3"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -23,11 +23,11 @@ android {
     buildTypes {
         release {
             optimization {
-                enable = false // Mude para [true] ao gerar o .aab final
+                enable = true // Mude para [true] ao gerar o .aab final
                 // enable = true [Ative para a versão final que vai para a Play Store]
             }
             // Opcional: remove layouts e imagens XML que não estão sendo usados
-            isShrinkResources = false // Mude para [true] junto com a otimização acima
+            isShrinkResources = true // Mude para [true] junto com a otimização acima
 
             // Define as regras de quais códigos NÃO devem ser mexidos (muito importante para o Supabase)
             proguardFiles(

@@ -124,10 +124,12 @@ class AuthViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 val auth = SupabaseClientProvider.client.auth
-                auth.signUpWith(Email) {
+                auth.signUpWith(
+                    Email,
+                    redirectUrl = EMAIL_CONFIRMATION_REDIRECT_URL
+                ) {
                     email = emailTxt
                     password = passwordTxt
-                    // Envia o nome dentro do objeto de metadados do usuário
                     data = buildJsonObject {
                         put("nome", nomeValido)
                     }
@@ -393,5 +395,6 @@ class AuthViewModel : ViewModel() {
 
     private companion object {
         const val PASSWORD_RESET_REDIRECT_URL = "saneam://auth/reset-password"
+        const val EMAIL_CONFIRMATION_REDIRECT_URL = "saneam://auth/confirm-email"
     }
 }

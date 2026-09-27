@@ -1,0 +1,231 @@
+@startuml SaneAM-classes
+title SaneAM - Diagrama de classes (visao arquitetural)
+left to right direction
+skinparam packageStyle rectangle
+skinparam classAttributeIconSize 0
+
+package "Aplicacao Android" {
+    class SaneAMApplication {
+        +iniciarRecuperacaoSenha()
+        +concluirRecuperacaoSenha()
+        +isRecuperacaoSenhaAtiva(): Boolean
+    }
+
+    package "UI" {
+        class AuthActivity
+        class RecuperaSenhaActivity
+        class MenuActivity
+        class DashboardFragment
+        class InventarioFragment
+        class MovimentacoesFragment
+        class EntradaFragment
+        class SaidaFragment
+        class AcertoFragment
+        class TransferenciaActivity
+        class MaterialSelectorBottomSheet
+        class ConfigFragment
+        class ListaUsuariosFragment
+        class PermissoesUsuarioFragment
+    }
+
+    package "ViewModels" {
+        class AuthViewModel {
+            +checarSessaoAtiva()
+            +realizarLogin(email, senha)
+            +realizarCadastro(email, senha, nome)
+            +solicitarRecuperacaoSenha(email)
+            +redefinirSenha(novaSenha, confirmacao)
+            +realizarLoginComGoogle(idToken)
+        }
+        class DashboardViewModel {
+            +carregarResumo()
+            +obterItensEstoqueCritico()
+        }
+        class InventarioViewModel {
+            +carregarDepositos()
+            +buscarMateriais(busca, idDeposito)
+        }
+        class MovimentacaoViewModel {
+            +executarMovimentacao(...)
+            +executarTransferencia(...)
+        }
+        class EstoqueViewModel
+        class UsuariosViewModel
+        class PermissoesUsuarioViewModel {
+            +carregar(idUsuario)
+            +salvar(idUsuario, itens)
+        }
+        class PerfilViewModel
+        class ConfigViewModel
+        class MaterialSelectorViewModel
+        class DepositoSelectorViewModel
+    }
+
+    package "Repositorios e servicos" {
+        class SupabaseClientProvider {
+            +client
+        }
+        class RepositorioDashboard {
+            +obterResumoDashboard()
+        }
+        class RepositorioEstoque {
+            +obterItemEstoque(idMaterial, idDeposito)
+            +executarMovimentacaoEstoque(movimentacao)
+            +transferirEstoque(...)
+            +obterItensComEstoqueBaixo(idDeposito)
+        }
+        class RepositorioMaterial {
+            +buscarMateriais(busca)
+            +buscarResumoMateriaisPorDeposito(...)
+            +obterGruposComContagem()
+        }
+        class RepositorioDeposito {
+            +obterTodosDepositos()
+            +obterDepositosComAcesso()
+        }
+        class RepositorioUsuario {
+            +obterTodosPerfis()
+            +obterPermissoesDoUsuario(idUsuario)
+            +substituirPermissoes(idUsuario, permissoes)
+        }
+        class DepositoCache {
+            +ler(idUsuario)
+            +salvar(idUsuario, depositos)
+            +limpar(idUsuario)
+        }
+    }
+}
+
+package "Supabase / dominio" {
+    class Perfil {
+        id: UUID
+        nome: String
+        email: String
+        ehAdministrador: Boolean
+    }
+    class PermissaoUsuario {
+        idUsuario: UUID
+        idDeposito: Long
+        papel: PapelUsuario
+    }
+    enum PapelUsuario {
+        LEITOR
+        OPERADOR
+    }
+    class Deposito {
+        id: Long
+        nome: String
+        endereco: String
+    }
+    class Grupo {
+        id: Long
+        nome: String
+        iconeRes: String
+    }
+    class Material {
+        id: Long
+        codigoAlpha: String
+        nome: String
+        unidadeMedida: String
+    }
+    class ItemEstoque {
+        idMaterial: Long
+        idDeposito: Long
+        quantidade: Double
+        quantidadeMinima: Double
+    }
+    class MovimentacaoEstoque {
+        tipo: TipoMovimentacao
+        idMaterial: Long
+        idDeposito: Long
+        idUsuario: UUID
+        quantidade: Double
+        motivo: String
+    }
+    enum TipoMovimentacao {
+        ENTRADA
+        SAIDA
+        ACERTO
+    }
+    class ResumoDashboard
+    class ResumoMaterial
+    class ResumoMaterialDeposito
+    class ResumoMaterialGrupo
+    class ItemEstoqueBaixo
+    class GrupoComContagem
+    class DepositoComAcesso
+}
+
+AuthActivity --> AuthViewModel
+RecuperaSenhaActivity --> AuthViewModel
+MenuActivity --> PerfilViewModel
+DashboardFragment --> DashboardViewModel
+DashboardFragment --> PerfilViewModel
+InventarioFragment --> InventarioViewModel
+MovimentacoesFragment --> MovimentacaoViewModel
+EntradaFragment --> MovimentacaoViewModel
+EntradaFragment --> DepositoSelectorViewModel
+EntradaFragment --> MaterialSelectorBottomSheet
+SaidaFragment --> MovimentacaoViewModel
+SaidaFragment --> DepositoSelectorViewModel
+SaidaFragment --> MaterialSelectorBottomSheet
+AcertoFragment --> MovimentacaoViewModel
+AcertoFragment --> DepositoSelectorViewModel
+AcertoFragment --> EstoqueViewModel
+AcertoFragment --> MaterialSelectorBottomSheet
+TransferenciaActivity --> MovimentacaoViewModel
+TransferenciaActivity --> DepositoSelectorViewModel
+MaterialSelectorBottomSheet --> MaterialSelectorViewModel
+ListaUsuariosFragment --> UsuariosViewModel
+PermissoesUsuarioFragment --> PermissoesUsuarioViewModel
+ConfigFragment --> ConfigViewModel
+ConfigFragment --> PerfilViewModel
+
+DashboardViewModel --> RepositorioDashboard
+DashboardViewModel --> RepositorioDeposito
+DashboardViewModel --> RepositorioMaterial
+DashboardViewModel --> RepositorioEstoque
+InventarioViewModel --> RepositorioDeposito
+InventarioViewModel --> RepositorioMaterial
+MovimentacaoViewModel --> RepositorioEstoque
+EstoqueViewModel --> RepositorioEstoque
+UsuariosViewModel --> RepositorioUsuario
+PermissoesUsuarioViewModel --> RepositorioUsuario
+PermissoesUsuarioViewModel --> RepositorioDeposito
+MaterialSelectorViewModel --> RepositorioMaterial
+DepositoSelectorViewModel --> RepositorioDeposito
+ConfigViewModel --> RepositorioUsuario
+RepositorioDeposito --> DepositoCache
+PerfilViewModel --> SupabaseClientProvider
+
+RepositorioDashboard --> SupabaseClientProvider
+RepositorioEstoque --> SupabaseClientProvider
+RepositorioMaterial --> SupabaseClientProvider
+RepositorioDeposito --> SupabaseClientProvider
+RepositorioUsuario --> SupabaseClientProvider
+SaneAMApplication --> SupabaseClientProvider
+
+Perfil "1" -- "0..*" PermissaoUsuario
+Deposito "1" -- "0..*" PermissaoUsuario
+Grupo "0..1" -- "0..*" Material
+Material "1" -- "0..*" ItemEstoque
+Deposito "1" -- "0..*" ItemEstoque
+Material "1" -- "0..*" MovimentacaoEstoque
+Deposito "1" -- "0..*" MovimentacaoEstoque
+Perfil "1" -- "0..*" MovimentacaoEstoque
+PermissaoUsuario --> PapelUsuario
+MovimentacaoEstoque --> TipoMovimentacao
+
+RepositorioDashboard ..> ResumoDashboard
+RepositorioMaterial ..> ResumoMaterial
+RepositorioMaterial ..> ResumoMaterialDeposito
+RepositorioMaterial ..> ResumoMaterialGrupo
+RepositorioMaterial ..> GrupoComContagem
+RepositorioDeposito ..> DepositoComAcesso
+RepositorioEstoque ..> ItemEstoque
+RepositorioEstoque ..> ItemEstoqueBaixo
+note bottom of SupabaseClientProvider
+  Backend remoto: Supabase Auth, PostgREST,
+  PostgreSQL, funcoes RPC e politicas RLS.
+end note
+@enduml

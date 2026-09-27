@@ -1,0 +1,66 @@
+@startuml SaneAM-use-cases
+title SaneAM - Diagrama de casos de uso
+left to right direction
+skinparam packageStyle rectangle
+
+actor "Visitante" as Visitante
+actor "Usuario autenticado" as Usuario
+actor "Leitor" as Leitor
+actor "Operador" as Operador
+actor "Administrador" as Administrador
+
+Leitor --|> Usuario
+Operador --|> Usuario
+Administrador --|> Operador
+
+rectangle "Aplicativo SaneAM" {
+    usecase "Criar conta" as UC_CriarConta
+    usecase "Confirmar e-mail" as UC_ConfirmarEmail
+    usecase "Entrar com e-mail e senha" as UC_LoginEmail
+    usecase "Entrar com Google" as UC_LoginGoogle
+    usecase "Recuperar / redefinir senha" as UC_RecuperarSenha
+    usecase "Consultar dashboard" as UC_Dashboard
+    usecase "Consultar inventario" as UC_Inventario
+    usecase "Buscar materiais" as UC_Buscar
+    usecase "Filtrar por deposito" as UC_FiltrarDeposito
+    usecase "Consultar estoque critico" as UC_Critico
+    usecase "Compartilhar inventario" as UC_Compartilhar
+    usecase "Registrar entrada" as UC_Entrada
+    usecase "Registrar saida" as UC_Saida
+    usecase "Realizar acerto" as UC_Acerto
+    usecase "Transferir entre depositos" as UC_Transferencia
+    usecase "Consultar movimentacoes" as UC_Movimentacoes
+    usecase "Consultar usuarios" as UC_Usuarios
+    usecase "Gerenciar permissoes por deposito" as UC_Permissoes
+    usecase "Consultar depositos autorizados" as UC_Depositos
+}
+
+Visitante --> UC_CriarConta
+Visitante --> UC_ConfirmarEmail
+Visitante --> UC_LoginEmail
+Visitante --> UC_LoginGoogle
+Visitante --> UC_RecuperarSenha
+
+Usuario --> UC_Dashboard
+Usuario --> UC_Inventario
+Usuario --> UC_Buscar
+Usuario --> UC_FiltrarDeposito
+Usuario --> UC_Critico
+Usuario --> UC_Compartilhar
+Usuario --> UC_Movimentacoes
+Usuario --> UC_Depositos
+
+Operador --> UC_Entrada
+Operador --> UC_Saida
+Operador --> UC_Acerto
+Operador --> UC_Transferencia
+
+Administrador --> UC_Usuarios
+Administrador --> UC_Permissoes
+
+note bottom of UC_Entrada
+  Entrada, saida, acerto e transferencia
+  exigem permissao de operador no deposito
+  correspondente; o backend aplica RLS.
+end note
+@enduml
