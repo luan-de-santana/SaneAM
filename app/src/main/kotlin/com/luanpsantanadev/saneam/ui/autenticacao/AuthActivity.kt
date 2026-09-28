@@ -28,7 +28,6 @@ import androidx.credentials.exceptions.GetCredentialUnknownException
 import androidx.credentials.exceptions.NoCredentialException
 import androidx.lifecycle.lifecycleScope
 import com.luanpsantanadev.saneam.R
-import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GetSignInWithGoogleOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.material.textfield.TextInputEditText
@@ -134,35 +133,12 @@ class AuthActivity : AppCompatActivity() {
                     this@AuthActivity,
                     signInRequest
                 ).credential
-            } catch (_: GetCredentialException) {
-                val googleIdOption = GetGoogleIdOption.Builder()
-                    .setFilterByAuthorizedAccounts(false)
-                    .setServerClientId(BuildConfig.GOOGLE_WEB_CLIENT_ID)
-                    .setAutoSelectEnabled(false)
-                    .build()
-                val fallbackRequest = GetCredentialRequest.Builder()
-                    .addCredentialOption(googleIdOption)
-                    .build()
-
-                try {
-                    credentialManager.getCredential(
-                        this@AuthActivity,
-                        fallbackRequest
-                    ).credential
-                } catch (fallbackError: GetCredentialException) {
-                    val mensagem = if (fallbackError is NoCredentialException) {
-                        getString(R.string.google_credencial_indisponivel)
-                    } else {
-                        fallbackError.message
-                            ?: getString(R.string.google_erro_obter_credencial)
-                    }
-                    mostrarErroCredencial(
-                        exception = fallbackError,
-                        etapa = getString(R.string.google_diagnostico_etapa_fallback),
-                        mensagem = mensagem
-                    )
-                    return@launch
-                }
+            } catch (exception: GetCredentialException) {
+                mostrarErroCredencial(
+                    exception = exception,
+                    etapa = getString(R.string.google_diagnostico_etapa_sign_in)
+                )
+                return@launch
             }
 
             autenticarComCredencial(credential)

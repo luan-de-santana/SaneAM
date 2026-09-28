@@ -42,3 +42,4 @@ fun View.rolarCampoFocadoComTeclado() {
     }
     ViewCompat.requestApplyInsets(this)
 }
+

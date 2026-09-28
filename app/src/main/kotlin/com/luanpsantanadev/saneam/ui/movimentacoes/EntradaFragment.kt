@@ -13,6 +13,7 @@ import com.luanpsantanadev.saneam.databinding.FragmentEntradaBinding
 import com.luanpsantanadev.saneam.service.model.Deposito
 import com.luanpsantanadev.saneam.service.model.ResumoMaterialGrupo
 import com.luanpsantanadev.saneam.service.model.TipoMovimentacao
+import com.luanpsantanadev.saneam.service.util.adicionarFiltroNumerico
 import com.luanpsantanadev.saneam.service.util.parseQuantidadeMovimentacao
 import com.luanpsantanadev.saneam.service.util.criarAdapterSpinnerEscuro
 import com.luanpsantanadev.saneam.service.util.rolarCampoFocadoComTeclado
@@ -42,6 +43,7 @@ class EntradaFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.root.rolarCampoFocadoComTeclado()
+        binding.edtQuantidade.adicionarFiltroNumerico()
 
         childFragmentManager.setFragmentResultListener(
             MaterialSelectorBottomSheet.REQUEST_KEY,

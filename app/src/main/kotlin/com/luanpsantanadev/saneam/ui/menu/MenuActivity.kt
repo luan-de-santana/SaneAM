@@ -25,9 +25,12 @@ class MenuActivity : AppCompatActivity() {
         binding = ActivityMenuBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.navHostFragmentActivityMain.aplicarInsetsBarrasSistema(topo = true, inferior = false)
-        binding.bottomNavigation.aplicarInsetsBarrasSistema(topo = false)
-        configurarAjusteTeclado()
+        binding.navHostFragmentActivityMain.aplicarInsetsBarrasSistema(
+            topo = true,
+            inferior = false
+        )
+        binding.bottomNavigation.aplicarInsetsBarrasSistema(topo = false, inferior = true)
+        configurarAjusteTeclado() // Removido para teste
 
         // Configura bottom navigation
         configurarNavegacao()
@@ -42,14 +45,10 @@ class MenuActivity : AppCompatActivity() {
                 binding.navHostFragmentActivityMain.layoutParams as ConstraintLayout.LayoutParams
             val margemInferior = if (tecladoVisivel) ime.bottom else 0
 
-            if (
-                layoutParams.bottomMargin != margemInferior ||
-                binding.bottomNavigation.visibility != visibilidadeMenu
-            ) {
-                layoutParams.bottomMargin = margemInferior
-                binding.navHostFragmentActivityMain.layoutParams = layoutParams
-                binding.bottomNavigation.visibility = visibilidadeMenu
-            }
+            layoutParams.bottomMargin = margemInferior
+            binding.navHostFragmentActivityMain.layoutParams = layoutParams
+            binding.bottomNavigation.visibility = visibilidadeMenu
+
             insets
         }
         ViewCompat.requestApplyInsets(binding.root)
@@ -59,7 +58,7 @@ class MenuActivity : AppCompatActivity() {
         val navHostFragment = supportFragmentManager
             .findFragmentById(R.id.nav_host_fragment_activity_main) as NavHostFragment
         val navController = navHostFragment.navController
-        
+
         binding.bottomNavigation.setupWithNavController(navController)
     }
 

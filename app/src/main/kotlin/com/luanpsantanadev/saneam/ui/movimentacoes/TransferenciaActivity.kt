@@ -1,7 +1,6 @@
 package com.luanpsantanadev.saneam.ui.movimentacoes
 
 import android.os.Bundle
-import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -9,7 +8,8 @@ import com.luanpsantanadev.saneam.R
 import com.luanpsantanadev.saneam.databinding.ActivityTransferenciaBinding
 import com.luanpsantanadev.saneam.service.model.Deposito
 import com.luanpsantanadev.saneam.service.model.ResumoMaterialGrupo
-import com.luanpsantanadev.saneam.service.util.aplicarInsetsBarrasSistema
+import com.luanpsantanadev.saneam.service.util.adicionarFiltroNumerico
+import com.luanpsantanadev.saneam.service.util.configurarScrollComTeclado
 import com.luanpsantanadev.saneam.service.util.criarAdapterSpinnerEscuro
 import com.luanpsantanadev.saneam.viewmodel.DepositoSelectorViewModel
 import com.luanpsantanadev.saneam.viewmodel.MovimentacaoStatus
@@ -20,7 +20,6 @@ class TransferenciaActivity : AppCompatActivity() {
     private lateinit var binding: ActivityTransferenciaBinding
     private val depositoViewModel: DepositoSelectorViewModel by viewModels()
     private val movimentacaoViewModel: MovimentacaoViewModel by viewModels()
-    private var quantidade: Int = 0
     private var materialSelecionado: ResumoMaterialGrupo? = null
     private var listaDepositos: List<Deposito> = emptyList()
 
@@ -28,7 +27,17 @@ class TransferenciaActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityTransferenciaBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.root.aplicarInsetsBarrasSistema(topo = true, laterais = true)
+
+        binding.root.configurarScrollComTeclado(
+            campoParaRolar = binding.edtMotivo,
+            contentLayout = binding.contentLayout,
+            scrollView = binding.scrollView,
+            onTecladoFechado = {
+                binding.scrollView.post {
+                    binding.scrollView.smoothScrollTo(0, 0)
+                }
+            }
+        )
 
         supportFragmentManager.setFragmentResultListener(
             MaterialSelectorBottomSheet.REQUEST_KEY,
@@ -37,11 +46,13 @@ class TransferenciaActivity : AppCompatActivity() {
             materialSelecionado = MaterialSelectorBottomSheet.materialFromResult(result)
             val texto = materialSelecionado?.let { "${it.codigoAlpha} - ${it.nome}" } ?: ""
             binding.edtMaterial.setText(texto)
+            binding.txtUnidade.text = materialSelecionado?.unidadeMedida ?: "un"
         }
 
         setupListeners()
         configurarObservadores()
-        updateQuantidadeView()
+        binding.edtQuantidade.adicionarFiltroNumerico()
+        updateQuantidadeView(0)
     }
 
     private fun configurarObservadores() {
@@ -49,13 +60,17 @@ class TransferenciaActivity : AppCompatActivity() {
             listaDepositos = lista
             val nomes = lista.map { it.nome }
             val adapter = criarAdapterSpinnerEscuro(nomes)
-            
+
             binding.spinnerOrigem.adapter = adapter
             binding.spinnerDestino.adapter = adapter
         }
 
         depositoViewModel.erro.observe(this) { mensagem ->
-            Toast.makeText(this, getString(R.string.erro_carregar_depositos, mensagem), Toast.LENGTH_LONG).show()
+            Toast.makeText(
+                this,
+                getString(R.string.erro_carregar_depositos, mensagem),
+                Toast.LENGTH_LONG
+            ).show()
         }
 
         depositoViewModel.carregando.observe(this) { carregando ->
@@ -69,16 +84,19 @@ class TransferenciaActivity : AppCompatActivity() {
                 is MovimentacaoStatus.Carregando -> {
                     binding.btnConfirmar.isEnabled = false
                 }
+
                 is MovimentacaoStatus.Sucesso -> {
                     binding.btnConfirmar.isEnabled = true
                     Toast.makeText(this, R.string.transferencia_sucesso, Toast.LENGTH_SHORT).show()
                     finish()
                 }
+
                 is MovimentacaoStatus.Erro -> {
                     binding.btnConfirmar.isEnabled = true
                     Toast.makeText(this, status.mensagem, Toast.LENGTH_LONG).show()
                     movimentacaoViewModel.resetStatus()
                 }
+
                 else -> {}
             }
         }
@@ -95,61 +113,18 @@ class TransferenciaActivity : AppCompatActivity() {
             abrirSeletorMaterial()
         }
 
-        // Incrementar e decrementar quantidade
+        // Incrementar quantidade
         binding.btnPlus.setOnClickListener {
-            quantidade++
-            updateQuantidadeView()
+            incrementarQuantidade()
         }
 
+        // Decrementar quantidade
         binding.btnMinus.setOnClickListener {
-            if (quantidade > 0) {
-                quantidade--
-                updateQuantidadeView()
-            }
+            decrementarQuantidade()
         }
 
-        // Ação de Confirmar Transferência
         binding.btnConfirmar.setOnClickListener {
-            val idxOrigem = binding.spinnerOrigem.selectedItemPosition
-            val idxDestino = binding.spinnerDestino.selectedItemPosition
-            
-            val origem = if (idxOrigem != -1 && listaDepositos.isNotEmpty()) listaDepositos[idxOrigem] else null
-            val destino = if (idxDestino != -1 && listaDepositos.isNotEmpty()) listaDepositos[idxDestino] else null
-
-            if (materialSelecionado == null) {
-                Toast.makeText(this, R.string.selecione_material, Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-
-            if (origem?.id == null || destino?.id == null) {
-                Toast.makeText(this, R.string.selecione_depositos, Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-
-            if (origem.id == destino.id) {
-                Toast.makeText(this, R.string.origem_destino_diferentes, Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-
-            if (quantidade <= 0) {
-                Toast.makeText(this, R.string.informe_quantidade, Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-
-            val material = materialSelecionado ?: run {
-                Toast.makeText(this, R.string.selecione_material, Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-
-            val idMaterial = material.id
-
-            movimentacaoViewModel.executarTransferencia(
-                idMaterial = idMaterial,
-                idOrigem = origem.id,
-                idDestino = destino.id,
-                quantidade = quantidade.toDouble(),
-                nomeMaterial = material.nome
-            )
+            confirmarTransferencia()
         }
     }
 
@@ -158,7 +133,101 @@ class TransferenciaActivity : AppCompatActivity() {
         bottomSheet.show(supportFragmentManager, MaterialSelectorBottomSheet.TAG)
     }
 
-    private fun updateQuantidadeView() {
-        binding.txtQuantidade.text = quantidade.toString()
+    private fun incrementarQuantidade() {
+        val input = binding.edtQuantidade.getText().toString().trim()
+        if (input.isNotEmpty()) {
+            try {
+                var quantidade = input.toInt()
+                updateQuantidadeView(++quantidade)
+            } catch (_: NumberFormatException) {
+                binding.edtQuantidade.error = "Número inválido ou muito grande"
+                return
+            }
+        } else {
+            updateQuantidadeView(1)
+        }
+    }
+
+    private fun decrementarQuantidade() {
+        val input = binding.edtQuantidade.getText().toString().trim()
+        if (input.isNotEmpty()) {
+            try {
+                var quantidade = input.toInt()
+                if (quantidade > 0) {
+                    updateQuantidadeView(--quantidade)
+                }
+            } catch (_: NumberFormatException) {
+                binding.edtQuantidade.error = "Número inválido ou muito grande"
+                return
+            }
+        } else {
+            updateQuantidadeView(0)
+        }
+    }
+
+    private fun updateQuantidadeView(quantidade: Int) {
+        binding.edtQuantidade.setText(quantidade.toString())
+    }
+
+    private fun confirmarTransferencia() {
+        val idxOrigem = binding.spinnerOrigem.selectedItemPosition
+        val idxDestino = binding.spinnerDestino.selectedItemPosition
+
+        val origem =
+            if (idxOrigem != -1 && listaDepositos.isNotEmpty()) listaDepositos[idxOrigem] else null
+        val destino =
+            if (idxDestino != -1 && listaDepositos.isNotEmpty()) listaDepositos[idxDestino] else null
+
+        if (materialSelecionado == null) {
+            Toast.makeText(this, R.string.selecione_material, Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        if (origem?.id == null || destino?.id == null) {
+            Toast.makeText(this, R.string.selecione_depositos, Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        if (origem.id == destino.id) {
+            Toast.makeText(this, R.string.origem_destino_diferentes, Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val input = binding.edtQuantidade.getText().toString().trim()
+
+        if (input.isEmpty()) {
+            binding.edtQuantidade.error = "O campo não pode ficar vazio"
+            return
+        }
+
+        val quantidade = try {
+            input.toInt()
+        } catch (_: NumberFormatException) {
+            binding.edtQuantidade.error = "Número inválido ou muito grande"
+            return
+        }
+
+        if (quantidade <= 0) {
+            Toast.makeText(this, R.string.informe_quantidade, Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val material = materialSelecionado ?: run {
+            Toast.makeText(this, R.string.selecione_material, Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val motivo = binding.edtMotivo.getText().toString().trim()
+
+        val idMaterial = material.id
+
+        movimentacaoViewModel.executarTransferencia(
+            idMaterial = idMaterial,
+            idOrigem = origem.id,
+            idDestino = destino.id,
+            quantidade = quantidade.toDouble(),
+            nomeMaterial = material.nome,
+            motivo = motivo
+        )
     }
 }

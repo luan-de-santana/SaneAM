@@ -76,7 +76,8 @@ class MovimentacaoViewModel(
         idOrigem: Long,
         idDestino: Long,
         quantidade: Double,
-        nomeMaterial: String
+        nomeMaterial: String,
+        motivo: String
     ) {
         if (!quantidade.ehQuantidadeMovimentoValida()) {
             _status.value = MovimentacaoStatus.Erro("Informe uma quantidade válida maior que zero.")
@@ -102,7 +103,7 @@ class MovimentacaoViewModel(
                 idDestino = idDestino,
                 quantidade = quantidade,
                 idUsuario = idUsuario,
-                motivo = "Transferência de $nomeMaterial"
+                motivo = motivo.ifEmpty { "Transferência de $nomeMaterial" }
             )
                 .onSuccess {
                     _status.value = MovimentacaoStatus.Sucesso

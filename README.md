@@ -1,4 +1,4 @@
-# ![ic_launcher_round.webp](app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.webp) SaneAM
+# ![ic_launcher_round.webp](app/src/main/res/mipmap-hdpi/ic_launcher_round.webp) SaneAM
 
 [![License: GPL v3](https://shields.io)](https://gnu.org)
 [![Kotlin](https://shields.io)](https://kotlinlang.org)
